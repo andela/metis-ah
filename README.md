@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/andela/metis-ah.svg?branch=develop)](https://travis-ci.org/andela/metis-ah)
+
 Authors Haven - A Social platform for the creative at heart.
 =======
 
