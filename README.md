@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/andela/metis-ah.svg?branch=develop)](https://travis-ci.org/andela/metis-ah)
+[![Build Status](https://travis-ci.org/andela/metis-ah.svg?branch=develop)](https://travis-ci.org/andela/metis-ah) [![Build Status](https://img.shields.io/badge/style-airbnb-blue.svg)](https://houndci.com)
 
 Authors Haven - A Social platform for the creative at heart.
 =======
