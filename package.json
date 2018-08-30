@@ -4,9 +4,14 @@
   "description": "A Social platform for the creative at heart",
   "main": "app.js",
   "scripts": {
-    "test": "mocha test --exit --require babel-core/register",
-    "start": "babel-node app.js"
-  },
+    "test": "nyc mocha --exit --require babel-core/register",
+    "start": "babel-node app.js",
+		"coverage": "nyc report --reporter=text-lcov | coveralls"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/andela/metis-ah.git"
+	},
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
@@ -20,12 +25,14 @@
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
-    "mocha": "^5.2.0",
+    "coveralls": "^3.0.2",
     "eslint": "^5.4.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
-    "eslint-plugin-react": "^7.11.1"
+    "eslint-plugin-react": "^7.11.1",
+    "mocha": "^5.2.0",
+    "nyc": "^13.0.1"
   }
 }
