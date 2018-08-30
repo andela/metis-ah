@@ -6,17 +6,19 @@
   "scripts": {
     "test": "nyc mocha --exit --require babel-core/register",
     "start": "babel-node app.js",
-		"coverage": "nyc report --reporter=text-lcov | coveralls"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/andela/metis-ah.git"
-	},
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela/metis-ah.git"
+  },
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.3"
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "swagger-ui-express": "^4.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
