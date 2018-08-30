@@ -40,3 +40,8 @@ node_modules
 # packages
 package-lock.json
 
+# environmental variables
+.env
+
+# sequelize migration config file
+config.json
