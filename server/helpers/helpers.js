@@ -8,7 +8,7 @@ const helpers = {
    */
   validPassword: (password) => {
     // Check that length is greater or equal to 8
-    if (password.length < 8) {
+    if (password.trim().length < 8) {
       return {
         valid: false,
         message: 'Password should be more than 8 characters'
@@ -20,7 +20,7 @@ const helpers = {
       return {
         valid: true,
         message: 'Password is valid'
-      }
+      };
     }
 
     return {
@@ -30,12 +30,12 @@ const helpers = {
   },
 
   /**
-   * @description This method validates checks if the string passed is a valid email.
+   * @description This method checks if the string passed is a valid email.
    * @param  {string} email The email address to be validated
-   * @returns {object} TODO
+   * @returns {object} An object that contains the valid and message
    */
   validEmail: (email) => {
-		if (!validator.isEmail(email)) {
+		if (!validator.isEmail(email.trim())) {
 			return {
 				valid: false,
 				message: 'Invalid email address'
@@ -45,8 +45,27 @@ const helpers = {
 		return {
 			valid: true,
 			message: 'Email is valid'
+		};
+	},
+
+	/**
+   * @description This method checks if the string passed is a valid.
+   * @param  {string} string The string to be checked
+   * @returns {object} An object that contains the valid and message
+   */
+	validString: (bar) => {
+		if (bar.trim().length === 0) {
+			return {
+				valid: false,
+				message: 'empty string'
+			};
 		}
-  }
+
+		return {
+			valid: true,
+			message: 'good to go'
+		};
+	}
 };
 
 export default helpers;

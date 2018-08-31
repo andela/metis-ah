@@ -5,6 +5,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 
 import users from './server/controllers/user';
+import middleware from './server/middleware/middleware';
 
 const { signUp } = users;
 
@@ -26,8 +27,8 @@ app.use(json);
 app.get('/', (req, res) => res.status(200).json({
   message: 'Welcome to the sims program'
 }));
-app.post('/users/auth/signup', signUp);
+app.post('/users/auth/signup', middleware.validateSignUp, signUp);
 
-app.listen(port, () => console.log('yo mehn started!'));
+app.listen(port, () => console.log(`server is running on port ${port}`));
 
 export default app;
