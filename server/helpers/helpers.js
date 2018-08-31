@@ -16,7 +16,7 @@ const helpers = {
     }
 
     // Check that at least one character is upper or lowercase
-    if (/[A-Z][a-z]/.test(password)) {
+    if (/(?=.*[a-z])(?=.*[A-Z])/.test(password)) {
       return {
         valid: true,
         message: 'Password is valid'

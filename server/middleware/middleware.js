@@ -1,6 +1,12 @@
 import helper from '../helpers/helpers';
 
 const middlewares = {
+  /** @description This method helps validate a user signups
+   * @param  {object} req The request object
+   * @param  {object} res The response object
+   * @param  {object} next the next middleware
+	 * @returns {object} undefined
+   */
   validateSignUp: (req, res, next) => {
     let status = 'success';
     let message = '';
@@ -35,9 +41,9 @@ const middlewares = {
           status,
           message
         });
+    } else {
+      next();
     }
-
-    next();
   }
 };
 
