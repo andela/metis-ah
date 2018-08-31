@@ -4,6 +4,10 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 
+import users from './server/controllers/user';
+
+const { signUp } = users;
+
 const app = express();
 const urlencoded = bodyParser.urlencoded({ extended: false });
 const json = bodyParser.json();
@@ -22,6 +26,7 @@ app.use(json);
 app.get('/', (req, res) => res.status(200).json({
   message: 'Welcome to the sims program'
 }));
+app.post('/users/auth/signup', signUp);
 
 app.listen(port, () => console.log('yo mehn started!'));
 
