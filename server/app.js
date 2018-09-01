@@ -4,8 +4,8 @@ import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 
-import users from './server/controllers/user';
-import middleware from './server/middleware/middleware';
+import users from './controllers/user';
+import middleware from './middleware/middleware';
 
 const { signUp } = users;
 

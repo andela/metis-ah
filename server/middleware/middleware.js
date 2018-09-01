@@ -11,11 +11,25 @@ const middlewares = {
     let status = 'success';
     let message = '';
 
+    // Check the passed body for required properties
+    const { valid, invalidMessage } = helper.checkProps(req.body, 'firstname', 'lastname', 'email', 'password');
+
+    if (!valid) {
+      res.status(400)
+        .json({
+          status: 'fail',
+          message: invalidMessage
+        });
+
+      return;
+    }
+
     // Validate the email address provided
-    if (!helper.validEmail(req.body.email).valid) {
+    if (!helper.validEmail(req.body.email)) {
       status = 'fail';
       message += 'Invalid email provided\n';
     }
+
 
     // Validate the password provided
     if (!helper.validPassword(req.body.password).valid) {
@@ -24,15 +38,15 @@ const middlewares = {
     }
 
     // validate the firstname;
-    if (!helper.validString(req.body.firstname).valid) {
+    if (!helper.validString(req.body.firstname)) {
       status = 'fail';
-      message += 'Firstname cannot be an empty string';
+      message += 'Firstname cannot be an empty string\n';
     }
 
     // validate the lastname
-    if (!helper.validString(req.body.lastname).valid) {
+    if (!helper.validString(req.body.lastname)) {
       status = 'fail';
-      message += 'Lastname cannot be an empty string';
+      message += 'Lastname cannot be an empty string\n';
     }
 
     if (status === 'fail') {
