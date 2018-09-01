@@ -32,40 +32,51 @@ const helpers = {
   /**
    * @description This method checks if the string passed is a valid email.
    * @param  {string} email The email address to be validated
-   * @returns {object} An object that contains the valid and message
+   * @returns {boolean} A boolean representing if the email is valid or not
    */
   validEmail: (email) => {
-		if (!validator.isEmail(email.trim())) {
-			return {
-				valid: false,
-				message: 'Invalid email address'
-			}
-		}
+    if (!validator.isEmail(email.trim())) {
+      return false;
+    }
 
-		return {
-			valid: true,
-			message: 'Email is valid'
-		};
-	},
+    return true;
+  },
 
-	/**
+  /**
    * @description This method checks if the string passed is a valid.
-   * @param  {string} string The string to be checked
-   * @returns {object} An object that contains the valid and message
+   * @param  {string} bar The string to be checked
+   * @returns {boolean} A boolean representing if the string is valid or not
    */
-	validString: (bar) => {
-		if (bar.trim().length === 0) {
-			return {
-				valid: false,
-				message: 'empty string'
-			};
-		}
+  validString: (bar) => {
+    if (bar.trim().length === 0) {
+      return false;
+    }
 
-		return {
-			valid: true,
-			message: 'good to go'
-		};
-	}
+    return true;
+  },
+
+  /**
+   * @description This method checks if an object contains a number of properties
+   * @param  {object} obj The object to be searched
+   * @param  {array} params The list of properties to be searched for
+   * @returns {object} An object that contains a valid (bool) and invalidMessage (string) property
+   */
+  checkProps: (obj, ...params) => {
+    let valid = true;
+    let invalidMessage = '';
+
+    for (let i = 0; i < params.length; i += 1) {
+      if (!obj[params[i]]) {
+        valid = false;
+        invalidMessage += `Please provide ${params[i]}\n`;
+      }
+    }
+
+    return {
+      valid,
+      invalidMessage
+    };
+  }
 };
 
 export default helpers;
