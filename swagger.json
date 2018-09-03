@@ -1,0 +1,42 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "Author's Haven [https://metis-ah-staging.herokuapp.com/](https://metis-ah-staging.herokuapp.com/) is a platform that allows you to share your knowledge across the world",
+      "version": "1.0.0",
+      "title": "Author's Haven",
+      "contact": {
+        "email": "metis.ah2018@gmail.com"
+      }
+    },
+    "host": "metis-ah-staging.herokuapp.com",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "User",
+        "description": "Everything about all Users"
+      },
+      {
+        "name": "Articles",
+        "description": "Everything about all Articles"
+      }
+    ],
+    "schemes": [
+      "https",
+      "http"
+    ],
+    "paths": {
+      "/": {
+        "get": {
+          "summary": "Welcomes users to app",
+          "description": "Users recieves a welcome message",
+          "responses": {
+            "200": {
+              "description": "Welcome to the simulation program"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+    }
+  }
