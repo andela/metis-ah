@@ -1,0 +1,26 @@
+{
+  "development": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres"
+  },
+  "test": {
+    "use_env_variable": "TEST_DATABASE_URL",
+    "dialect": "postgres"
+  },
+  "local_dev": {
+    "username": "DEV_DB_USERNAME",
+    "password": "DEV_DB_PASSWORD",
+    "database": "DEV_DB",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+  "local_test": {
+    "username": "TEST_DB_USERNAME",
+    "password": "TEST_DB_PASSWORD",
+    "database": "TEST_DB",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  }
+}
