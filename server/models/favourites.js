@@ -6,7 +6,7 @@ const favourites = (sequelize, DataTypes) => {
     articleId: {
       type: DataTypes.INTEGER
     }
-  }, { freezeTableName: true });
+  });
 
   Favourites.associate = (models) => {
     Favourites.belongsTo(models.Users, {

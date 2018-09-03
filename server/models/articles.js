@@ -16,7 +16,7 @@ const articles = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, { freezeTableName: true });
+  });
 
   Articles.associate = (models) => {
     Articles.belongsTo(models.Users, {

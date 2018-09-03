@@ -6,7 +6,7 @@ const followings = (sequelize, DataTypes) => {
     follower: {
       type: DataTypes.INTEGER
     }
-  }, { freezeTableName: true });
+  });
 
   Followings.associate = (models) => {
     Followings.belongsTo(models.Users, {

@@ -11,12 +11,10 @@ module.exports = {
       allowNull: false
     },
     firstname: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.STRING
     },
     lastname: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.STRING
     },
     email: {
       type: Sequelize.STRING,
@@ -50,6 +48,6 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE
     }
-  }),
+  }, { freezeTableName: true }),
   down: queryInterface => queryInterface.dropTable('Users')
 };

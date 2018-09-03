@@ -36,6 +36,6 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE
     }
-  }),
+  }, { freezeTableName: true }),
   down: queryInterface => queryInterface.dropTable('Replies')
 };

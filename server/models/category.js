@@ -4,7 +4,7 @@ const categories = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-  }, { freezeTableName: true });
+  });
 
   Categories.associate = (models) => {
     Categories.hasMany(models.Articles, {

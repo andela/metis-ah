@@ -4,7 +4,7 @@ const comments = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, { freezeTableName: true });
+  });
 
   Comments.associate = (models) => {
     Comments.belongsTo(models.Users, {
