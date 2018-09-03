@@ -37,7 +37,7 @@ const users = (sequelize, DataTypes) => {
     interests: {
       type: DataTypes.ARRAY(DataTypes.TEXT)
     }
-  }, { freezeTableName: true });
+  });
 
   Users.associate = (models) => {
     Users.hasMany(models.Articles, {

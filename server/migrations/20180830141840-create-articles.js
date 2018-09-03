@@ -18,7 +18,7 @@ module.exports = {
       type: Sequelize.STRING
     },
     body: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false
     },
     userId: {
@@ -32,7 +32,7 @@ module.exports = {
     },
     categoryId: {
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
+      onDelete: 'SET NULL',
       references: {
         model: 'Categories',
         key: 'id',
@@ -47,6 +47,6 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE
     }
-  }),
+  }, { freezeTableName: true }),
   down: queryInterface => queryInterface.dropTable('Articles')
 };

@@ -3,7 +3,7 @@ const replies = (sequelize, DataTypes) => {
     content: {
       type: DataTypes.STRING
     }
-  }, { freezeTableName: true });
+  });
 
   Replies.associate = (models) => {
     Replies.belongsTo(models.Comments, {

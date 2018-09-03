@@ -12,7 +12,7 @@ const subscriptions = (sequelize, DataTypes) => {
     token: {
       type: DataTypes.INTEGER
     }
-  }, { freezeTableName: true });
+  });
 
   Subscriptions.associate = (models) => {
     Subscriptions.belongsTo(models.Users, {
