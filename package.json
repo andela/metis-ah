@@ -8,11 +8,11 @@
     "start": "babel-node server/app.js",
     "start_dev": "NODE_ENV=local_dev babel-node server/app.js",
     "premigrate": "NODE_ENV=local_dev sequelize db:migrate",
-		"migrate": "NODE_ENV=local_test sequelize db:migrate",
-		"postmigrate": "NODE_ENV=local_dev",
-		"precreatdb": "NODE_ENV=local_dev sequelize db:create",
-		"createdb": "NODE_ENV=local_test sequelize db:create",
-		"postcreatedb": "NODE_ENV=local_dev",
+    "migrate": "NODE_ENV=local_test sequelize db:migrate",
+    "postmigrate": "NODE_ENV=local_dev",
+    "precreatdb": "NODE_ENV=local_dev sequelize db:create",
+    "createdb": "NODE_ENV=local_test sequelize db:create",
+    "postcreatedb": "NODE_ENV=local_dev",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

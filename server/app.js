@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
+import swaggerDocument from '../swagger.json';
 
 const app = express();
 const urlencoded = bodyParser.urlencoded({ extended: false });
