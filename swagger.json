@@ -36,7 +36,7 @@
           }
         }
       },
-      "/users/auth/signup": {
+      "/api/users/auth/signup": {
         "post": {
           "tags": [
             "user"

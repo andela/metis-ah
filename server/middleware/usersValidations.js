@@ -1,6 +1,6 @@
 import helper from '../helpers/helpers';
 
-const middlewares = {
+const usersValidations = {
   /** @description This method helps validate a user signups
    * @param  {object} req The request object
    * @param  {object} res The response object
@@ -9,56 +9,54 @@ const middlewares = {
    */
   validateSignUp: (req, res, next) => {
     let status = 'success';
-    let message = '';
+    let messages = [];
 
     // Check the passed body for required properties
-    const { valid, invalidMessage } = helper.checkProps(req.body, 'firstname', 'lastname', 'email', 'password');
+    const { valid, invalidMessages } = helper
+      .checkProps(req.body, 'firstname', 'lastname', 'email', 'password');
 
     if (!valid) {
-      res.status(400)
+      return res.status(400)
         .json({
           status: 'fail',
-          message: invalidMessage
+          messages: invalidMessages
         });
-
-      return;
     }
 
     // Validate the email address provided
     if (!helper.validEmail(req.body.email)) {
       status = 'fail';
-      message += 'Invalid email provided\n';
+      messages.push('Invalid email provided');
     }
 
 
     // Validate the password provided
     if (!helper.validPassword(req.body.password).valid) {
       status = 'fail';
-      message += `${helper.validPassword(req.body.password).message}\n`;
+      messages = messages.concat(helper.validPassword(req.body.password).invalidMessages);
     }
 
     // validate the firstname;
     if (!helper.validString(req.body.firstname)) {
       status = 'fail';
-      message += 'Firstname cannot be an empty string\n';
+      messages.push('Firstname cannot be an empty string');
     }
 
     // validate the lastname
     if (!helper.validString(req.body.lastname)) {
       status = 'fail';
-      message += 'Lastname cannot be an empty string\n';
+      messages.push('Lastname cannot be an empty string');
     }
 
     if (status === 'fail') {
-      res.status(400)
+      return res.status(400)
         .json({
           status,
-          message
+          messages
         });
-    } else {
-      next();
     }
+    return next();
   }
 };
 
-export default middlewares;
+export default usersValidations;

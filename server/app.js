@@ -2,12 +2,9 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
+
 import swaggerDocument from '../swagger.json';
-
-import users from './controllers/user';
-import middleware from './middleware/usersValidations';
-
-const { signUp } = users;
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 const urlencoded = bodyParser.urlencoded({ extended: false });
@@ -20,14 +17,17 @@ app.use(cors());
 // USE SWAGGER DOCUMENTATION
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+
 // ALLOW APP TO USE BODY-PARSER.
 app.use(urlencoded);
 app.use(json);
 
+// Use user routes
+app.use('/api/users', userRoutes);
+
 app.get('/', (req, res) => res.status(200).json({
   message: 'Welcome to the sims program'
 }));
-app.post('/users/auth/signup', middleware.validateSignUp, signUp);
 
 app.listen(port, () => console.log(`server is running on port ${port}`));
 

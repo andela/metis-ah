@@ -7,7 +7,7 @@ const users = {
 	 */
   signUp: (req, res) => res.status(400)
     .json({
-      message: 'everything is ok, good to go'
+      messages: ['everything is ok, good to go']
     })
 };
 

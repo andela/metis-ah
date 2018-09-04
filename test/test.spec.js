@@ -22,23 +22,24 @@ describe('TEST ALL ENDPOINT', () => {
   });
 
   describe('Descriptive error messages:', () => {
-    it('signup incomplete properties', () => {
+    it('signup incomplete properties', (done) => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
         })
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('message');
-          res.body.message.should.eql('Please provide firstname\nPlease provide lastname\nPlease provide email\nPlease provide password\n');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Please provide firstname', 'Please provide lastname', 'Please provide email', 'Please provide password']);
+          done();
         });
     });
-    it('signup firstname and lastname error', () => {
+    it('signup firstname and lastname error', (done) => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: '     ',
           lastname: '      ',
@@ -48,14 +49,15 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('message');
-          res.body.message.should.eql('Firstname cannot be an empty string\nLastname cannot be an empty string\n');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Firstname cannot be an empty string', 'Lastname cannot be an empty string']);
+          done();
         });
     });
-    it('signup email error', () => {
+    it('signup email error', (done) => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
@@ -65,14 +67,15 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('message');
-          res.body.message.should.equal('Invalid email provided\n');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Invalid email provided']);
+          done();
         });
     });
-    it('signup password error', () => {
+    it('signup password error', (done) => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
@@ -82,25 +85,27 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('message');
-          res.body.message.should.equal('Password must include at least one uppercase and lowercase character\n');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
+          done();
         });
     });
-    it('signup password error', () => {
+    it('signup password error', (done) => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
           email: 'test.tester@email.com',
-          password: 'assndv'
+          password: 'asDndv'
         })
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('message');
-          res.body.message.should.equal('Password should be more than 8 characters\n');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Password should be more than 8 characters']);
+          done();
         });
     });
   });
@@ -110,7 +115,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('users successfully signup', (done) => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
@@ -119,8 +124,8 @@ describe('TEST ALL ENDPOINT', () => {
         })
         .end((err, res) => {
           res.body.should.be.an('object');
-          res.body.should.have.property('message');
-          res.body.message.should.eql('everything is ok, good to go');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['everything is ok, good to go']);
           done();
         });
     });
