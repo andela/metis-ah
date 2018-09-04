@@ -25,7 +25,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup incomplete properties', () => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
         })
         .end((err, res) => {
@@ -38,7 +38,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup firstname and lastname error', () => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: '     ',
           lastname: '      ',
@@ -55,7 +55,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup email error', () => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
@@ -72,7 +72,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup password error', () => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
@@ -89,7 +89,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup password error', () => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
@@ -110,7 +110,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('users successfully signup', (done) => {
       chai
         .request(app)
-        .post('/users/auth/signup')
+        .post('/api/users/auth/signup')
         .send({
           firstname: 'Opeoluwa',
           lastname: 'Iyi-Kuyoro',
