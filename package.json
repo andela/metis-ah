@@ -5,7 +5,14 @@
   "main": "app.js",
   "scripts": {
     "test": "nyc mocha --exit --require babel-core/register",
-    "start": "babel-node app.js",
+    "start": "babel-node server/app.js",
+    "start_dev": "NODE_ENV=local_dev babel-node server/app.js",
+    "premigrate": "NODE_ENV=local_dev sequelize db:migrate",
+    "migrate": "NODE_ENV=local_test sequelize db:migrate",
+    "postmigrate": "NODE_ENV=local_dev",
+    "precreatdb": "NODE_ENV=local_dev sequelize db:create",
+    "createdb": "NODE_ENV=local_test sequelize db:create",
+    "postcreatedb": "NODE_ENV=local_dev",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -17,7 +24,12 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.1.1",
     "swagger-ui-express": "^4.0.0"
   },
   "devDependencies": {
