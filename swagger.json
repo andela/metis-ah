@@ -8,7 +8,7 @@
         "email": "metis.ah2018@gmail.com"
       }
     },
-    "host": "metis-ah-staging.herokuapp.com",
+    "host": "localhost:8000",
     "basePath": "/",
     "tags": [
       {
@@ -35,80 +35,102 @@
             }
           }
         }
-      },
-      "/api/users/auth/signup": {
+			},
+			"/api/v1/users/auth/signup": {
         "post": {
-          "tags": [
-            "user"
-          ],
-          "summary": "Signup to Author's Haven",
-          "description": "New users signup to the service and are returned a JWT",
-          "consumes": [
-            "application/json"
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "The user object that is to be created",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/signin"
-              }
-            }
-          ],
+					"tags": [ "User" ],
+          "summary": "Allows user to sign up with username, email and password",
+					"description": "User recieves JWtoken as he supplies his username, email and password",
+					"parameters": [
+						{
+							"in": "body",
+							"name": "body",
+							"description": "User's object that need to be parsed",
+							"required": true,
+							"schema": {
+								"$ref": "#/definitions/Signup"
+							}
+						}
+					],
           "responses": {
-            "400": {
-              "$ref": "#/definitions/error"
-            }
+            "201": {
+              "description": "User is signed up successfully"
+						},
+						"400": {
+							"description": "Email already exist!"
+						}
           }
         }
-      }
+			},
+			"/api/v1/users/auth/login": {
+        "post": {
+					"tags": [ "User" ],
+          "summary": "Allows user to login email and password",
+					"description": "User receives JWtoken on successful login",
+					"consumes": [
+						"application/json"
+					],
+					"produces": [
+						"application/xml"
+					],
+					"parameters": [
+						{
+							"in": "body",
+							"name": "body",
+							"description": "User's object that need to be parsed",
+							"required": true,
+							"schema": {
+								"$ref": "#/definitions/Login"
+							}
+						}
+					],
+          "responses": {
+            "200": {
+              "description": "User is signed in successfully"
+						},
+						"401": {
+							"description": "Invalid credentials supplied"
+						}
+          }
+        }
+			}
     },
     "definitions": {
-      "signin": {
-        "type": "object",
-        "required": [
-          "firstname",
-          "lastname",
-          "email",
-          "password"
-        ],
-        "properties": {
-          "firstname": {
-            "type": "string",
-            "example": "Opeoluwa"
-          },
-          "lastname": {
-            "type": "string",
-            "example": "Iyi-Kuyoro"
-          },
-          "email": {
-            "type": "string",
-            "example": "ope.iky@ah.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "PassWords"
-          }
-        }
+			"Signup": {
+				"type": "object",
+				"properties": {
+					"username": {
+						"type": "string",
+						"example": "metis"
+					},
+					"email": {
+						"type": "string",
+						"example": "metis@gmail.com"
+					},
+					"password": {
+						"type": "string",
+						"example": "Password"
+					}
+				},
+				"json": {
+					"name": "User"
+				}
       },
-      "error": {
-        "type": "object",
-        "description": "Invalid input",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "fail"
-          },
-          "messages": {
-            "type": "array",
-            "example": ["Invalid email", "Lastname cannot be an empty string"]
-          }
-        }
-      }
+      "Login": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"example": "metis@gmail.com"
+					},
+					"password": {
+						"type": "string",
+						"example": "Password"
+					}
+				},
+				"json": {
+					"name": "User"
+				}
+			}
     }
   }

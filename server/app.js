@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
-
+import jsend from 'jsend';
 import swaggerDocument from '../swagger.json';
 import userRoutes from './routes/userRoutes';
 
@@ -17,15 +17,16 @@ app.use(cors());
 // USE SWAGGER DOCUMENTATION
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// USE JSEND MIDDLEWARE
+app.use(jsend.middleware);
 
 // ALLOW APP TO USE BODY-PARSER.
 app.use(urlencoded);
 app.use(json);
 
-// Use user routes
-app.use('/api/users', userRoutes);
+app.use('/api/v1/users', userRoutes);
 
-app.get('/', (req, res) => res.status(200).json({
+app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'
 }));
 

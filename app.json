@@ -1,17 +1,19 @@
 {
   "name": "metis-ah",
   "scripts": {
+
   },
   "env": {
+    "INHERIT_THIS_CONFIG_VAR": {
+      "required": true
+    }
   },
   "formation": {
     "web": {
       "quantity": 1
     }
   },
-  "addons": [
-
-  ],
+  "addons": ["heroku-postgresql:hobby-dev"],
   "buildpacks": [
     {
       "url": "heroku/nodejs"

@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import app from '../server/app';
 
 chai.use(chaiHttp);
-const { should } = chai;
+const { should, expect } = chai;
 should();
 
 describe('TEST ALL ENDPOINT', () => {
@@ -14,8 +14,8 @@ describe('TEST ALL ENDPOINT', () => {
         .get('/')
         .end((err, res) => {
           res.body.should.be.an('object');
-          res.body.should.have.property('message');
-          res.body.message.should.eql('Welcome to the sims program');
+          res.body.should.have.property('data');
+          res.body.data.message.should.eql('Welcome to the sims program');
           done();
         });
     });
@@ -25,24 +25,23 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup incomplete properties', (done) => {
       chai
         .request(app)
-        .post('/api/users/auth/signup')
+        .post('/api/v1/users/auth/signup')
         .send({
         })
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
           res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Please provide firstname', 'Please provide lastname', 'Please provide email', 'Please provide password']);
+          res.body.messages.should.eql(['Please provide username', 'Please provide email', 'Please provide password']);
           done();
         });
     });
-    it('signup firstname and lastname error', (done) => {
+    it('signup username error', (done) => {
       chai
         .request(app)
-        .post('/api/users/auth/signup')
+        .post('/api/v1/users/auth/signup')
         .send({
-          firstname: '     ',
-          lastname: '      ',
+          username: '     ',
           email: 'test.tester@email.com',
           password: 'jdwndsiIUBDIijbikb'
         })
@@ -50,17 +49,16 @@ describe('TEST ALL ENDPOINT', () => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
           res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Firstname cannot be an empty string', 'Lastname cannot be an empty string']);
+          res.body.messages.should.eql(['username cannot be an empty string']);
           done();
         });
     });
     it('signup email error', (done) => {
       chai
         .request(app)
-        .post('/api/users/auth/signup')
+        .post('/api/v1/users/auth/signup')
         .send({
-          firstname: 'Opeoluwa',
-          lastname: 'Iyi-Kuyoro',
+          username: 'IyiKuyoro',
           email: 'test.testeremail.com',
           password: 'PasswordDD'
         })
@@ -75,10 +73,9 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup password error', (done) => {
       chai
         .request(app)
-        .post('/api/users/auth/signup')
+        .post('/api/v1/users/auth/signup')
         .send({
-          firstname: 'Opeoluwa',
-          lastname: 'Iyi-Kuyoro',
+          username: 'IyiKuyoro',
           email: 'test.tester@email.com',
           password: 'asswordlksndv'
         })
@@ -93,10 +90,9 @@ describe('TEST ALL ENDPOINT', () => {
     it('signup password error', (done) => {
       chai
         .request(app)
-        .post('/api/users/auth/signup')
+        .post('/api/v1/users/auth/signup')
         .send({
-          firstname: 'Opeoluwa',
-          lastname: 'Iyi-Kuyoro',
+          username: 'IyiKuyoro',
           email: 'test.tester@email.com',
           password: 'asDndv'
         })
@@ -115,19 +111,100 @@ describe('TEST ALL ENDPOINT', () => {
     it('users successfully signup', (done) => {
       chai
         .request(app)
-        .post('/api/users/auth/signup')
+        .post('/api/v1/users/auth/signup')
         .send({
-          firstname: 'Opeoluwa',
-          lastname: 'Iyi-Kuyoro',
+          username: 'IyiKuyoro',
           email: 'test.tester@email.com',
           password: 'jdwndsiIUBDIijbikb'
         })
         .end((err, res) => {
-          res.body.should.be.an('object');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['everything is ok, good to go']);
+          expect(res.body).to.be.an('object');
+          expect(res.body.data.message).to.equal('user is signed up successfully');
           done();
         });
     });
+  });
+});
+
+describe('USER SIGN UP TEST', () => {
+  it('should return user signed up successfully and return token', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/signup')
+      .send({
+        username: 'JojitoonName',
+        email: 'user@gmail.com',
+        password: 'Password'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.token);
+        expect(res.body.data.message).to.equal('user is signed up successfully');
+        done();
+      });
+  });
+
+  it('should return email already exist', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/signup')
+      .send({
+        username: 'JojitoonName',
+        email: 'user@gmail.com',
+        password: 'Password'
+      })
+      .end((err, res) => {
+        expect(res.body.data.message).to.equal('email already exist!');
+        done();
+      });
+  });
+});
+
+describe('USER SIGN IN TEST', () => {
+  it('should return user doesnt exist', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/login')
+      .send({
+        username: 'myName',
+        email: 'use@gmail.com',
+        password: 'Password'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('error');
+        expect(res.body.message).to.equal('Invalid credentials supplied');
+        done();
+      });
+  });
+
+  it('should return invalid credentials', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/login')
+      .send({
+        email: 'user@gmail.com',
+        password: 'Passwwor'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('error');
+        expect(res.body.message).to.equal('Invalid credentials supplied');
+        done();
+      });
+  });
+
+  it('should return sign in successful and return token', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/login')
+      .send({
+        email: 'user@gmail.com',
+        password: 'Password'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.token);
+        expect(res.body.data.message).to.equal('user is signed in successfully');
+        done();
+      });
   });
 });
