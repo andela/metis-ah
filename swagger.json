@@ -35,8 +35,80 @@
             }
           }
         }
+      },
+      "/api/users/auth/signup": {
+        "post": {
+          "tags": [
+            "user"
+          ],
+          "summary": "Signup to Author's Haven",
+          "description": "New users signup to the service and are returned a JWT",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "The user object that is to be created",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/signin"
+              }
+            }
+          ],
+          "responses": {
+            "400": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
       }
     },
     "definitions": {
+      "signin": {
+        "type": "object",
+        "required": [
+          "firstname",
+          "lastname",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "example": "Opeoluwa"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Iyi-Kuyoro"
+          },
+          "email": {
+            "type": "string",
+            "example": "ope.iky@ah.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "PassWords"
+          }
+        }
+      },
+      "error": {
+        "type": "object",
+        "description": "Invalid input",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "fail"
+          },
+          "messages": {
+            "type": "array",
+            "example": ["Invalid email", "Lastname cannot be an empty string"]
+          }
+        }
+      }
     }
   }
