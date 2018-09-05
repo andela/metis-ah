@@ -104,9 +104,9 @@
             "type": "string",
             "example": "fail"
           },
-          "message": {
-            "type": "string",
-            "example": "Error message"
+          "messages": {
+            "type": "array",
+            "example": ["Invalid email", "Lastname cannot be an empty string"]
           }
         }
       }
