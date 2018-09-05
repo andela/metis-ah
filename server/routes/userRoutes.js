@@ -1,6 +1,5 @@
 import express from 'express';
 import userController from '../controllers/userController';
-
 import auth from '../middleware/auth';
 import usersValidations from '../middleware/usersValidations';
 

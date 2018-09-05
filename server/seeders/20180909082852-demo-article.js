@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.bulkInsert('Articles', [{
+  up: queryInterface => queryInterface.bulkInsert('Articles', [{
     slug: 'just-a-sample-article',
     title: 'Just a Sample Article',
     description: 'This is a seed article used for testing purposes',
@@ -14,5 +14,5 @@ module.exports = {
     updatedAt: '2018-09-09'
   }], {}),
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Articles', null, {})
+  down: queryInterface => queryInterface.bulkDelete('Articles')
 };
