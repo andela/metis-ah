@@ -253,6 +253,28 @@ describe('TEST ALL ENDPOINT', () => {
         });
     });
   });
+
+  describe.only('/PUT. VERIFY ACCOUNT', () => {
+    it('Should return a 200 status code', (done) => {
+      chai
+        .request(app)
+        .put(`/api/users/verify/${token}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.status.should.be.a('string');
+          res.body.should.have.property('data');
+          res.body.data.should.be.an('object');
+          res.body.data.should.have.property('message');
+          res.body.data.message.should.be.a('string');
+          res.body.data.message.should.be.eql('Your account is verified successfully');
+          res.body.data.should.have.property('token');
+          res.body.data.token.should.be.a('string');
+          done();
+        });
+    });
+  });
 });
 
 describe('USER SIGN UP TEST', () => {
