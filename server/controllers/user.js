@@ -20,37 +20,19 @@ const users = {
 	 * @returns {object} json response
 	 */
   signUp: (req, res) => {
-    Users.findOrCreate({
-      where: {
-        email: req.body.email,
-      },
-      defaults: {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-      }
-    })
-      .spread((user, created) => {
-        if (!created) {
-          return res.status(400).jsend.fail({ message: 'user already exist!' });
-        }
-        const token = jwt.sign(
-          {
-            id: user.id,
-            isVerified: user.isVerified
-          },
-          secret,
-          { expiresIn: 7200 },
-        );
-        const tokenhash = cryptr.encrypt(token);
-        mailer.onUserRegistration(user.username, user.email, tokenhash);
-        res.status(200).jsend.success({
-          message: 'user is signed up successfully. Verify your Email address.', tokenhash
-        });
+    Users
+      .Create({
+        // CREATE USER ACCOUNT GOES HERE
       })
-      .catch(error => res.status(400).jsend.error({
-        message: error.message
-      }));
+      .then((user) => {
+        const token = 'CREATE A TOKEN';
+
+        // YOUR TOKEN IS ENCRYPTED
+        const tokenhash = cryptr.encrypt(token);
+
+        // THIS FUNCTION SEND AN EMAIL TO USER FOR VERIFICATION OF ACCOUNT
+        mailer.onUserRegistration(/* user.username */ /* user.email */ tokenhash);
+      });
   },
 
   /**
