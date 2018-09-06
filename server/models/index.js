@@ -7,7 +7,23 @@ const basename = path.basename(module.filename);
 const config = dbConfig[process.env.NODE_ENV];
 const db = {};
 
+<<<<<<< Updated upstream
 const sequelize = new Sequelize(process.env[config.use_env_variable]);
+=======
+let sequelize;
+
+if (
+  process.env.NODE_ENV === 'production'
+  || process.env.NODE_ENV === 'development'
+  || process.env.NODE_ENV === 'test'
+) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], {
+    dialectOptions: { ssl: { require: true } }
+  });
+} else {
+  sequelize = new Sequelize(process.env[config.use_env_variable]);
+}
+>>>>>>> Stashed changes
 
 fs
   .readdirSync(__dirname)

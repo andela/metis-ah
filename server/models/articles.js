@@ -15,6 +15,9 @@ const articles = (sequelize, DataTypes) => {
     body: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    imageUrl: {
+      type: DataTypes.STRING
     }
   });
 
