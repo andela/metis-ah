@@ -8,12 +8,9 @@
     "test": "NODE_ENV=test nyc mocha --exit --require babel-core/register",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "start": "babel-node server/app.js",
-    "start_dev": "NODE_ENV=local_dev nodemon --exec babel-node server/app.js",
-    "pretest-dev": "NODE_ENV=local_test sequelize db:migrate",
-    "test-dev": "NODE_ENV=local_test nyc mocha test --exit --require babel-core/register",
-    "posttest-dev": "NODE_ENV=local_test sequelize db:migrate:undo:all",
-    "premigrate": "NODE_ENV=local_dev sequelize db:migrate",
-    "migrate": "NODE_ENV=local_test sequelize db:migrate",
+    "start_dev": "nodemon --exec babel-node server/app.js",
+    "migrate": "sequelize db:migrate",
+    "unmigrate": "sequelize db:migrate:undo:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

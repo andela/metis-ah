@@ -36,6 +36,20 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
+    it('login incomplete properties', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Please provide email', 'Please provide password']);
+          done();
+        });
+    });
     it('signup username error', (done) => {
       chai
         .request(app)
@@ -70,12 +84,45 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
+    it('login email error', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          username: 'IyiKuyoro',
+          email: 'test.testeremail.com',
+          password: 'PasswordDD'
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Invalid email provided']);
+          done();
+        });
+    });
     it('signup password error', (done) => {
       chai
         .request(app)
         .post('/api/v1/users/auth/signup')
         .send({
           username: 'IyiKuyoro',
+          email: 'test.tester@email.com',
+          password: 'asswordlksndv'
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('messages');
+          res.body.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
+          done();
+        });
+    });
+    it('login password error', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
           email: 'test.tester@email.com',
           password: 'asswordlksndv'
         })

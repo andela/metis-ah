@@ -33,7 +33,8 @@ const usersValidations = {
     // Validate the password provided
     if (!helper.validPassword(req.body.password).valid) {
       status = 'fail';
-      messages = messages.concat(helper.validPassword(req.body.password).invalidMessages);
+      messages = messages
+        .concat(helper.validPassword(req.body.password).invalidMessages);
     }
 
     // validate the firstName;
