@@ -17,8 +17,7 @@ const usersValidations = {
 
     if (!valid) {
       return res.status(400)
-        .json({
-          status: 'fail',
+        .jsend.fail({
           messages: invalidMessages
         });
     }
@@ -33,7 +32,8 @@ const usersValidations = {
     // Validate the password provided
     if (!helper.validPassword(req.body.password).valid) {
       status = 'fail';
-      messages = messages.concat(helper.validPassword(req.body.password).invalidMessages);
+      messages = messages
+        .concat(helper.validPassword(req.body.password).invalidMessages);
     }
 
     // validate the firstName;
@@ -44,8 +44,7 @@ const usersValidations = {
 
     if (status === 'fail') {
       return res.status(400)
-        .json({
-          status,
+        .jsend.fail({
           messages
         });
     }
@@ -69,8 +68,7 @@ const usersValidations = {
 
     if (!valid) {
       return res.status(400)
-        .json({
-          status: 'fail',
+        .jsend.fail({
           messages: invalidMessages
         });
     }
@@ -90,8 +88,7 @@ const usersValidations = {
 
     if (status === 'fail') {
       return res.status(400)
-        .json({
-          status,
+        .jsend.fail({
           messages
         });
     }

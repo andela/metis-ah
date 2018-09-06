@@ -1,7 +1,7 @@
 import models from '../models';
 import generateToken from '../helpers/generateToken';
 
-const { Users } = models
+const { Users } = models;
 
 const userController = {
   /**
@@ -28,6 +28,8 @@ const userController = {
         const token = generateToken(user.id, 7200);
 
         return res.status(201).jsend.success({
+          userId: user.id,
+          username: user.username,
           message: 'user is signed up successfully',
           token
         });
@@ -58,6 +60,8 @@ const userController = {
         const token = generateToken(user.id, 7200);
 
         return res.status(200).jsend.success({
+          userId: user.id,
+          username: user.username,
           message: 'user is signed in successfully',
           token
         });

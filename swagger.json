@@ -8,7 +8,7 @@
         "email": "metis.ah2018@gmail.com"
       }
     },
-    "host": "localhost:8000",
+    "host": "metis-ah-staging.herokuapp.com",
     "basePath": "/",
     "tags": [
       {
