@@ -215,6 +215,25 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
+    it('users signup with google', (done) => {
+      chai
+        .request(app)
+        .post('/api/users/auth/google/redirect')
+        .send({
+          user: {
+            id: 1,
+            firstname: 'Opeoluwa',
+            lastname: 'Iyi-Kuyoro',
+            email: 'op@ah.metis.com',
+            created: true
+          }
+        })
+        .end((err, res) => {
+          // console.log(res);
+          res.body.should.be.an('object');
+          done();
+        });
+    });
   });
 });
 

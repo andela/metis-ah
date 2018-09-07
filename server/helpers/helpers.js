@@ -1,4 +1,7 @@
 import validator from 'validator';
+import model from '../models/index';
+
+const { Users } = model;
 
 const helpers = {
   /**
@@ -62,6 +65,78 @@ const helpers = {
       valid,
       invalidMessages
     };
+  },
+
+  /**
+   * @description This is the callback function for google's authentication
+   * @param  {string} accessToken The access token passed by google
+   * @param  {string} refreshToken The refresh token passed by google
+   * @param  {object} profile The returned profile information
+   * @param  {function} done The next function
+   * @returns {object} undefined
+   */
+  googlesCallback: (accessToken, refreshToken, profile, done) => {
+    Users.findOrCreate({
+      where: {
+        email: profile.emails[0].value
+      },
+      defaults: {
+        firstname: profile.name.givenName,
+        lastname: profile.name.familyName,
+        email: profile.emails[0].value,
+        username: profile.emails[0].value
+      }
+    }).spread((user, created) => {
+      const {
+        id,
+        firstname,
+        lastname,
+        email
+      } = user.dataValues;
+      return done(null, {
+        id,
+        firstname,
+        lastname,
+        email,
+        created
+      });
+    });
+  },
+
+  /**
+   * @description This is the callback function for facebook's authentication
+   * @param  {string} accessToken The access token passed by facebook
+   * @param  {string} refreshToken The refresh token passed by facebook
+   * @param  {object} profile The returned profile information
+   * @param  {function} done The next function
+   * @returns {object} undefined
+   */
+  facebookCallback: (accessToken, refreshToken, profile, done) => {
+    Users.findOrCreate({
+      where: {
+        email: profile.emails[0].value
+      },
+      defaults: {
+        firstname: profile.name.givenName,
+        lastname: profile.name.familyName,
+        email: profile.emails[0].value,
+        username: profile.emails[0].value
+      }
+    }).spread((user, created) => {
+      const {
+        id,
+        firstname,
+        lastname,
+        email
+      } = user.dataValues;
+      return done(null, {
+        id,
+        firstname,
+        lastname,
+        email,
+        created
+      });
+    });
   }
 };
 

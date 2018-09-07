@@ -20,7 +20,7 @@ const users = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true,
     },
     bio: {
       type: DataTypes.STRING
