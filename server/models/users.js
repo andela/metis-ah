@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 const users = (sequelize, DataTypes) => {
   const Users = sequelize.define('Users', {
     username: {
@@ -6,12 +8,10 @@ const users = (sequelize, DataTypes) => {
       unique: true
     },
     firstname: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     lastname: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.STRING
     },
     email: {
       type: DataTypes.STRING,
@@ -66,6 +66,11 @@ const users = (sequelize, DataTypes) => {
     });
   };
 
+  Users.beforeCreate((user) => {
+    user.password = bcrypt.hashSync(user.password, 8);
+  });
+
+  Users.checkPassword = (password, user) => bcrypt.compareSync(password, user);
   return Users;
 };
 

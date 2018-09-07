@@ -24,7 +24,7 @@ const articles = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
 
-    Articles.belongsTo(models.Category, {
+    Articles.belongsTo(models.Categories, {
       foreignKey: 'categoryId',
       as: 'category'
     });
@@ -39,7 +39,7 @@ const articles = (sequelize, DataTypes) => {
       as: 'favourites'
     });
 
-    Articles.hasMany(models.Tags, {
+    Articles.belongsToMany(models.Tags, {
       as: 'articleTags',
       through: 'Tagging',
       foreignKey: 'articleId'
