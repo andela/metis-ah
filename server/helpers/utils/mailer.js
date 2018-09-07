@@ -1,11 +1,14 @@
 import { config } from 'dotenv';
 import sgMail from '@sendgrid/mail';
+import emsg from './eMsgs';
+
 
 config();
 const secret = process.env.SENDGRID_API_KEY;
 sgMail.setApiKey(secret);
 
 const url = process.env.BASE_URL;
+const { msgOnRegistration } = emsg;
 
 /**
  * Mailer Event Emitter
@@ -42,23 +45,10 @@ export default class Mailer {
    * @returns {function} sender
    */
   static onUserRegistration(username, email, token) {
-    const message = `
-    <div>
-        <h3>Hi ${username},</h3>
-        <p>Welcome to Author's Haven, we extend our gratitude to
-            to have you on our platform, But to activate your account please
-            click on this link <br /> 
-            <br /> <br /> 
-            <a href="${url}/api/verify/${token}"
-            style="border: 1px solid light-blue; background-color: blue; padding: 10px;
-             color: #fff; border-radius:10px; text-decoration: none" > Verify Account
-            <a>
-        </p>
-  </div>`;
     return Mailer.sender({
       to: email,
       subject: 'Verify user\'s account',
-      message
+      message: msgOnRegistration(username, url, token)
     });
   }
 
