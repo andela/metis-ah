@@ -8,20 +8,16 @@ module.exports = {
     },
     followed: {
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
         model: 'Users',
-        key: 'id',
-        as: 'userId'
+        key: 'id'
       }
     },
     follower: {
       type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
       references: {
         model: 'Users',
-        key: 'id',
-        as: 'userId'
+        key: 'id'
       }
     },
     createdAt: {

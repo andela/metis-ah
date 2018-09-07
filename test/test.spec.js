@@ -472,19 +472,5 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
-    it('should return sign in successful and return token', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/users/auth/login')
-        .send({
-          email: 'postman@gmail.com',
-          password: 'Password'
-        })
-        .end((err, res) => {
-          expect(res.body.status).to.equal('success');
-          expect(res.body.data.message).to.equal('user is signed in successfully');
-          done();
-        });
-    });
   });
 });
