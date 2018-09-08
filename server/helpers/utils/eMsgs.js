@@ -1,7 +1,7 @@
 export default {
   verifiedMessage: `
     <div>
-        <p>Hurry!!!!</p>
+        <p>Hurray!!!!</p>
         <p>You have successfully verified your account, and
         we are supper exited to have you on our platform
         Thanks!
@@ -21,5 +21,7 @@ export default {
             <a>
         </p>
   </div>`;
-  }
+  },
+
+  successSignupMessage: 'User is signed up, an email is sent to your mail account, please verify your mail account to complete registration'
 };

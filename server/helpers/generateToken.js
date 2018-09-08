@@ -7,13 +7,12 @@ const secret = process.env.SECRET;
 const cryptr = new Cryptr(secret);
 /**
  * @description This function generates and encrypts JWT token
- * @param  {integer} id
  * @param  {integer} time
+ * @param  {Array} args
  * @returns {string} encrypted JWT token
  */
-const generateToken = (id, time) => {
-  const rawToken = jwt.sign({ id }, secret, { expiresIn: time });
+const generateToken = (time, { ...args }) => {
+  const rawToken = jwt.sign({ ...args }, secret, { expiresIn: time });
   return cryptr.encrypt(rawToken);
 };
-
 export default generateToken;

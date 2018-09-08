@@ -2,11 +2,14 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server/app';
 import './socialLogin.spec';
+import generateToken from '../server/helpers/generateToken';
+import Mailer from '../server/helpers/utils/mailer';
 
 chai.use(chaiHttp);
 const { should, expect } = chai;
 should();
 
+const unVerifiedToken = generateToken(7200, { id: 1, isVerified: false });
 describe('TEST ALL ENDPOINT', () => {
   describe('Initial testing', () => {
     it('should return welcome to sims', (done) => {
@@ -212,7 +215,7 @@ describe('TEST ALL ENDPOINT', () => {
         })
         .end((err, res) => {
           expect(res.body).to.be.an('object');
-          expect(res.body.data.message).to.equal('user is signed up successfully');
+          expect(res.body.data.message).to.equal('User is signed up, an email is sent to your mail account, please verify your mail account to complete registration');
           done();
         });
     });
@@ -253,12 +256,54 @@ describe('TEST ALL ENDPOINT', () => {
         });
     });
   });
+  describe('USER SIGN UP TEST', () => {
+    it('should return user signed up successfully and return token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/signup')
+        .send({
+          username: 'JojitoonName',
+          email: 'user@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('success');
+          expect(res.body.data.token);
+          expect(res.body.data.message).to.equal('User is signed up, an email is sent to your mail account, please verify your mail account to complete registration');
+          done();
+        });
+    });
 
-  describe.only('/PUT. VERIFY ACCOUNT', () => {
+    it('should return email already exist', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/signup')
+        .send({
+          username: 'JojitoonName',
+          email: 'user@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.data.message).to.equal('email already exist!');
+          done();
+        });
+    });
+  });
+  describe('VERIFY ACCOUNT', () => {
+    it('should send mail to a user', (done) => {
+      const testMail = {
+        email: 'daniel.adekunle@andela.com',
+        subject: 'Just testing out function',
+        message: '<strong>Please delete, I am just testing</strong>'
+      };
+      const result = Mailer.emailHelperfunc(testMail);
+      expect(result).to.be.a('Promise');
+      done();
+    });
     it('Should return a 200 status code', (done) => {
       chai
         .request(app)
-        .put(`/api/users/verify/${token}`)
+        .put(`/api/v1/users/verify/${unVerifiedToken}`)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
@@ -275,87 +320,53 @@ describe('TEST ALL ENDPOINT', () => {
         });
     });
   });
-});
 
-describe('USER SIGN UP TEST', () => {
-  it('should return user signed up successfully and return token', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/signup')
-      .send({
-        username: 'JojitoonName',
-        email: 'user@gmail.com',
-        password: 'Password'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('success');
-        expect(res.body.data.token);
-        expect(res.body.data.message).to.equal('user is signed up successfully');
-        done();
-      });
-  });
+  describe('USER SIGN IN TEST', () => {
+    it('should return user doesnt exist', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          username: 'myName',
+          email: 'use@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Invalid credentials supplied');
+          done();
+        });
+    });
 
-  it('should return email already exist', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/signup')
-      .send({
-        username: 'JojitoonName',
-        email: 'user@gmail.com',
-        password: 'Password'
-      })
-      .end((err, res) => {
-        expect(res.body.data.message).to.equal('email already exist!');
-        done();
-      });
-  });
-});
+    it('should return invalid credentials', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'user@gmail.com',
+          password: 'Passwwor'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Invalid credentials supplied');
+          done();
+        });
+    });
 
-describe('USER SIGN IN TEST', () => {
-  it('should return user doesnt exist', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/login')
-      .send({
-        username: 'myName',
-        email: 'use@gmail.com',
-        password: 'Password'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('error');
-        expect(res.body.message).to.equal('Invalid credentials supplied');
-        done();
-      });
-  });
-
-  it('should return invalid credentials', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/login')
-      .send({
-        email: 'user@gmail.com',
-        password: 'Passwwor'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('error');
-        expect(res.body.message).to.equal('Invalid credentials supplied');
-        done();
-      });
-  });
-
-  it('should return sign in successful and return token', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/login')
-      .send({
-        email: 'user@gmail.com',
-        password: 'Password'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('success');
-        expect(res.body.data.token);
-        expect(res.body.data.message).to.equal('user is signed in successfully');
-        done();
-      });
+    it('should return sign in successful and return token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'user@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('success');
+          expect(res.body.data.token);
+          expect(res.body.data.message).to.equal('user is signed in successfully');
+          done();
+        });
+    });
   });
 });
