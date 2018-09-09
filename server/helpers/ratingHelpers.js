@@ -17,7 +17,7 @@ const ratingHelper = {
         id: req.params.articleID
       }
     }).then((article) => {
-      article.rating = sum / count;
+      article.rating = Math.floor(sum / count);
       article.save().catch(err => res.status(500).jsend.error({
         message: err
       }));
