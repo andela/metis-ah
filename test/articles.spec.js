@@ -47,26 +47,6 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         });
     });
 
-    it('should upload image successfully when provided with an image', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/articles')
-        .set('Content-Type', 'multipart/form-data')
-        .set('authorization', getRawToken(1, 90000))
-        .attach('image', fs.readFileSync(`${__dirname}/images/test.png`), 'test.png')
-        .field('title', 'How I Learnt React in Andela')
-        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
-        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
-        .end((err, res) => {
-          console.log(res.body);
-          res.body.status.should.equal('success');
-          res.status.should.equal(201);
-          res.body.data.article.imageUrl.should.be.a('string');
-          res.body.data.article.imageUrl.length.should.be.greaterThan(0);
-          done();
-        });
-    });
-
     it('should fail when token is not sent with it', (done) => {
       chai
         .request(app)
