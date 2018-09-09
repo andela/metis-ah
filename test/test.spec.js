@@ -13,6 +13,7 @@ chai.use(chaiHttp);
 const cryptr = new Cryptr(process.env.SECRET);
 const { should, expect } = chai;
 should();
+let token = '';
 
 const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
 const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
@@ -472,5 +473,110 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
+  it('should return sign in successful and return token', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/login')
+      .send({
+        email: 'user@gmail.com',
+        password: 'Password'
+      })
+      .end((err, res) => {
+        ({ token } = res.body.data);
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.token);
+        expect(res.body.data.message).to.equal('user is signed in successfully');
+        done();
+      });
+  });
+});
+
+describe('ARTICLES RATING TESTS', () => {
+  it('incorrect articleID', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/ed/rate')
+      .set('authorization', token)
+      .send({
+        rating: 5
+      })
+      .end((err, res) => {
+        console.log(res.body);
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+
+  it('rating out of range', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/rate')
+      .set('authorization', token)
+      .send({
+        rating: 8
+      })
+      .end((err, res) => {
+        console.log(res.body);
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Rating out of range. (Accepted range: 1 - 5.)');
+        done();
+      });
+  });
+
+  it('invalid rating', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/rate')
+      .set('authorization', token)
+      .send({
+        rating: 'five'
+      })
+      .end((err, res) => {
+        console.log(res.body);
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.eql('Rating must be a number.');
+        done();
+      });
+  });
+
+  it('no rating', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/rate')
+      .set('authorization', token)
+      .send({
+      })
+      .end((err, res) => {
+        console.log(res.body);
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('messages');
+        expect(res.body.data.messages).to.eql(['Please provide rating']);
+        done();
+      });
+  });
+
+  it('correct rating', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/rate')
+      .set('authorization', token)
+      .send({
+        rating: 5
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('rating');
+        expect(res.body.data.rating).to.equal(5);
+        done();
+      });
   });
 });

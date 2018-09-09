@@ -72,11 +72,46 @@ const articleController = {
 export default articleController;
 import jsend from 'jsend';
 import models from '../models';
+import ratingHelper from '../helpers/ratingHelpers';
+
+const { Ratings } = models;
+const { computeNewAverage } = ratingHelper;
 
 const articlesController = {
+  /**
+   * @description Rate an article and adjust records
+   * @param  {object} req The HTTP request object
+   * @param  {object} res The HTTP response object
+   * @returns {object} Undefined
+   */
   rateArticle: (req, res) => {
-    // Input new record in ratings
-    // Calculate average and update articles table
+    // Find or create a rating by current user on specified article
+    Ratings.findOrCreate({
+      where: {
+        articleId: req.params.articleID,
+        userId: req.currentUser
+      },
+      defaults: {
+        articleId: req.params.articleID,
+        userId: req.currentUser,
+        rating: req.body.rating
+      }
+    }).spread((record, created) => {
+      // If rating already exists, edit it
+      if (!created) {
+        record.rating = req.body.rating;
+        record.save.catch(err => res.status(500).jsend.error({
+          message: err
+        }));
+      }
+
+      // Get all ratings on specified article
+      Ratings.findAll({
+        where: {
+          articleId: req.params.articleID
+        }
+      }).then(ratings => computeNewAverage(ratings, req, res));
+    });
   }
 };
 
