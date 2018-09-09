@@ -60,7 +60,7 @@ const InputValidator = {
           });
         }
       }
-    })
+    });
   }
 };
 

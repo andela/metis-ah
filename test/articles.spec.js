@@ -58,6 +58,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .end((err, res) => {
+          console.log(res.body);
           res.body.status.should.equal('success');
           res.status.should.equal(201);
           res.body.data.article.imageUrl.should.be.a('string');
