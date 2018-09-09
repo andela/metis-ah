@@ -1,6 +1,6 @@
 import models from '../models';
 
-const { Articles } = models;
+const { Ratings, Articles } = models;
 
 const ratingHelper = {
   /**
@@ -45,6 +45,20 @@ const ratingHelper = {
     return res.status(200).jsend.success({
       rating: Math.floor(sum / count)
     });
+  },
+
+  /**
+ * @description Analyses the ratings for the article
+ * @param  {object} req The HTTP request object
+ * @param  {object} res The HTTP response object
+ * @returns {object} The HTTP response object
+ */
+  analyseRatings: (req, res) => {
+    Ratings.findAll({
+      where: {
+        articleId: req.params.articleID
+      }
+    }).then(ratings => ratingHelper.computeNewAverage(ratings, req, res));
   }
 };
 

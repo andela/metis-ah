@@ -14,6 +14,7 @@ const cryptr = new Cryptr(process.env.SECRET);
 const { should, expect } = chai;
 should();
 let token = '';
+let token2 = '';
 
 const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
 const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
@@ -482,7 +483,7 @@ describe('TEST ALL ENDPOINT', () => {
         password: 'Password'
       })
       .end((err, res) => {
-        ({ token } = res.body.data);
+        (token2 = res.body.data.token);
         expect(res.body.status).to.equal('success');
         expect(res.body.data.token);
         expect(res.body.data.message).to.equal('user is signed in successfully');
@@ -491,7 +492,57 @@ describe('TEST ALL ENDPOINT', () => {
   });
 });
 
+describe('TOKEN AUTHENTICATION', () => {
+  it('No Token', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/2/rate')
+      .send({
+        rating: 5
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('No token provided');
+        done();
+      });
+  });
+
+  it('Invalid Token', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/5/rate')
+      .set('authorization', `${token}1`)
+      .send({
+        rating: 5
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Failed to authenticate token! Valid token required');
+        done();
+      });
+  });
+});
+
 describe('ARTICLES RATING TESTS', () => {
+  before((done) => {
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/login')
+      .send({
+        username: 'John-Doe',
+        email: 'john.doe@ah.com',
+        password: 'johnDSoe'
+      })
+      .end((err, res) => {
+        ({ token } = res.body.data);
+        done();
+      });
+  });
+
   it('incorrect articleID', (done) => {
     chai
       .request(app)
@@ -501,7 +552,23 @@ describe('ARTICLES RATING TESTS', () => {
         rating: 5
       })
       .end((err, res) => {
-        console.log(res.body);
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+
+  it('incorrect articleID', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/10000000/rate')
+      .set('authorization', token)
+      .send({
+        rating: 5
+      })
+      .end((err, res) => {
         expect(res.body.status).to.equal('fail');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('message');
@@ -519,7 +586,6 @@ describe('ARTICLES RATING TESTS', () => {
         rating: 8
       })
       .end((err, res) => {
-        console.log(res.body);
         expect(res.body.status).to.equal('fail');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('message');
@@ -537,7 +603,6 @@ describe('ARTICLES RATING TESTS', () => {
         rating: 'five'
       })
       .end((err, res) => {
-        console.log(res.body);
         expect(res.body.status).to.equal('fail');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('message');
@@ -554,7 +619,6 @@ describe('ARTICLES RATING TESTS', () => {
       .send({
       })
       .end((err, res) => {
-        console.log(res.body);
         expect(res.body.status).to.equal('fail');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('messages');
@@ -569,13 +633,30 @@ describe('ARTICLES RATING TESTS', () => {
       .post('/api/v1/articles/1/rate')
       .set('authorization', token)
       .send({
+        rating: 3
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('rating');
+        expect(res.body.data.rating).to.equal(3);
+        done();
+      });
+  });
+
+  it('correct rating', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/rate')
+      .set('authorization', token2)
+      .send({
         rating: 5
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('success');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('rating');
-        expect(res.body.data.rating).to.equal(5);
+        expect(res.body.data.rating).to.equal(4);
         done();
       });
   });

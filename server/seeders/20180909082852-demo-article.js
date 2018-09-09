@@ -10,8 +10,8 @@ module.exports = {
     Fusce hendrerit, nisi non pretium accumsan, velit ipsum tempus turpis, in ullamcorper nisi tortor sit amet nibh. Praesent id tortor erat. Praesent odio massa, congue eu commodo eu, fermentum eget nibh. Nulla eu tellus lectus. Nam sed pellentesque metus. Vestibulum odio nisl, efficitur blandit ipsum a, imperdiet vestibulum tortor. Nullam commodo nisi elit, eleifend pellentesque sem sagittis ut. Sed sit amet convallis lectus. Suspendisse a massa vitae sem iaculis finibus ut vel mauris. Praesent et viverra ex, non molestie lorem.`,
     userId: 1,
     categoryId: 1,
-    createdAt: '2018-09-05',
-    updatedAt: '2018-09-05'
+    createdAt: '2018-09-09',
+    updatedAt: '2018-09-09'
   }], {}),
 
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Articles', null, {})

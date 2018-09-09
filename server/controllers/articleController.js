@@ -75,7 +75,7 @@ import models from '../models';
 import ratingHelper from '../helpers/ratingHelpers';
 
 const { Ratings } = models;
-const { computeNewAverage } = ratingHelper;
+const { analyseRatings } = ratingHelper;
 
 const articlesController = {
   /**
@@ -100,17 +100,18 @@ const articlesController = {
       // If rating already exists, edit it
       if (!created) {
         record.rating = req.body.rating;
-        record.save.catch(err => res.status(500).jsend.error({
-          message: err
-        }));
+        record.save().then(() => {
+          analyseRatings(req, res);
+        })
+          .catch((err) => {
+            res.status(500).jsend.error({
+              message: err
+            });
+          });
+      } else {
+        // Get all ratings on specified article
+        analyseRatings(req, res);
       }
-
-      // Get all ratings on specified article
-      Ratings.findAll({
-        where: {
-          articleId: req.params.articleID
-        }
-      }).then(ratings => computeNewAverage(ratings, req, res));
     });
   }
 };
