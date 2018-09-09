@@ -70,11 +70,13 @@ const articleController = {
 };
 
 export default articleController;
+import jsend from 'jsend';
 import models from '../models';
 
 const articlesController = {
   rateArticle: (req, res) => {
-
+    // Input new record in ratings
+    // Calculate average and update articles table
   }
 };
 
