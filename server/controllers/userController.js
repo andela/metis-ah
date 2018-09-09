@@ -1,7 +1,7 @@
 import models from '../models';
 import generateToken from '../helpers/generateToken';
 
-const { Users } = models
+const { Users } = models;
 
 const userController = {
   /**

@@ -5,9 +5,9 @@
   "main": "app.js",
   "scripts": {
     "pretest": "NODE_ENV=test sequelize db:migrate",
-    "test": "NODE_ENV=test nyc mocha --exit --require babel-core/register",
+    "test": "NODE_ENV=test nyc mocha --exit --require babel-core/register --timeout 90000",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
-    "test:dev": "nyc --reporter=html --reporter=text mocha ./test/*.spec.js  --require babel-core/register --exit --timeout=20000",
+    "test:dev": "npm run posttest && npm test",
     "start": "babel-node server/app.js",
     "start_dev": "nodemon --exec babel-node server/app.js",
     "migrate": "sequelize db:migrate",
