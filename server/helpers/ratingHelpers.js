@@ -42,8 +42,8 @@ const ratingHelper = {
 
     // Edit the articles rating column
     ratingHelper.editArticleRating(req, sum, count, res);
-    return res.status(200).jsend.success({
-      rating: Math.floor(sum / count)
+    return res.status(201).jsend.success({
+      averageRating: Math.floor(sum / count)
     });
   },
 
