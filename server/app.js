@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 import userRoutes from './routes/userRoutes';
-import articleRoute from './routes/articleRoutes';
+import articleRoutes from './routes/articleRoutes';
 import passportSetup from './config/passportSetup';
 import authRoutes from './routes/authRoutes';
 
@@ -37,11 +37,12 @@ app.use(passportSetup.initialize());
 // Use user routes
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/users/auth', authRoutes);
+app.use('/api/v1/articles', articleRoutes);
 
 app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'
 }));
-app.use('/api/v1/articles', articleRoute);
+app.use('/api/v1/articles', articleRoutes);
 
 
 app.listen(port, () => console.log(`server is running on port ${port}`));

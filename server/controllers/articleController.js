@@ -70,3 +70,12 @@ const articleController = {
 };
 
 export default articleController;
+import models from '../models';
+
+const articlesController = {
+  rateArticle: (req, res) => {
+
+  }
+};
+
+export default articlesController;
