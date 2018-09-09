@@ -600,13 +600,12 @@ describe('ARTICLES RATING TESTS', () => {
       .post('/api/v1/articles/1/rate')
       .set('authorization', token)
       .send({
-        rating: 'five'
+        rating: '{}'
       })
       .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('message');
-        expect(res.body.data.message).to.eql('Rating must be a number.');
+        expect(res.body.status).to.equal('error');
+        expect(res.body).to.have.property('message');
+        expect(res.body.message).to.eql('Rating must be a number.');
         done();
       });
   });
