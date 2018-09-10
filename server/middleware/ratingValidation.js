@@ -8,6 +8,30 @@ const { checkProps } = helpers;
 
 const ratingValidation = {
   /**
+   * @description Handel's user cannot rate own article
+   * @param  {object} req The HTTP request object
+   * @param  {object} res The HTTP response object
+   * @param  {function} next The next middleware
+   * @returns {object} The next middleware or response object
+   */
+  validateUser: (req, res, next) => {
+    Articles.findOne({
+      where: {
+        id: req.params.articleID,
+        userId: req.currentUser
+      }
+    }).then((article) => {
+      if (article) {
+        return res.status(401).jsend.fail({
+          message: 'User cannot rate his own article'
+        });
+      }
+
+      return next();
+    });
+  },
+
+  /**
    * @description Handel's articleID validation
    * @param  {object} req The HTTP request object
    * @param  {object} res The HTTP response object

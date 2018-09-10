@@ -528,20 +528,8 @@ describe('TOKEN AUTHENTICATION', () => {
 });
 
 describe('ARTICLES RATING TESTS', () => {
-  before((done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/login')
-      .send({
-        username: 'John-Doe',
-        email: 'john.doe@ah.com',
-        password: 'johnDSoe'
-      })
-      .end((err, res) => {
-        ({ token } = res.body.data);
-        done();
-      });
-  });
+  token = generateToken(1, 7200);
+  const tokenStone = generateToken(2, 7200);
 
   it('incorrect articleID', (done) => {
     chai
@@ -626,11 +614,28 @@ describe('ARTICLES RATING TESTS', () => {
       });
   });
 
-  it('correct rating', (done) => {
+  it('cannot rate own article', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/rate')
       .set('authorization', token)
+      .send({
+        rating: 3
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.a('object');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('User cannot rate his own article');
+        done();
+      });
+  });
+
+  it('correct rating', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/rate')
+      .set('authorization', tokenStone)
       .send({
         rating: 3
       })

@@ -12,7 +12,8 @@ const {
 const {
   validArticleId,
   validateRating,
-  validateObject
+  validateObject,
+  validateUser
 } = ratingValidation;
 const {
   validateArticle
@@ -27,6 +28,7 @@ articleRoutes.post('/:articleID/rate',
   validArticleId,
   validateObject,
   validateRating,
+  validateUser,
   rateArticle);
 
 export default articleRoutes;

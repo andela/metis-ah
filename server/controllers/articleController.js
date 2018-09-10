@@ -74,7 +74,7 @@ import jsend from 'jsend';
 import models from '../models';
 import ratingHelper from '../helpers/ratingHelpers';
 
-const { Ratings } = models;
+const { Articles, Ratings } = models;
 const { analyseRatings } = ratingHelper;
 
 const articlesController = {
