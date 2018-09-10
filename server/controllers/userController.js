@@ -67,6 +67,12 @@ const userController = {
           });
         }
         const token = generateToken(7200, { id: user.id, isVerified: user.isVerified });
+        if (!user.isVerified) {
+          mailer.onUserRegistration(user.username, user.email, token);
+          return res.status(400).jsend.error({
+            message: 'You have not verified your account yet! An Email is sent to you for account verification'
+          });
+        }
 
         return res.status(200).jsend.success({
           userId: user.id,

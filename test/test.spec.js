@@ -14,8 +14,8 @@ const { should, expect } = chai;
 should();
 
 const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
-const unVerifiedToken = generateToken(7200, { id: 1, isVerified: false });
-const verifiedToken = generateToken(7200, { id: 1, isVerified: true });
+const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
+const verifiedToken = generateToken(7200, { id: 2, isVerified: true });
 describe('TEST ALL ENDPOINT', () => {
   describe('Initial testing', () => {
     it('should return welcome to sims', (done) => {
@@ -458,8 +458,21 @@ describe('TEST ALL ENDPOINT', () => {
           password: 'Password'
         })
         .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('You have not verified your account yet! An Email is sent to you for account verification');
+          done();
+        });
+    });
+    it('should return sign in successful and return token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'postman@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
           expect(res.body.status).to.equal('success');
-          expect(res.body.data.token);
           expect(res.body.data.message).to.equal('user is signed in successfully');
           done();
         });

@@ -40,12 +40,10 @@ const auth = (req, res, next) => {
       next();
     });
   } catch (err) {
-    if (err) {
-      return res.status(401).send({
-        auth: false,
-        message: 'Failed to authenticate token! Valid token required',
-      });
-    }
+    return res.status(401).send({
+      auth: false,
+      message: 'Failed to authenticate token! Valid token required',
+    });
   }
 };
 export default auth;
