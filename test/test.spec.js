@@ -10,6 +10,7 @@ const { should, expect } = chai;
 should();
 
 const unVerifiedToken = generateToken(7200, { id: 1, isVerified: false });
+const verifiedToken = generateToken(7200, { id: 1, isVerified: true });
 describe('TEST ALL ENDPOINT', () => {
   describe('Initial testing', () => {
     it('should return welcome to sims', (done) => {
@@ -319,8 +320,121 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/users/verify/${verifiedToken}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.status.should.be.a('string');
+          res.body.should.have.property('message');
+          res.body.message.should.be.a('string');
+          res.body.message.should.be.eql('Your account is already been verified');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .put('/api/v1/users/verify/hjgug878gyf65dr4uyiuo8fd5')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('auth');
+          res.body.auth.should.be.a('boolean');
+          res.body.auth.should.be.equal(false);
+          res.body.should.have.property('message');
+          res.body.message.should.be.a('string');
+          res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
+          done();
+        });
+    });
   });
 
+  describe('Find All Users', () => {
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('auth');
+          res.body.auth.should.be.a('boolean');
+          res.body.auth.should.be.equal(false);
+          res.body.should.have.property('message');
+          res.body.message.should.be.a('string');
+          res.body.message.should.be.eql('No token provided');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', `${unVerifiedToken}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('message');
+          res.body.message.should.be.a('string');
+          res.body.message.should.be.eql('You dont have access. please verify your account');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', 'afa0efneoinej8ehbfiow')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('auth');
+          res.body.auth.should.be.a('boolean');
+          res.body.auth.should.be.equal(false);
+          res.body.should.have.property('message');
+          res.body.message.should.be.a('string');
+          res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
+          done();
+        });
+    });
+    it('Should return a 200 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', `${verifiedToken}`)
+        .end((err, res) => {
+          const user = res.body.data.users;
+          if (!user) {
+            res.should.have.status(200);
+            res.body.should.be.an('object');
+            res.body.should.have.property('status');
+            res.body.status.should.be.a('string');
+            res.body.should.have.property('data');
+            res.body.data.should.be.an('object');
+            res.body.data.should.have.property('message');
+            res.body.data.message.should.be.a('string');
+            res.body.data.message.should.be.eql('No User Found');
+          }
+          if (user) {
+            res.should.have.status(200);
+            res.body.should.be.an('object');
+            res.body.should.have.property('status');
+            res.body.status.should.be.a('string');
+            res.body.should.have.property('data');
+            res.body.data.should.be.an('object');
+            res.body.data.should.have.property('message');
+            res.body.data.message.should.be.a('string');
+            res.body.data.message.should.be.eql('Success!');
+          }
+          done();
+        });
+    });
+  });
   describe('USER SIGN IN TEST', () => {
     it('should return user doesnt exist', (done) => {
       chai

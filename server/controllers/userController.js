@@ -115,6 +115,22 @@ const userController = {
             });
           });
       });
+  },
+
+  allUsers: (req, res) => {
+    Users
+      .findAll()
+      .then((users) => {
+        if (!users.length) {
+          return res.status(200).jsend.success({
+            message: 'No User Found',
+          });
+        }
+        return res.status(200).jsend.success({
+          message: 'Success!',
+          users
+        });
+      });
   }
 };
 
