@@ -38,6 +38,9 @@
     {
       "name": "Categories",
       "description": "Everything about Categories"
+    },
+    { "name": "Notifications",
+    "description": "Everything about user notifications"
     }
   ],
   "schemes": [
@@ -279,104 +282,168 @@
       }
     },
     "/api/v1/tags/{tagName}": {
-      "get": {
+        "get": {
+          "tags": ["Tags"],
+          "summary": "Allows user view a tag",
+          "description": "User views a tag in database with all is associated articles",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [{
+              "in": "header",
+              "name": "authorization",
+              "description": "user token",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "path",
+              "name": "tagName",
+              "description": "tag name",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "tag with articles"
+            },
+            "404": {
+              "description": "no tag found"
+            }
+          }
+        }
+    },
+		"/api/v1/user/update": {
+			"parameters": [{
+				"name": "token",
+				"in": "headers",
+				"required": true,
+				"description": "Authorization header",
+				"type": "string"
+			}],
+			"put": {
+				"tags": [ "User" ],
+				"summary": "Allows user to update their profile",
+				"description": "Authenticated user will be able edit their profile",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Your profile has been updated successfully",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Update"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Your profile has been updated successfully"
+					}
+				}
+			}
+		},
+		"/api/v1/user/:userId": {
+			"parameters": [{
+				"name": "token",
+				"in": "headers",
+				"required": true,
+				"description": "Authorization header",
+				"type": "string"
+			}, {
+				"name": "userId",
+				"in": "path",
+				"required": true,
+				"description": "ID of the user",
+				"type": "string"
+			}],
+			"get": {
+				"summary": "Return the user's details",
+				"description": "",
+				"schema": {
+					"$ref": "#/definitions/userId"
+				},
+				"responses": {
+					"200": {
+						"description": "User profile"
+					}
+				}
+			}
+		},
+		"/api/v1/articles/{articleId}/{likeType}": {
+			"post": {
+				"tags": [ "Like" ],
+				"summary": "Allows user to like, dislike and unlike article",
+				"description": "Article like, dislike and unlike endpoint",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/xml"
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "articleId",
+						"description": "The id of the article to be liked",
+						"required": true,
+						"type": "number"
+					},
+					{
+						"in": "path",
+						"name": "likeType",
+						"description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Password reset successful"
+					},
+					"401": {
+						"description": "Verification link not valid"
+					},
+					"500": {
+						"description": "Request could not be completed. Please try again"
+					}
+				}
+			}
+		},
+    "/api/v1/users/auth/reset-password": {
+      "post": {
         "tags": [
-          "Tags"
+          "User"
         ],
-        "summary": "Allows user view a tag",
-        "description": "User views a tag in database with all is associated articles",
+        "summary": "Allows user to request for a password reset",
+        "description": "User receives an email with a link to reset password",
         "consumes": [
           "application/json"
         ],
         "produces": [
-          "application/json"
+          "application/xml"
         ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "authorization",
-            "description": "user token",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "path",
-            "name": "tagName",
-            "description": "tag name",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "tag with articles"
-          },
-          "404": {
-            "description": "no tag found"
-          }
-        }
-      }
-    },
-    "/api/v1/user/update": {
-      "parameters": [
-        {
-          "name": "token",
-          "in": "headers",
-          "required": true,
-          "description": "Authorization header",
-          "type": "string"
-        }
-      ],
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Allows user to update their profile",
-        "description": "Authenticated user will be able edit their profile",
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "Your profile has been updated successfully",
+            "description": "User's object that need to be parsed",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Update"
+              "$ref": "#/definitions/reset-password-email"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Your profile has been updated successfully"
-          }
-        }
-      }
-    },
-    "/api/v1/user/:userId": {
-      "parameters": [
-        {
-          "name": "token",
-          "in": "headers",
-          "required": true,
-          "description": "Authorization header",
-          "type": "string"
-        },
-        {
-          "name": "userId",
-          "in": "path",
-          "required": true,
-          "description": "ID of the user",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "summary": "Return the user's details",
-        "description": "",
-        "schema": {
-          "$ref": "#/definitions/userId"
-        },
-        "responses": {
-          "200": {
-            "description": "User profile"
+            "description": "Password reset link has been sent to your email"
+          },
+          "401": {
+            "description": "Invalid credentials supplied"
           }
         }
       }
@@ -403,43 +470,6 @@
             "name": "userId",
             "description": "user id to follow",
             "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "you are now following the user"
-          }
-        },
-        "401": {
-          "description": "User access required"
-        }
-      }
-    },
-    "/api/v1/users/interests": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Allows user to add categories to his interests",
-        "description": "User can add multiple interests at a time",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "authorization",
-            "description": "user token",
-            "required": true
-          },
-          {
-            "in": "body",
-            "name": "body",
-            "description": "category ids to add as interests",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/interests"
-            }
           }
         ],
         "responses": {
@@ -527,40 +557,6 @@
           },
           "500": {
             "description": "Request could not be completed. Please try again"
-          }
-        }
-      }
-    },
-    "/api/v1/users/auth/reset-password": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Allows user to request for a password reset",
-        "description": "User receives an email with a link to reset password",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/xml"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "User's object that need to be parsed",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/reset-password-email"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Password reset link has been sent to your email"
-          },
-          "401": {
-            "description": "Invalid credentials supplied"
           }
         }
       }
@@ -1565,6 +1561,256 @@
         "responses": {
           "200": {
             "description": "Returns bookmarked all articles"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications": {
+      "get": {
+        "tags": [ "Notifications" ],
+        "summary": "Allows user to view notifications",
+        "description": "This gives user the ability to view notifications",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [ "Notifications" ],
+        "summary": "Allows user to mark all notifications as read",
+        "description": "This gives user the ability to mark all his notifications as read",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [ "Notifications" ],
+        "summary": "Allows user to delete notifications hitory",
+        "description": "This gives user the ability to delete all his notifications",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/{notifyId}": {
+        "get": {
+          "tags": [ "Notifications" ],
+          "summary": "Allows user to get to one notifications",
+          "description": "This gives user the ability to view one notifications",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "description": "authentication access token for users to access this endpoint",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "path",
+              "name": "notifyId",
+              "description": "notification id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful"
+            },
+            "401": {
+              "description": "Authentication failed"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "put": {
+          "tags": [ "Notifications" ],
+          "summary": "Allows user to mark one notifications as read",
+          "description": "This gives user the ability to mark one of his notifications as read",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "description": "authentication access token for users to access this endpoint",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "path",
+              "name": "notifyId",
+              "description": "notification id",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful"
+            },
+            "401": {
+              "description": "Authentication failed"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "delete": {
+        "tags": [ "Notifications" ],
+        "summary": "Allows user to delete one notifications hitory",
+        "description": "This gives user the ability to delete one of his notifications",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "notifyId",
+            "description": "notification id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+      },
+    "/api/v1/notifications/read": {
+      "delete": {
+        "tags": [ "Notifications" ],
+        "summary": "Allows user to delete all read notifications",
+        "description": "This gives user the ability to delete all his read notifications",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/notifications/history": {
+      "get": {
+        "tags": [ "Notifications" ],
+        "summary": "Allows user to get notifications history",
+        "description": "This gives user the ability get all his notifications history",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }

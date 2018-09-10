@@ -8,6 +8,7 @@ import msg from '../helpers/utils/eMsgs';
 import { cloudinaryConfig, uploader } from '../config/cloudinary/cloudinaryConfig';
 import { multerUploads, dataUri } from '../config/multer/multerConfig';
 import refineAndConcat from '../helpers/refineAndConcat';
+import notify from '../helpers/notify';
 
 config();
 const url = process.env.BASE_URL;
@@ -18,6 +19,8 @@ const { refine, concatUnique } = refineAndConcat;
 const {
   Users, Followings, Interests, Categories, Articles, Bookmarks, Ratings
 } = models;
+
+const { SingleUserNotification } = notify;
 
 const userController = {
   /**
@@ -95,10 +98,12 @@ const userController = {
             message: 'Invalid credentials supplied',
           });
         }
+
         const token = generateToken('365d', {
           id: user.id,
           isVerified: user.isVerified,
           roleId: user.roleId
+
         });
         if (!user.isVerified) {
           mailer.onUserRegistration(user.username, user.email, token);
@@ -121,7 +126,7 @@ const userController = {
             token,
             message: 'user is signed in successfully'
           });
-      }).catch(() => {
+      }).catch((err) => {
         res.status(500).jsend.fail({ message: 'Login was not successful. Please try again' });
       });
   },
@@ -192,6 +197,7 @@ const userController = {
 	 * @returns {object} json response
 	 */
   verify: (req, res) => {
+    // CREATE A TOKEN
     let userEmail;
     Users
       .findById(req.currentUser.id)
@@ -279,6 +285,7 @@ const userController = {
             if (!created) {
               return res.status(400).jsend.fail({ message: `You are already following ${user.username}` });
             }
+            SingleUserNotification(res, req, user.id);
             res.status(200).jsend.success({ message: `you are now following ${user.username}` });
           })
           .catch(() => res.status(500).jsend.error({ message: 'You could not follow user at this time . Please try again' }));

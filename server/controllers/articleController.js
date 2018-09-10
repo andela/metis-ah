@@ -10,6 +10,7 @@ import tagManager from '../helpers/tagManager';
 import getBeginningOfWeek from '../helpers/getBeginningOfWeek';
 import GetAuthorsOfTheWeekHelpers from '../helpers/GetAuthorsOfTheWeekHelpers';
 
+import notify from '../helpers/notify';
 
 const { gte } = Op;
 const {
@@ -24,6 +25,12 @@ const {
   Users,
   Comments
 } = models;
+
+const {
+  multiEventNotifications,
+  multiNotifications,
+} = notify;
+
 const { analyseRatings } = ratingHelpers;
 
 const {
@@ -83,6 +90,7 @@ const articlesController = {
           : fields.tags;
 
       tagManager.createTag(res, tags, Tags, createdArticle);
+      multiNotifications(res, req, createdArticle);
       return res.status(201).jsend.success({
         article: createdArticle,
         tags,
@@ -126,6 +134,12 @@ const articlesController = {
             error: err.message
           }));
         }
+        multiEventNotifications(
+          res,
+          req,
+          Number(req.params.articleId),
+          `${req.params.likeType}d the article: `
+        );
         return res.status(200).jsend.success({ data, message });
       }).catch(() => res.status(401).jsend.fail({
         message: 'Article not found'

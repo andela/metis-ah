@@ -15,6 +15,7 @@ import tagRoute from './routes/tagRoutes';
 import roleRoutes from './routes/roleRoutes';
 import authorRoutes from './routes/authorRoutes';
 import categoryRoute from './routes/categoryRoutes';
+import notifyRoutes from './routes/notificationRoutes';
 
 dotenv.config();
 const app = express();
@@ -43,6 +44,7 @@ app.use(passportSetup.session());
 
 // Use user routes
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/notifications', notifyRoutes);
 app.use('/api/v1/users/auth', authRoutes);
 app.use('/api/v1/articles', articleRoutes);
 app.use('/api/v1/cases', caseRoutes);

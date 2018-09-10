@@ -36,7 +36,12 @@ const commentHelpers = {
       } else {
         historyOptions.commentId = comment.dataValues.id;
       }
-
+      notify.multiEventNotifications(
+        res,
+        req,
+        articleId,
+        'articleLikes', 'commented on the article:'
+      );
       await historyModel.create(historyOptions);
       const user = await Users.findById(userComment.userId, {
         attributes: ['id', 'username', 'firstname', 'lastname', 'createdAt', 'updatedAt']
