@@ -1,14 +1,19 @@
 import chai from 'chai';
+import Cryptr from 'cryptr';
+import dotenv from 'dotenv';
 import chaiHttp from 'chai-http';
 import app from '../server/app';
 import './socialLogin.spec';
 import generateToken from '../server/helpers/generateToken';
 import Mailer from '../server/helpers/utils/mailer';
 
+dotenv.config();
 chai.use(chaiHttp);
+const cryptr = new Cryptr(process.env.SECRET);
 const { should, expect } = chai;
 should();
 
+const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
 const unVerifiedToken = generateToken(7200, { id: 1, isVerified: false });
 const verifiedToken = generateToken(7200, { id: 1, isVerified: true });
 describe('TEST ALL ENDPOINT', () => {
@@ -308,15 +313,9 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.an('object');
-          res.body.should.have.property('status');
-          res.body.status.should.be.a('string');
           res.body.should.have.property('data');
-          res.body.data.should.be.an('object');
-          res.body.data.should.have.property('message');
-          res.body.data.message.should.be.a('string');
           res.body.data.message.should.be.eql('Your account is verified successfully');
           res.body.data.should.have.property('token');
-          res.body.data.token.should.be.a('string');
           done();
         });
     });
@@ -328,9 +327,7 @@ describe('TEST ALL ENDPOINT', () => {
           res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.status.should.be.a('string');
           res.body.should.have.property('message');
-          res.body.message.should.be.a('string');
           res.body.message.should.be.eql('Your account is already been verified');
           done();
         });
@@ -343,10 +340,8 @@ describe('TEST ALL ENDPOINT', () => {
           res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('auth');
-          res.body.auth.should.be.a('boolean');
           res.body.auth.should.be.equal(false);
           res.body.should.have.property('message');
-          res.body.message.should.be.a('string');
           res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
           done();
         });
@@ -362,10 +357,7 @@ describe('TEST ALL ENDPOINT', () => {
           res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('auth');
-          res.body.auth.should.be.a('boolean');
           res.body.auth.should.be.equal(false);
-          res.body.should.have.property('message');
-          res.body.message.should.be.a('string');
           res.body.message.should.be.eql('No token provided');
           done();
         });
@@ -379,8 +371,6 @@ describe('TEST ALL ENDPOINT', () => {
           res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('message');
-          res.body.message.should.be.a('string');
           res.body.message.should.be.eql('You dont have access. please verify your account');
           done();
         });
@@ -394,10 +384,21 @@ describe('TEST ALL ENDPOINT', () => {
           res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('auth');
-          res.body.auth.should.be.a('boolean');
           res.body.auth.should.be.equal(false);
-          res.body.should.have.property('message');
-          res.body.message.should.be.a('string');
+          res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', `${faketoken}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('auth');
+          res.body.auth.should.be.equal(false);
           res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
           done();
         });
@@ -408,29 +409,10 @@ describe('TEST ALL ENDPOINT', () => {
         .get('/api/v1/users/all')
         .set('Authorization', `${verifiedToken}`)
         .end((err, res) => {
-          const user = res.body.data.users;
-          if (!user) {
-            res.should.have.status(200);
-            res.body.should.be.an('object');
-            res.body.should.have.property('status');
-            res.body.status.should.be.a('string');
-            res.body.should.have.property('data');
-            res.body.data.should.be.an('object');
-            res.body.data.should.have.property('message');
-            res.body.data.message.should.be.a('string');
-            res.body.data.message.should.be.eql('No User Found');
-          }
-          if (user) {
-            res.should.have.status(200);
-            res.body.should.be.an('object');
-            res.body.should.have.property('status');
-            res.body.status.should.be.a('string');
-            res.body.should.have.property('data');
-            res.body.data.should.be.an('object');
-            res.body.data.should.have.property('message');
-            res.body.data.message.should.be.a('string');
-            res.body.data.message.should.be.eql('Success!');
-          }
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.data.message.should.be.eql('Success!');
           done();
         });
     });
