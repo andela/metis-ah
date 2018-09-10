@@ -36,7 +36,7 @@ const usersValidations = {
         .concat(helper.validPassword(req.body.password).invalidMessages);
     }
 
-    // validate the firstName;
+    // validate the userName;
     if (!helper.validString(req.body.username)) {
       status = 'fail';
       messages.push('username cannot be an empty string');
@@ -60,7 +60,7 @@ const usersValidations = {
    */
   validateLogin: (req, res, next) => {
     let status = 'success';
-    let messages = [];
+    const messages = [];
 
     // Check the passed body for required properties
     const { valid, invalidMessages } = helper
@@ -79,8 +79,29 @@ const usersValidations = {
       messages.push('Invalid email provided');
     }
 
+    if (status === 'fail') {
+      return res.status(400)
+        .jsend.fail({
+          messages
+        });
+    }
+    return next();
+  },
+  // Validate password on reset
+  validateNewPassword: (req, res, next) => {
+    let status = 'success';
+    let messages = [];
 
-    // Validate the password provided
+    const { valid, invalidMessages } = helper
+      .checkProps(req.body, 'password');
+
+    if (!valid) {
+      return res.status(400)
+        .jsend.fail({
+          messages: invalidMessages
+        });
+    }
+
     if (!helper.validPassword(req.body.password).valid) {
       status = 'fail';
       messages = messages.concat(helper.validPassword(req.body.password).invalidMessages);

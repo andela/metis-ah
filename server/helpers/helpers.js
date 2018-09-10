@@ -12,6 +12,8 @@ const helpers = {
   validPassword: (password) => {
     let valid = true;
     const invalidMessages = [];
+    // Password cant be empty
+
     // Check that length is greater or equal to 8
     if (password.trim().length < 8) {
       valid = false;
@@ -43,6 +45,16 @@ const helpers = {
    * @returns {boolean} A boolean representing if the string is valid or not
    */
   validString: bar => bar.trim().length > 0,
+
+  /**
+   * @description This method checks the date the password
+   * was updated and compares it to the date in the token
+   * @param  {string} currentDate
+   * @param  {string} tokenDate
+   * @returns {boolean} A boolean representing if the token is still valid or not
+   */
+  compareDate: (currentDate, tokenDate) => new Date(currentDate).getTime()
+                                              === new Date(tokenDate).getTime(),
 
   /**
    * @description This method checks if an object contains a number of properties
