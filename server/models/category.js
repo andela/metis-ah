@@ -3,7 +3,7 @@ const categories = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false
-    },
+    }
   });
 
   Categories.associate = (models) => {

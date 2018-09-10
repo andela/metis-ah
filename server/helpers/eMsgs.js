@@ -29,6 +29,6 @@ export default {
           <br /> <br />
           <a href="${url}/api/v1/users/api/auth/reset-password/${token}">${url}/api/v1/users/api/auth/reset-password/${token}</a>
       </p>
-      <p>If you don’t use this link within 3 hours, it will expire. To get a new password reset link, visit <a href="${url}/api/v1/users/api/auth/reset-password/">${url}/api/v1/users/api/auth/reset-password/</a></p>
+      <p>If you don’t use this link within 10 minutes, it will expire. To get a new password reset link, visit <a href="${url}/api/v1/users/api/auth/reset-password/">${url}/api/v1/users/api/auth/reset-password/</a></p>
 </div>`
 };

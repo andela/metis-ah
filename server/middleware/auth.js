@@ -43,7 +43,7 @@ const auth = (req, res, next) => {
       next();
     });
   } catch (error) {
-    return res.status(401).jsend.error({ message: 'Invalid token' });
+    return res.status(401).jsend.fail({ auth: false, message: 'Failed to authenticate token! Valid token required' });
   }
 };
 export default auth;

@@ -177,22 +177,6 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
-    it('login password error', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/users/auth/login')
-        .send({
-          email: 'test.tester@email.com',
-          password: 'asswordlksndv'
-        })
-        .end((err, res) => {
-          res.body.should.be.an('object');
-          res.body.should.have.property('status');
-          res.body.data.should.have.property('messages');
-          res.body.data.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
-          done();
-        });
-    });
     it('signup password error', (done) => {
       chai
         .request(app)
@@ -511,7 +495,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('should return invalid credentials', (done) => {
       chai
         .request(app)
-        .post('/api/v1/users/api/auth/reset-password')
+        .post('/api/v1/users/auth/reset-password')
         .send({
           email: 'tomi@gmail.com'
         })
@@ -525,7 +509,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('should return invalid credentials', (done) => {
       chai
         .request(app)
-        .post('/api/v1/users/api/auth/reset-password')
+        .post('/api/v1/users/auth/reset-password')
         .send({
           email: 'user@gmail.com'
         })
@@ -540,7 +524,7 @@ describe('TEST ALL ENDPOINT', () => {
       const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
       chai
         .request(app)
-        .put(`/api/v1/users/api/auth/reset-password/${token}`)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
         .send({
           password: 'Userboyboy'
         })
@@ -555,7 +539,7 @@ describe('TEST ALL ENDPOINT', () => {
       const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
       chai
         .request(app)
-        .put(`/api/v1/users/api/auth/reset-password/${token}`)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
         .send({
           password: 'Userboyboy'
         })
@@ -570,7 +554,7 @@ describe('TEST ALL ENDPOINT', () => {
       const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
       chai
         .request(app)
-        .put(`/api/v1/users/api/auth/reset-password/${token}`)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
         .send({
         })
         .end((err, res) => {
@@ -584,7 +568,7 @@ describe('TEST ALL ENDPOINT', () => {
       const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
       chai
         .request(app)
-        .put(`/api/v1/users/api/auth/reset-password/${token}`)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
         .send({
           password: 'adebncxsdds'
         })
@@ -611,11 +595,11 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
-    it('should return invalid credentials', (done) => {
-      const token = generateToken(600, { id: 1, updatedAt: '2018-09-09' });
+    it('should return password reset successful', (done) => {
+      const token = generateToken(600, { id: 1, isVerified: true, updatedAt: '2018-09-08' });
       chai
         .request(app)
-        .put(`/api/v1/users/api/auth/reset-password/${token}`)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
         .send({
           password: 'Userboyboy'
         })

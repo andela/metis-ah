@@ -157,6 +157,80 @@
         }
       }
     },
+      "/api/v1/users/auth/reset-password": {
+        "post": {
+					"tags": [ "User" ],
+          "summary": "Allows user to request for a password reset",
+					"description": "User receives an email with a link to reset password",
+					"consumes": [
+						"application/json"
+					],
+					"produces": [
+						"application/xml"
+					],
+					"parameters": [
+						{
+							"in": "body",
+							"name": "body",
+							"description": "User's object that need to be parsed",
+							"required": true,
+							"schema": {
+								"$ref": "#/definitions/reset-password-email"
+							}
+						}
+					],
+          "responses": {
+            "200": {
+              "description": "Password reset link has been sent to your email"
+						},
+						"401": {
+							"description": "Invalid credentials supplied"
+						}
+          }
+        }
+      },
+      "/api/v1/users/auth/reset-password/{token}": {
+        "put": {
+					"tags": [ "User" ],
+          "summary": "Allows user to reset password",
+					"description": "User password reset endpoint",
+					"consumes": [
+						"application/json"
+					],
+					"produces": [
+						"application/xml"
+					],
+					"parameters": [
+						{
+							"in": "path",
+							"name": "token",
+							"description": "Token sent to the user's email for password reset",
+              "required": true,
+              "type": "string"
+            },
+            {
+							"in": "body",
+							"name": "body",
+							"description": "User's object that need to be parsed",
+							"required": true,
+							"schema": {
+								"$ref": "#/definitions/reset-password"
+							}
+            }
+					],
+          "responses": {
+            "200": {
+              "description": "Password reset successful"
+						},
+						"401": {
+							"description": "Verification link not valid"
+            },
+            "500": {
+              "description": "Request could not be completed. Please try again"
+            }
+          }
+        }
+			},
       "/api/v1/users/{userId}/follow": {
         "post": {
 					"tags": [ "User" ],
@@ -303,6 +377,30 @@
 					"password": {
 						"type": "string",
 						"example": "Password"
+					}
+				},
+				"json": {
+					"name": "User"
+				}
+      },
+      "reset-password-email": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"example": "metis@gmail.com"
+					}
+				},
+				"json": {
+					"name": "User"
+				}
+      },
+      "reset-password": {
+				"type": "object",
+				"properties": {
+					"password": {
+						"type": "string",
+						"example": "Jojitoon"
 					}
 				},
 				"json": {
