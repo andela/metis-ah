@@ -123,7 +123,7 @@ const notify = {
           notify.createNotifications(res, bulkData);
         }
       })
-      .catch(err => err.message);
+      .catch((err) => { res.status(500).jsend.error({ message: err }); });
   },
 
   /**

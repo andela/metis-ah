@@ -96,32 +96,38 @@ const notificationController = {
   },
   clearHistory: (req, res) => {
     Notifications
-      .destroy({
-        where: {
-          receiverId: req.currentUser.id
+      .destroy(
+        {
+          where: {
+            receiverId: req.currentUser.id
+          }
         }
-      })
+      )
       .then(() => res.redirect('/api/v1/notifications'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
   },
   clearOne: (req, res) => {
     Notifications
-      .destroy({
-        where: {
-          receiverId: req.currentUser.id,
-          id: req.params.notifyId
+      .destroy(
+        {
+          where: {
+            receiverId: req.currentUser.id,
+            id: req.params.notifyId
+          }
         }
-      })
+      )
       .then(() => res.redirect('/api/v1/notifications'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
   },
   clearRead: (req, res) => {
     Notifications.scope('read')
-      .destroy({
-        where: {
-          receiverId: req.currentUser.id
+      .destroy(
+        {
+          where: {
+            receiverId: req.currentUser.id
+          }
         }
-      })
+      )
       .then(() => res.redirect('/api/v1/notifications'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
   }
