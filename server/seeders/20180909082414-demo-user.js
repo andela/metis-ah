@@ -17,6 +17,14 @@ module.exports = {
     interests: ['Dancing', 'Java'],
     createdAt: '2018-09-09',
     updatedAt: '2018-09-09'
+  }, {
+    username: 'John-James',
+    email: 'john.james@ah.com',
+    password: bcrypt.hashSync('johnJJoe', 8),
+    isVerified: true,
+    interests: ['Dancing', 'Java'],
+    createdAt: '2018-09-09',
+    updatedAt: '2018-09-09'
   }], {}),
 
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Users', null, {})

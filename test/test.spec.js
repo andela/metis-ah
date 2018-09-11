@@ -4,17 +4,16 @@ import dotenv from 'dotenv';
 import nock from 'nock';
 import chaiHttp from 'chai-http';
 import app from '../server/app';
-import './socialLogin.spec';
 import generateToken from '../server/helpers/generateToken';
 import Mailer from '../server/helpers/utils/mailer';
+import './socialLogin.spec';
+import './rateArticles.spec';
 
 dotenv.config();
 chai.use(chaiHttp);
 const cryptr = new Cryptr(process.env.SECRET);
 const { should, expect } = chai;
 should();
-let token = '';
-let token2 = '';
 
 const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
 const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
@@ -483,7 +482,6 @@ describe('TEST ALL ENDPOINT', () => {
         password: 'Password'
       })
       .end((err, res) => {
-        (token2 = res.body.data.token);
         expect(res.body.status).to.equal('success');
         expect(res.body.data.token);
         expect(res.body.data.message).to.equal('user is signed in successfully');
@@ -513,7 +511,7 @@ describe('TOKEN AUTHENTICATION', () => {
     chai
       .request(app)
       .post('/api/v1/articles/5/rate')
-      .set('authorization', `${token}1`)
+      .set('authorization', 'token')
       .send({
         rating: 5
       })
@@ -522,145 +520,6 @@ describe('TOKEN AUTHENTICATION', () => {
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('message');
         expect(res.body.data.message).to.equal('Failed to authenticate token! Valid token required');
-        done();
-      });
-  });
-});
-
-describe('ARTICLES RATING TESTS', () => {
-  token = generateToken(1, 7200);
-  const tokenStone = generateToken(2, 7200);
-
-  it('incorrect articleID', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/ed/rate')
-      .set('authorization', token)
-      .send({
-        rating: 5
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('message');
-        expect(res.body.data.message).to.equal('Article not found');
-        done();
-      });
-  });
-
-  it('incorrect articleID', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/10000000/rate')
-      .set('authorization', token)
-      .send({
-        rating: 5
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('message');
-        expect(res.body.data.message).to.equal('Article not found');
-        done();
-      });
-  });
-
-  it('rating out of range', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/1/rate')
-      .set('authorization', token)
-      .send({
-        rating: 8
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('message');
-        expect(res.body.data.message).to.equal('Rating out of range. (Accepted range: 1 - 5.)');
-        done();
-      });
-  });
-
-  it('invalid rating', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/1/rate')
-      .set('authorization', token)
-      .send({
-        rating: '{}'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('error');
-        expect(res.body).to.have.property('message');
-        expect(res.body.message).to.eql('Rating must be a number.');
-        done();
-      });
-  });
-
-  it('no rating', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/1/rate')
-      .set('authorization', token)
-      .send({
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('messages');
-        expect(res.body.data.messages).to.eql(['Please provide rating']);
-        done();
-      });
-  });
-
-  it('cannot rate own article', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/1/rate')
-      .set('authorization', token)
-      .send({
-        rating: 3
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('message');
-        expect(res.body.data.message).to.equal('User cannot rate his own article');
-        done();
-      });
-  });
-
-  it('correct rating', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/1/rate')
-      .set('authorization', tokenStone)
-      .send({
-        rating: 3
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('success');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('averageRating');
-        expect(res.body.data.averageRating).to.equal(3);
-        done();
-      });
-  });
-
-  it('correct rating', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/articles/1/rate')
-      .set('authorization', token2)
-      .send({
-        rating: 5
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('success');
-        expect(res.body.data).to.be.a('object');
-        expect(res.body.data).to.have.property('averageRating');
-        expect(res.body.data.averageRating).to.equal(4);
         done();
       });
   });
