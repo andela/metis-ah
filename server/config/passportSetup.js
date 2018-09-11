@@ -21,7 +21,7 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(new GoogleStrategy({
-  callbackURL: 'http://localhost:8000/api/users/auth/google/redirect',
+  callbackURL: process.env.GOOGLE_CLIENT_CALLBACK_URI,
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET
 }, helpers.googlesCallback));
@@ -29,7 +29,7 @@ passport.use(new GoogleStrategy({
 passport.use(new FaceBookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-  callbackURL: 'http://localhost:8000/api/users/auth/facebook/redirect',
+  callbackURL: process.env.FACEBOOK_CLIENT_CALLBACK_URI,
   profileFields: ['email']
 }, helpers.facebookCallback));
 
