@@ -45,12 +45,34 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('title', 'How I Learnt React in Andela')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .field('tags', 'andela,TIA')
         .type('form')
         .end((err, res) => {
           res.status.should.equal(201);
           res.body.should.be.an('object');
           res.body.data.should.have.property('message');
           res.body.should.have.property('status');
+          res.body.data.should.have.property('tags');
+          res.body.status.should.equal('success');
+          done();
+        });
+    });
+    it('should return with a status of 201 on successful creation of articles without image being uploaded with the same tags', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles')
+        .set('authorization', hashedToken)
+        .set('Content-Type', 'multipart/form-data')
+        .field('title', 'How I Learnt React in Andela 2')
+        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article 2')
+        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela 2')
+        .field('tags', 'andela,TIA')
+        .end((err, res) => {
+          res.status.should.equal(201);
+          res.body.should.be.an('object');
+          res.body.data.should.have.property('message');
+          res.body.should.have.property('status');
+          res.body.data.should.have.property('tags');
           res.body.status.should.equal('success');
           done();
         });

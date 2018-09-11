@@ -9,6 +9,7 @@ import Mailer from '../server/helpers/utils/mailer';
 import './socialLogin.spec';
 import './rateArticles.spec';
 import './reportArticle.spec';
+import helpers from '../server/helpers/helpers';
 
 dotenv.config();
 chai.use(chaiHttp);
@@ -34,6 +35,20 @@ describe('TEST ALL ENDPOINT', () => {
     });
   });
 
+  describe('TESTING HELPERS FUNCTION', () => {
+    it('should validate password', () => {
+      const value = helpers.validPassword('PassWord');
+      expect(value.valid).to.equal(true);
+    });
+    it('should validate email false', () => {
+      const value = helpers.validEmail('email');
+      expect(value).to.equal(false);
+    });
+    it('should validate email', () => {
+      const value = helpers.validEmail('email@email.com');
+      expect(value).to.equal(true);
+    });
+  });
   describe('Descriptive error messages:', () => {
     it('signup incomplete properties', (done) => {
       chai

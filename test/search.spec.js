@@ -24,7 +24,7 @@ describe('Search Functionality tests', () => {
         .get('/api/v1/articles/search?author=postm')
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.data.searchResult.count.should.equal(6);
+          res.body.data.searchResult.count.should.equal(7);
           done();
         });
     });

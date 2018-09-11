@@ -1,22 +1,22 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('ArticleTags', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('ArticlesTags', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER
     },
-    articleId: {
-      type: Sequelize.INTEGER,
-      references: {
-        model: 'Articles',
-        key: 'id'
-      }
-    },
     tagId: {
       type: Sequelize.INTEGER,
       references: {
         model: 'Tags',
+        key: 'id'
+      }
+    },
+    articleId: {
+      type: Sequelize.INTEGER,
+      references: {
+        model: 'Articles',
         key: 'id'
       }
     },
@@ -29,5 +29,6 @@ module.exports = {
       type: Sequelize.DATE
     }
   }, { freezeTableName: true }),
-  down: queryInterface => queryInterface.dropTable('ArticleTags')
+
+  down: queryInterface => queryInterface.dropTable('ArticlesTags')
 };

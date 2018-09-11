@@ -1,5 +1,5 @@
 module.exports = {
-  up: queryInterface => queryInterface.bulkInsert('ArticleTags', [{
+  up: queryInterface => queryInterface.bulkInsert('ArticlesTags', [{
     articleId: 1,
     tagId: 1,
     createdAt: '2018-09-08',
@@ -17,5 +17,5 @@ module.exports = {
     createdAt: '2018-09-08',
     updatedAt: '2018-09-08'
   }]),
-  down: queryInterface => queryInterface.bulkDelete('ArticleTags')
+  down: queryInterface => queryInterface.bulkDelete('ArticlesTags')
 };

@@ -57,8 +57,8 @@ const articles = (sequelize, DataTypes) => {
     });
 
     Articles.belongsToMany(models.Tags, {
-      as: 'articleTags',
-      through: 'ArticleTags',
+      as: 'tags',
+      through: models.ArticlesTags,
       foreignKey: 'articleId'
     });
 

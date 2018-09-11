@@ -10,6 +10,7 @@ import articleRoutes from './routes/articleRoutes';
 import passportSetup from './config/passportSetup';
 import authRoutes from './routes/authRoutes';
 import caseRoutes from './routes/caseRoutes';
+import tagRoute from './routes/tagRoutes';
 
 dotenv.config();
 const app = express();
@@ -19,20 +20,13 @@ const port = parseInt(process.env.PORT, 10) || 8000;
 
 // USE CORS TO AVOID CROSS ORIGIN CONFLICT
 app.use(cors());
-app.use(jsend.middleware);
 
 // USE SWAGGER DOCUMENTATION
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// USE JSEND MIDDLEWARE
 app.use(jsend.middleware);
-
-// ALLOW APP TO USE BODY-PARSER.
 app.use(urlencoded);
 app.use(json);
-app.use(jsend.middleware);
-
-
 app.use(passportSetup.initialize());
 
 // Use user routes
@@ -40,6 +34,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/users/auth', authRoutes);
 app.use('/api/v1/articles', articleRoutes);
 app.use('/api/v1/cases', caseRoutes);
+app.use('/api/v1/tags', tagRoute);
 
 app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'
