@@ -1,11 +1,14 @@
 import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
-import swaggerUi from 'swagger-ui-express';
 import jsend from 'jsend';
+import dotenv from 'dotenv';
+import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 import userRoutes from './routes/userRoutes';
+import articleRoute from './routes/articleRoutes';
 
+dotenv.config();
 const app = express();
 const urlencoded = bodyParser.urlencoded({ extended: false });
 const json = bodyParser.json();
@@ -23,12 +26,15 @@ app.use(jsend.middleware);
 // ALLOW APP TO USE BODY-PARSER.
 app.use(urlencoded);
 app.use(json);
+app.use(jsend.middleware);
 
 app.use('/api/v1/users', userRoutes);
 
 app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'
 }));
+app.use('/api/v1/articles', articleRoute);
+
 
 app.listen(port, () => console.log(`server is running on port ${port}`));
 
