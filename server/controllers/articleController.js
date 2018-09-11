@@ -2,14 +2,17 @@ import cloudinary from 'cloudinary';
 import slug from 'slug';
 import uuid from 'uuid-random';
 import cloudinaryConfig from '../config/cloudinary/cloudinaryConfig';
-import models from '../models/index';
+import ratingHelpers from '../helpers/ratingHelpers';
+import models from '../models';
 
-const { Articles } = models;
+const { Articles, Ratings } = models;
+const { analyseRatings } = ratingHelpers;
+
 /**
  * @desc This a controller object literal that handles
  * containing functions that handles action relating to Articles
  */
-const articleController = {
+const articlesController = {
   /**
    * @desc saves an article to the database
    * @param  {object} req http request object
@@ -66,18 +69,8 @@ const articleController = {
         error: err.message
       }));
     }
-  }
-};
+  },
 
-export default articleController;
-import jsend from 'jsend';
-import models from '../models';
-import ratingHelper from '../helpers/ratingHelpers';
-
-const { Articles, Ratings } = models;
-const { analyseRatings } = ratingHelper;
-
-const articlesController = {
   /**
    * @description Rate an article and adjust records
    * @param  {object} req The HTTP request object

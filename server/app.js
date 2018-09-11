@@ -42,8 +42,6 @@ app.use('/api/v1/articles', articleRoutes);
 app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'
 }));
-app.use('/api/v1/articles', articleRoutes);
-
 
 app.listen(port, () => console.log(`server is running on port ${port}`));
 

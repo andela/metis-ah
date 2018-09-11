@@ -59,7 +59,7 @@ const ratingValidation = {
    * @returns {object} The next middleware or response object
    */
   validateRating: (req, res, next) => {
-    if (typeof Number(req.body.rating) !== 'number') {
+    if (!Number.isInteger(Number(req.body.rating))) {
       return res.status(400).jsend.fail({
         message: 'Rating must be a number.'
       });
