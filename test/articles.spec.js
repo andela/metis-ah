@@ -1,13 +1,16 @@
 // globals assert, expect, describe
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import nock from 'nock';
 import fs from 'fs';
 import app from '../server/app';
-import getRawToken from '../server/helpers/getRawToken';
+import response from './responses/cloudinaryApiResponse';
 
 chai.use(chaiHttp);
-const { assert, expect, should } = chai;
+const { expect, should } = chai;
 should();
+
+let hashedToken;
 
 describe('ARTICLE ENDPOINT TESTS', () => {
   // REGISTERS A NEW USER TO AVOID FOREIGN KEY ERROR
@@ -23,16 +26,23 @@ describe('ARTICLE ENDPOINT TESTS', () => {
       .end((err, res) => {
         expect(res.body).to.be.an('object');
         expect(res.body.data.message).to.equal('user is signed up successfully');
+        hashedToken = res.body.data.token;
         done();
       });
   });
 
   describe('CREATE ARTICLE ENDPOINT TESTS', () => {
+    beforeEach(() => {
+      nock('https://api.cloudinary.com/v1_1/dbsxxymfz')
+        .post('/image/upload')
+        .reply(200, response);
+    });
+
     it('should return with a status of 201 on successful creation of articles without image being uploaded', (done) => {
       chai
         .request(app)
         .post('/api/v1/articles')
-        .set('authorization', getRawToken(1, 90000))
+        .set('authorization', hashedToken)
         .set('Content-Type', 'multipart/form-data')
         .field('title', 'How I Learnt React in Andela')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
@@ -84,7 +94,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
       chai
         .request(app)
         .post('/api/v1/articles')
-        .set('authorization', getRawToken(1, 90000))
+        .set('authorization', hashedToken)
         .set('Content-Type', 'multipart/form-data')
         .field('title', '')
         .field('description', '')
@@ -102,7 +112,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
       chai
         .request(app)
         .post('/api/v1/articles')
-        .set('authorization', getRawToken(1, 90000))
+        .set('authorization', hashedToken)
         .set('Content-Type', 'multipart/form-data')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
@@ -110,6 +120,44 @@ describe('ARTICLE ENDPOINT TESTS', () => {
           res.status.should.equal(400);
           res.body.data.should.have.property('error');
           res.body.data.message.should.equal('You submitted Invalid Data!');
+          done();
+        });
+    });
+
+    it('should fail when uploading an image beyond 2 mb', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles')
+        .set('Content-Type', 'multipart/form-data')
+        .set('authorization', hashedToken)
+        .field('title', 'How I Learnt React in Andela')
+        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
+        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .attach('image', fs.readFileSync(`${__dirname}/images/Ft5_3mb.JPG`), 'Ft5_3mb.JPG')
+        .end((err, res) => {
+          res.body.status.should.equal('fail');
+          res.status.should.equal(500);
+          res.body.data.should.have.property('error');
+          res.body.data.error.should.contain('maxFileSize exceeded');
+          done();
+        });
+    });
+
+    it('should upload image successfully when provided with an image', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles')
+        .set('Content-Type', 'multipart/form-data')
+        .set('authorization', hashedToken)
+        .attach('image', fs.readFileSync(`${__dirname}/images/test.png`), 'test.png')
+        .field('title', 'How I Learnt React in Andela')
+        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
+        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .end((err, res) => {
+          res.body.status.should.equal('success');
+          res.status.should.equal(201);
+          res.body.data.article.imageUrl.should.be.a('string');
+          res.body.data.article.imageUrl.length.should.be.greaterThan(0);
           done();
         });
     });

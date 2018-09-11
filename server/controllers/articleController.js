@@ -6,19 +6,18 @@ import models from '../models/index';
 
 const { Articles } = models;
 /**
- * @desc This a controller class that handles
+ * @desc This a controller object literal that handles
  * containing functions that handles action relating to Articles
  */
-class ArticleController {
+const articleController = {
   /**
    * @desc saves an article to the database
    * @param  {object} req http request object
    * @param  {object} res http response object
    * @returns {res} http response object
    */
-  static create(req, res) {
+  create: (req, res) => {
     const { files, fields } = req.articleFormData;
-
     if (files.image) {
       const temporaryPath = files.image.path;
       // INITIALIZES CLOUDINARY LOCAL CONFIGURATIONS
@@ -77,6 +76,6 @@ class ArticleController {
       });
     }
   }
-}
+};
 
-export default ArticleController;
+export default articleController;

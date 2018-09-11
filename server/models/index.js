@@ -5,12 +5,10 @@ import dbConfig from '../config/config';
 
 const basename = path.basename(module.filename);
 const config = dbConfig[process.env.NODE_ENV];
-console.log(config);
+
 const db = {};
 
-
 const sequelize = new Sequelize(process.env[config.use_env_variable]);
-
 
 fs
   .readdirSync(__dirname)
