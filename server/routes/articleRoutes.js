@@ -22,12 +22,14 @@ const articleRoutes = express.Router();
 
 // POST ARTICLE ROUTE
 articleRoutes.post('/', auth, validateArticle, create);
-articleRoutes.post('/:articleID/rate',
+articleRoutes.post(
+  '/:articleID/rate',
   auth,
   validArticleId,
   validateObject,
   validateRating,
   validateUser,
-  rateArticle);
+  rateArticle
+);
 
 export default articleRoutes;
