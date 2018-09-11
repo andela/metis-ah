@@ -26,33 +26,28 @@ const articleController = {
       cloudinary.v2.uploader.upload(
         temporaryPath, (error, result) => {
           if (error) {
-            res.status(500).jsend.fail({
+            return res.status(500).jsend.fail({
               message: 'Something, went wrong. please try again',
               error: error.message,
               formData: fields,
             });
-          } else {
-            // VALIDATE
-          // SAVE ARTICLE WITH IMAGE
-            Articles.create({
-              userId: req.currentUser,
-              title: fields.title,
-              slug: `${slug(fields.title)}-${uuid()}`,
-              description: fields.description,
-              body: fields.body,
-              imageUrl: result.url,
-            }).then((createdArticle) => {
-              res.status(201).jsend.success({
-                article: createdArticle,
-                message: 'Article published successfully',
-              });
-            }).catch((err) => {
-              res.status(500).jsend.fail({
-                message: 'Something, went wrong. please try again',
-                error: err.message,
-              });
-            });
           }
+          // VALIDATE
+          // SAVE ARTICLE WITH IMAGE
+          Articles.create({
+            userId: req.currentUser,
+            title: fields.title,
+            slug: `${slug(fields.title)}-${uuid()}`,
+            description: fields.description,
+            body: fields.body,
+            imageUrl: result.url,
+          }).then(createdArticle => res.status(201).jsend.success({
+            article: createdArticle,
+            message: 'Article published successfully'
+          })).catch(err => res.status(500).jsend.fail({
+            message: 'Something, went wrong. please try again',
+            error: err.message
+          }));
         }
       );
     } else {
@@ -62,18 +57,14 @@ const articleController = {
         title: fields.title,
         slug: `${slug(fields.title)}-${uuid()}`,
         description: fields.description,
-        body: fields.body,
-      }).then((createdArticle) => {
-        res.status(201).jsend.success({
-          article: createdArticle,
-          message: 'Article published successfully',
-        });
-      }).catch((error) => {
-        res.status(500).jsend.fail({
-          message: 'Something, went wrong. please try again',
-          error: error.message,
-        });
-      });
+        body: fields.body
+      }).then(createdArticle => res.status(201).jsend.success({
+        article: createdArticle,
+        message: 'Article published successfully'
+      })).catch(err => res.status(500).jsend.fail({
+        message: 'Something, went wrong. please try again',
+        error: err.message
+      }));
     }
   }
 };
