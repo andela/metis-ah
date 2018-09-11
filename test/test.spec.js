@@ -59,8 +59,8 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Please provide email', 'Please provide password']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Please provide email', 'Please provide password']);
           done();
         });
     });
@@ -127,8 +127,8 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Invalid email provided']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Invalid email provided']);
           done();
         });
     });
@@ -176,8 +176,8 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
           done();
         });
     });
