@@ -3,7 +3,6 @@ import auth from '../middleware/auth';
 import articleController from '../controllers/articleController';
 import ratingValidation from '../middleware/ratingValidation';
 import inputValidator from '../middleware/inputValidator';
-import userRoutes from './userRoutes';
 
 const {
   rateArticle,
