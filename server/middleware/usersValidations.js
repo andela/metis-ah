@@ -17,8 +17,7 @@ const usersValidations = {
 
     if (!valid) {
       return res.status(400)
-        .json({
-          status: 'fail',
+        .jsend.fail({
           messages: invalidMessages
         });
     }
@@ -45,8 +44,7 @@ const usersValidations = {
 
     if (status === 'fail') {
       return res.status(400)
-        .json({
-          status,
+        .jsend.fail({
           messages
         });
     }
@@ -70,8 +68,7 @@ const usersValidations = {
 
     if (!valid) {
       return res.status(400)
-        .json({
-          status: 'fail',
+        .jsend.fail({
           messages: invalidMessages
         });
     }
@@ -91,8 +88,7 @@ const usersValidations = {
 
     if (status === 'fail') {
       return res.status(400)
-        .json({
-          status,
+        .jsend.fail({
           messages
         });
     }

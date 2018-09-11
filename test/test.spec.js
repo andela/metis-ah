@@ -31,8 +31,22 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Please provide username', 'Please provide email', 'Please provide password']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Please provide username', 'Please provide email', 'Please provide password']);
+          done();
+        });
+    });
+    it('login incomplete properties', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Please provide email', 'Please provide password']);
           done();
         });
     });
@@ -62,8 +76,8 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['username cannot be an empty string']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['username cannot be an empty string']);
           done();
         });
     });
@@ -79,8 +93,25 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Invalid email provided']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Invalid email provided']);
+          done();
+        });
+    });
+    it('login email error', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          username: 'IyiKuyoro',
+          email: 'test.testeremail.com',
+          password: 'PasswordDD'
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Invalid email provided']);
           done();
         });
     });
@@ -113,8 +144,24 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
+          done();
+        });
+    });
+    it('login password error', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'test.tester@email.com',
+          password: 'asswordlksndv'
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
           done();
         });
     });
@@ -146,14 +193,12 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.should.have.property('messages');
-          res.body.messages.should.eql(['Password should be more than 8 characters']);
+          res.body.data.should.have.property('messages');
+          res.body.data.messages.should.eql(['Password should be more than 8 characters']);
           done();
         });
     });
   });
-
-  // TODO: Tomi please adjust this as approprate
   describe('Successful signup', () => {
     it('users successfully signup', (done) => {
       chai

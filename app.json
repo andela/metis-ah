@@ -4,9 +4,37 @@
 
   },
   "env": {
-    "INHERIT_THIS_CONFIG_VAR": {
+    "DATABASE_URL": {
+      "required": true
+    },
+    "NODE_ENV": {
+      "required": true
+    },
+    "SECRET": {
+      "required": true
+    },
+    "SENDGRID_API_KEY": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_ID": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_SECRET": {
+      "required": true
+    },
+    "GOOGLE_CLIENT_CALLBACK_URI": {
+      "required": true
+    },
+    "FACEBOOK_CLIENT_ID": {
+      "required": true
+    },
+    "FACEBOOK_CLIENT_SECRET": {
+      "required": true
+    },
+    "FACEBOOK_CLIENT_CALLBACK_URI": {
       "required": true
     }
+
   },
   "formation": {
     "web": {
