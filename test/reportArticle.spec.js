@@ -23,8 +23,27 @@ describe('REPORT AN ARTICLE:', () => {
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('success');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('This case has been recorded and will be reviewed');
+        done();
+      });
+  });
+
+  it('report same article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/report')
+      .set({
+        authorization: token
+      })
+      .send({
+        violation: 'Discrimination',
+        description: 'This article depicts men as ignorant!'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
         expect(res.body).to.have.property('message');
-        expect(res.body.message).to.equal('This case has been recorded and will be reviewed');
+        expect(res.body.message).to.equal('You have reported this article already');
         done();
       });
   });
@@ -42,8 +61,8 @@ describe('REPORT AN ARTICLE:', () => {
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
-        expect(res.body).to.have.property('message');
-        expect(res.body.message).to.equal('Article not found');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Article not found');
         done();
       });
   });
@@ -61,8 +80,8 @@ describe('REPORT AN ARTICLE:', () => {
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
-        expect(res.body).to.have.property('message');
-        expect(res.body.message).to.equal('Violation can only be [\'Discrimination\', \'Plagiarism\', \'Sexual Content\', \'Discrimination\']');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Violation can only be [\'Discrimination\', \'Plagiarism\', \'Sexual Content\', \'Discrimination\']');
         done();
       });
   });
@@ -78,8 +97,8 @@ describe('REPORT AN ARTICLE:', () => {
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
-        expect(res.body).to.have.property('message');
-        expect(res.body.message).to.equal('Violation can only be [\'Discrimination\', \'Plagiarism\', \'Sexual Content\', \'Discrimination\']');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Violation can only be [\'Discrimination\', \'Plagiarism\', \'Sexual Content\', \'Discrimination\']');
         done();
       });
   });

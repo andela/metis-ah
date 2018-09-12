@@ -7,11 +7,8 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 import userRoutes from './routes/userRoutes';
 import articleRoutes from './routes/articleRoutes';
-<<<<<<< HEAD
 import passportSetup from './config/passportSetup';
 import authRoutes from './routes/authRoutes';
-=======
->>>>>>> feat(articles): add `articleRoutes.js` file
 
 dotenv.config();
 const app = express();

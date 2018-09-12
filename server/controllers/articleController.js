@@ -6,7 +6,7 @@ import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
 
-const { Articles, Ratings, ArticleLikes } = models;
+const { Cases, Articles, Ratings, ArticleLikes } = models;
 const { analyseRatings } = ratingHelpers;
 
 /**
@@ -83,6 +83,37 @@ const articlesController = {
       }).catch(() => res.status(401).jsend.fail({
         message: 'Article not found'
       }));
+  },
+
+  /**
+   * @description Reports a defaulting article
+   * @param  {object} req The request object
+   * @param  {object} res The response object
+   * @return {object} The response object
+   */
+  reportArticle: (req, res) => {
+    Cases.findOrCreate({
+      where: {
+        userId: req.currentUser,
+        articleId: req.params.articleId
+      },
+      default: {
+        userId: req.currentUser,
+        articleId: req.params.articleId,
+        violation: req.body.violation,
+        description: req.body.description || ''
+      }
+    }).spread((user, created) => {
+      if (!created) {
+        return res.status(400).jsend.fail({
+          message: 'You have reported this article already'
+        });
+      }
+
+      return res.status(201).jsend.fail({
+        message: 'This case has been recorded and will be reviewed'
+      });
+    });
   },
 
   /**
