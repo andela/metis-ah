@@ -18,6 +18,10 @@
       {
         "name": "Articles",
         "description": "Everything about all Articles"
+      },
+      {
+        "name": "Like",
+        "description": "Everything about all likes"
       }
     ],
     "schemes": [
@@ -155,7 +159,47 @@
             "description": "Failed to authenticate token! Valid token required"
           }
         }
-      }
+      },
+      "/api/v1/articles/{articleId}/{likeType}": {
+        "post": {
+					"tags": [ "Like" ],
+          "summary": "Allows user to like, dislike and unlike article",
+					"description": "Article like, dislike and unlike endpoint",
+					"consumes": [
+						"application/json"
+					],
+					"produces": [
+						"application/xml"
+					],
+					"parameters": [
+						{
+							"in": "path",
+							"name": "articleId",
+							"description": "The id of the article to be liked",
+              "required": true,
+              "type": "number"
+            },
+            {
+							"in": "path",
+							"name": "likeType",
+							"description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
+              "required": true,
+              "type": "string"
+            }
+					],
+          "responses": {
+            "200": {
+              "description": "Password reset successful"
+						},
+						"401": {
+							"description": "Verification link not valid"
+            },
+            "500": {
+              "description": "Request could not be completed. Please try again"
+            }
+          }
+        }
+			}
     },
       "/api/v1/users/auth/reset-password": {
         "post": {

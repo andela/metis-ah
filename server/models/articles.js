@@ -46,6 +46,11 @@ const articles = (sequelize, DataTypes) => {
       as: 'favourites'
     });
 
+    Articles.hasMany(models.ArticleLikes, {
+      foreignKey: 'articleId',
+      as: 'articleLikes'
+    });
+
     Articles.belongsToMany(models.Tags, {
       as: 'articleTags',
       through: 'Tagging',

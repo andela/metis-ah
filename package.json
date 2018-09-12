@@ -4,8 +4,8 @@
   "description": "A Social platform for the creative at heart",
   "main": "app.js",
   "scripts": {
-    "pretest": "NODE_ENV=test sequelize db:migrate;NODE_ENV=test sequelize db:seed:all",
-    "test": "NODE_ENV=test nyc mocha --exit --require babel-core/register",
+    "pretest": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
+    "test": "NODE_ENV=test nyc mocha test/**.spec.js --require babel-polyfill --require babel-core/register --exit",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "test:dev": "npm run posttest && npm test",
     "start": "babel-node server/app.js",

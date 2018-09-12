@@ -161,3 +161,70 @@ describe('ARTICLE ENDPOINT TESTS', () => {
     });
   });
 });
+
+describe('Articles likes test', () => {
+  it('should return Invalid likeType', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/adam')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Invalid likeType... likeType has to be - like, dislike or unlike');
+        done();
+      });
+  });
+
+  it('should return Invalid likeType', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/a/like')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Invalid articleId');
+        done();
+      });
+  });
+
+  it('should return you liked the article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/like')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.message).to.equal('you liked the article');
+        done();
+      });
+  });
+
+  it('should return you unliked the articlee', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/unlike')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.message).to.equal('you unliked the article');
+        done();
+      });
+  });
+
+  it('should return you unliked the articlee', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/100/unlike')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+});
