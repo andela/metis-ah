@@ -5,11 +5,12 @@ import likeController from '../controllers/likeController';
 import auth from '../middleware/auth';
 import ratingValidation from '../middleware/ratingValidation';
 import inputValidator from '../middleware/inputValidator';
+import reportValidation from '../middleware/reportValidation';
 import usersValidations from '../middleware/usersValidations';
 import checkParams from '../middleware/checkParams';
 import { multerUploads } from '../config/multer/multerConfig';
 
-const { rateArticle, create, like } = articleController;
+const { reportArticle, rateArticle, create, like } = articleController;
 const { addComment } = commentController;
 const { validateArticle, validateComments } = inputValidator;
 const { validateLikeObject } = usersValidations;
@@ -20,6 +21,11 @@ const {
   validateObject,
   validateUser
 } = ratingValidation;
+// TODO, varlidateArticleId is to be added when rate articles feature has been merged to develop.
+const {
+  validateViolation,
+  validateRequestObject
+} = reportValidation;
 
 const articleRoutes = express.Router();
 
@@ -42,5 +48,12 @@ articleRoutes.post(
 );
 articleRoutes.post('/', auth, multerUploads, validateArticle, create);
 articleRoutes.post('/:articleId/:likeType', auth, checkParams.id, checkParams.likeType, like);
+articleRoutes.post(
+  '/:articleId/report',
+  auth,
+  validateViolation,
+  validateRequestObject,
+  reportArticle
+);
 
 export default articleRoutes;
