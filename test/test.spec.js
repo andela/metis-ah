@@ -249,7 +249,6 @@ describe('TEST ALL ENDPOINT', () => {
           }
         })
         .end((err, res) => {
-          // console.log(res);
           res.body.should.be.an('object');
           done();
         });
