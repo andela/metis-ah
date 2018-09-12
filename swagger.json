@@ -316,6 +316,35 @@
             "description": "you are now following the user"
           }
         }
+			},
+      "/api/v1/articles/:articleId/comments/:commentId/like": {
+        "post": {
+					"tags": [ "Like" ],
+          "summary": "Route for authenticated users to like or unlike a comments on an article",
+					"description": "Returns a confirmation is like or unlike is successful",
+					"parameters": [
+						{
+							"in": "params",
+							"name": "commentId",
+							"description": "the id of the comment to be liked",
+							"required": true
+						}
+					],
+          "responses": {
+            "201": {
+              "description": "Returns a 201 status code on the first like"
+						},
+            "200": {
+              "description": "Returns a 200 when like is toggled based on yours like/unlike action"
+						},
+						"400": {
+							"description": "Returns a 400 if params is not valid"
+						},
+            "500": {
+							"description": "Returns a 500 if comment no longer exists"
+						}
+          }
+        }
       }
     },
     "/api/v1/articles/:articleId": {
