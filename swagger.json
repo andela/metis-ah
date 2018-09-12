@@ -93,7 +93,7 @@
 						}
       }
     }
-  },
+  		},
       "/api/verify/{token}": {
         "put": {
           "summary": "Verify user account",
@@ -120,7 +120,64 @@
             }
           }
         }
-      }
+      },
+			"/api/v1/user/update": {
+				"parameters": [{
+					"name": "token",
+					"in": "headers",
+					"required": true,
+					"description": "Authorization header",
+					"type": "string"
+				}],
+        "put": {
+					"tags": [ "User" ],
+          "summary": "Allows user to update their profile",
+					"description": "Authenticated user will be able edit their profile",
+					"parameters": [
+						{
+							"in": "body",
+							"name": "body",
+							"description": "Your profile has been updated successfully",
+							"required": true,
+							"schema": {
+								"$ref": "#/definitions/Update"
+							}
+						}
+					],
+          "responses": {
+            "200": {
+              "description": "Your profile has been updated successfully"
+						}
+          }
+        }
+			},
+			"/api/v1/user/:userId": {
+				"parameters": [{
+					"name": "token",
+					"in": "headers",
+					"required": true,
+					"description": "Authorization header",
+					"type": "string"
+				}, {
+					"name": "userId",
+					"in": "path",
+					"required": true,
+					"description": "ID of the user",
+					"type": "string"
+				}],
+        "get": {
+          "summary": "Return the user's details",
+					"description": "",
+					"schema": {
+						"$ref": "#/definitions/userId"
+					},
+          "responses": {
+            "200": {
+              "description": "User profile"
+            }
+          }
+        }
+			}
     },
     "definitions": {
       "signin": {
@@ -185,6 +242,46 @@
 				"json": {
 					"name": "User"
 				}
+			},
+			"Update": {
+				"type": "object",
+				"properties": {
+					"firstname": {
+						"type": "string",
+						"example": "joe"
+					},
+					"lastname": {
+						"type": "string",
+						"example": "easy"
+					},
+					"username": {
+						"type": "string",
+						"example": "metis"
+					},
+					"email": {
+						"type": "string",
+						"example": "metis@gmail.com"
+					},
+					"password": {
+						"type": "string",
+						"example": "password"
+					},
+					"bio": {
+						"type": "string",
+						"example": "Here is a brief information about me"
+					},
+					"interest": {
+						"type": "array",
+						"example": ["gaming", "entreprenuership"]
+					}
+				},
+				"json": {
+					"name": "User"
+				}
+			},
+			"userId": {
+				"type": "number",
+				"example": 1
 			}
     }
   }

@@ -137,7 +137,8 @@ const helpers = {
         created
       });
     });
-  }
+  },
+  parsedId: id => ((!(/^\d+$/.test(id))) ? NaN : parseInt(id, 10)),
 };
 
 export default helpers;

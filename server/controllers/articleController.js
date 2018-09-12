@@ -1,7 +1,7 @@
 import cloudinary from 'cloudinary';
 import slug from 'slug';
 import uuid from 'uuid-random';
-import cloudinaryConfig from '../config/cloudinary/cloudinaryConfig';
+import { cloudinaryConfig } from '../config/cloudinary/cloudinaryConfig';
 import models from '../models/index';
 
 const { Articles } = models;
