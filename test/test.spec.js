@@ -1,6 +1,7 @@
 import chai from 'chai';
 import Cryptr from 'cryptr';
 import dotenv from 'dotenv';
+import nock from 'nock';
 import chaiHttp from 'chai-http';
 import app from '../server/app';
 import './socialLogin.spec';
@@ -16,6 +17,7 @@ should();
 const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
 const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
 const verifiedToken = generateToken(7200, { id: 2, isVerified: true });
+console.log(unVerifiedToken);
 describe('TEST ALL ENDPOINT', () => {
   describe('Initial testing', () => {
     it('should return welcome to sims', (done) => {
@@ -296,14 +298,22 @@ describe('TEST ALL ENDPOINT', () => {
     });
   });
   describe('VERIFY ACCOUNT', () => {
+    before(() => {
+      nock('https://api.sendgrid.com', {
+        reqheaders: {
+          authorization: process.env.SENDGRID_API_KEY,
+          'Content-Type': 'application/json'
+        }
+      })
+        .post('/v3/mail/send');
+    });
     it('should send mail to a user', (done) => {
       const testMail = {
         email: 'daniel.adekunle@andela.com',
         subject: 'Just testing out function',
         message: '<strong>Please delete, I am just testing</strong>'
       };
-      const result = Mailer.emailHelperfunc(testMail);
-      expect(result).to.be.a('Promise');
+      Mailer.emailHelperfunc(testMail);
       done();
     });
     it('Should return a 200 status code', (done) => {
@@ -339,10 +349,10 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
-          res.body.should.have.property('auth');
-          res.body.auth.should.be.equal(false);
-          res.body.should.have.property('message');
-          res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.should.have.property('message');
+          res.body.data.message.should.be.eql('Failed to authenticate token! Valid token required');
           done();
         });
     });
@@ -356,9 +366,9 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
-          res.body.should.have.property('auth');
-          res.body.auth.should.be.equal(false);
-          res.body.message.should.be.eql('No token provided');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.message.should.be.eql('No token provided');
           done();
         });
     });
@@ -371,7 +381,7 @@ describe('TEST ALL ENDPOINT', () => {
           res.should.have.status(401);
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.message.should.be.eql('You dont have access. please verify your account');
+          res.body.data.message.should.be.eql('You dont have access. please verify your account');
           done();
         });
     });
@@ -383,9 +393,9 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
-          res.body.should.have.property('auth');
-          res.body.auth.should.be.equal(false);
-          res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.message.should.be.eql('Failed to authenticate token! Valid token required');
           done();
         });
     });
@@ -397,9 +407,9 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
-          res.body.should.have.property('auth');
-          res.body.auth.should.be.equal(false);
-          res.body.message.should.be.eql('Failed to authenticate token! Valid token required');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.message.should.be.eql('Failed to authenticate token! Valid token required');
           done();
         });
     });

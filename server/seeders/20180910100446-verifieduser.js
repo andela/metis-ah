@@ -8,6 +8,6 @@ module.exports = {
     isVerified: true,
     createdAt: '2018-09-08',
     updatedAt: '2018-09-08'
-  }], {}),
-  down: queryInterface => queryInterface.bulkDelete('Users', null, {})
+  }]),
+  down: queryInterface => queryInterface.bulkDelete('Users')
 };

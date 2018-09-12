@@ -13,9 +13,8 @@ const { msgOnRegistration } = emsg;
 /**
  * Mailer Event Emitter
  * @exports
- * @class Mailer
  */
-export default class Mailer {
+const Mailer = {
   /**
    * Email Transporter
    * @method sender
@@ -25,7 +24,7 @@ export default class Mailer {
    * @param {string} message
    * @returns {nothing} returns nothing
    */
-  static sender({ to, subject, message }) {
+  sender({ to, subject, message }) {
     const msg = {
       to,
       from: 'noreply@metis-ah',
@@ -33,7 +32,7 @@ export default class Mailer {
       html: message,
     };
     return sgMail.send(msg);
-  }
+  },
 
   /**
    * Sends Mail on user registration
@@ -44,14 +43,11 @@ export default class Mailer {
    * @param {string} token user's token
    * @returns {function} sender
    */
-  static onUserRegistration(username, email, token) {
-    return Mailer.sender({
-      to: email,
-      subject: 'Verify user\'s account',
-      message: msgOnRegistration(username, url, token)
-    });
-  }
-
+  onUserRegistration: (username, email, token) => Mailer.sender({
+    to: email,
+    subject: 'Verify user\'s account',
+    message: msgOnRegistration(username, url, token)
+  }),
   /**
    * Email Sender helper function
    * @method emailHelperfunc
@@ -59,7 +55,7 @@ export default class Mailer {
    * @param {*} args
    * @returns {function} sender
    */
-  static emailHelperfunc(args) {
+  emailHelperfunc: (args) => {
     const { email, subject, message } = args;
     return Mailer.sender({
       to: email,
@@ -67,4 +63,6 @@ export default class Mailer {
       message
     });
   }
-}
+};
+
+export default Mailer;

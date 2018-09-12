@@ -35,7 +35,7 @@ const articleController = {
           // VALIDATE
           // SAVE ARTICLE WITH IMAGE
           Articles.create({
-            userId: req.currentUser,
+            userId: req.currentUser.id,
             title: fields.title,
             slug: `${slug(fields.title)}-${uuid()}`,
             description: fields.description,
@@ -53,7 +53,7 @@ const articleController = {
     } else {
       // SAVE ARTICLE WITHOUT IMAGE
       Articles.create({
-        userId: req.currentUser,
+        userId: req.currentUser.id,
         title: fields.title,
         slug: `${slug(fields.title)}-${uuid()}`,
         description: fields.description,

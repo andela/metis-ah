@@ -16,7 +16,7 @@ const cryptr = new Cryptr(secret);
 const auth = (req, res, next) => {
   const token = req.headers.authorization || req.params.token;
   if (!token) {
-    return res.status(401).send({
+    return res.status(401).jsend.fail({
       auth: false,
       message: 'No token provided',
     });
@@ -25,13 +25,13 @@ const auth = (req, res, next) => {
     const unhashtoken = cryptr.decrypt(token);
     jwt.verify(unhashtoken, secret, (err, decoded) => {
       if (err) {
-        return res.status(401).send({
+        return res.status(401).jsend.fail({
           auth: false,
           message: 'Failed to authenticate token! Valid token required',
         });
       }
       if (req.headers.authorization && !decoded.isVerified) {
-        return res.status(401).jsend.error({
+        return res.status(401).jsend.fail({
           auth: false,
           message: 'You dont have access. please verify your account',
         });
@@ -40,7 +40,7 @@ const auth = (req, res, next) => {
       next();
     });
   } catch (err) {
-    return res.status(401).send({
+    return res.status(401).jsend.fail({
       auth: false,
       message: 'Failed to authenticate token! Valid token required',
     });

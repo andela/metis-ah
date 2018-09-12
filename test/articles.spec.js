@@ -17,15 +17,13 @@ describe('ARTICLE ENDPOINT TESTS', () => {
   before('Register a new user', (done) => {
     chai
       .request(app)
-      .post('/api/v1/users/auth/signup')
+      .post('/api/v1/users/auth/login')
       .send({
-        username: 'johngorithm',
-        email: 'johngorithm@email.com',
-        password: 'jdwndsiIUBDIijbikb'
+        email: 'postman@gmail.com',
+        password: 'Password'
       })
       .end((err, res) => {
         expect(res.body).to.be.an('object');
-        expect(res.body.data.message).to.equal('user is signed up successfully');
         hashedToken = res.body.data.token;
         done();
       });
@@ -68,7 +66,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .end((err, res) => {
           res.status.should.equal(401);
-          res.body.message.should.equal('No token provided');
+          res.body.data.message.should.equal('No token provided');
           done();
         });
     });
@@ -85,7 +83,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .end((err, res) => {
           res.status.should.equal(401);
-          res.body.message.should.equal('Failed to authenticate token! Valid token required');
+          res.body.data.message.should.equal('Failed to authenticate token! Valid token required');
           done();
         });
     });
