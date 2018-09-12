@@ -331,7 +331,133 @@
           }
         }
       }
-    },
+		},
+		"/api/v1/user/update": {
+			"parameters": [{
+				"name": "token",
+				"in": "headers",
+				"required": true,
+				"description": "Authorization header",
+				"type": "string"
+			}],
+			"put": {
+				"tags": [ "User" ],
+				"summary": "Allows user to update their profile",
+				"description": "Authenticated user will be able edit their profile",
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "Your profile has been updated successfully",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/Update"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Your profile has been updated successfully"
+					}
+				}
+			}
+		},
+		"/api/v1/user/:userId": {
+			"parameters": [{
+				"name": "token",
+				"in": "headers",
+				"required": true,
+				"description": "Authorization header",
+				"type": "string"
+			}, {
+				"name": "userId",
+				"in": "path",
+				"required": true,
+				"description": "ID of the user",
+				"type": "string"
+			}],
+			"get": {
+				"summary": "Return the user's details",
+				"description": "",
+				"schema": {
+					"$ref": "#/definitions/userId"
+				},
+				"responses": {
+					"200": {
+						"description": "User profile"
+					}
+				}
+			}
+		},
+		"/api/v1/users/{userId}/follow": {
+			"post": {
+				"tags": [ "User" ],
+				"summary": "Allows user to follow other users",
+				"description": "User will become a follower of another user",
+				"consumes": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "header",
+						"name": "authorization",
+						"description": "user token",
+						"required": true
+					},
+					{
+						"in": "path",
+						"name": "userId",
+						"description": "user id to follow",
+						"required": true
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "you are now following the user"
+					}
+				}
+			}
+		},
+		"/api/v1/articles/{articleId}/{likeType}": {
+			"post": {
+				"tags": [ "Like" ],
+				"summary": "Allows user to like, dislike and unlike article",
+				"description": "Article like, dislike and unlike endpoint",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/xml"
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "articleId",
+						"description": "The id of the article to be liked",
+						"required": true,
+						"type": "number"
+					},
+					{
+						"in": "path",
+						"name": "likeType",
+						"description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Password reset successful"
+					},
+					"401": {
+						"description": "Verification link not valid"
+					},
+					"500": {
+						"description": "Request could not be completed. Please try again"
+					}
+				}
+			}
+		},
     "/api/v1/users/auth/reset-password": {
       "post": {
         "tags": [
@@ -1193,90 +1319,130 @@
           }
         }
       }
-    }
-  },
-  "ArticleRequestBody": {
-    "type": "object",
-    "properties": {
-      "title": {
-        "type": "string",
-        "example": "How the Metis ruled the world"
-      },
-      "slug": {
-        "type": "string",
-        "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
-      },
-      "description": {
-        "type": "string",
-        "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
-      },
-      "body": {
-        "type": "string",
-        "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
-      },
-      "image": {
-        "type": "string",
-        "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
-      }
-    }
-  },
-  "ArticleResponseBody": {
-    "type": "object",
-    "properties": {
-      "title": {
-        "type": "string",
-        "example": "How the Metis ruled the world"
-      },
-      "slug": {
-        "type": "string",
-        "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
-      },
-      "description": {
-        "type": "string",
-        "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
-      },
-      "body": {
-        "type": "string",
-        "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
-      },
-      "image": {
-        "type": "string",
-        "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
-      },
-      "createdAt": {
-        "type": "string",
-        "format": "datetime",
-        "example": "2018-09-05T00:00:00.000Z"
-      },
-      "updatedAt": {
-        "type": "string",
-        "format": "datetime",
-        "example": "2018-09-05T00:00:00.000Z"
-      }
-    }
-  },
-  "ArticlesResponseBody": {
-    "type": "object",
-    "properties": {
-      "status": {
-        "type": "string",
-        "example": "success"
-      },
-      "data": {
-        "type": "object",
-        "properties": {
-          "articles": {
-            "type": "array",
-            "items": {
-              "$ref" : "#/definitions/ArticleResponseBody"
-            }
-          },
-          "currentPage": {
-            "type": "integer",
-            "example": 1
-          }
-        }
-      }
-    }
+    },
+		"ArticleRequestBody": {
+			"type": "object",
+			"properties": {
+				"title": {
+					"type": "string",
+					"example": "How the Metis ruled the world"
+				},
+				"slug": {
+					"type": "string",
+					"example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+				},
+				"description": {
+					"type": "string",
+					"example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+				},
+				"body": {
+					"type": "string",
+					"example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+				},
+				"image": {
+					"type": "string",
+					"example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+				}
+			}
+		},
+		"ArticleResponseBody": {
+			"type": "object",
+			"properties": {
+				"title": {
+					"type": "string",
+					"example": "How the Metis ruled the world"
+				},
+				"slug": {
+					"type": "string",
+					"example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+				},
+				"description": {
+					"type": "string",
+					"example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+				},
+				"body": {
+					"type": "string",
+					"example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+				},
+				"image": {
+					"type": "string",
+					"example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"example": "2018-09-05T00:00:00.000Z"
+				},
+				"updatedAt": {
+					"type": "string",
+					"format": "datetime",
+					"example": "2018-09-05T00:00:00.000Z"
+				}
+			}
+		},
+		"ArticlesResponseBody": {
+			"type": "object",
+			"properties": {
+				"status": {
+					"type": "string",
+					"example": "success"
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"articles": {
+							"type": "array",
+							"items": {
+								"$ref" : "#/definitions/ArticleResponseBody"
+							}
+						},
+						"currentPage": {
+							"type": "integer",
+							"example": 1
+						}
+					}
+				}
+			}
+			},
+		"Update": {
+			"type": "object",
+			"properties": {
+				"firstname": {
+					"type": "string",
+					"example": "joe"
+				},
+				"lastname": {
+					"type": "string",
+					"example": "easy"
+				},
+				"username": {
+					"type": "string",
+					"example": "metis"
+				},
+				"email": {
+					"type": "string",
+					"example": "metis@gmail.com"
+				},
+				"password": {
+					"type": "string",
+					"example": "password"
+				},
+				"bio": {
+					"type": "string",
+					"example": "Here is a brief information about me"
+				},
+				"interest": {
+					"type": "array",
+					"example": ["gaming", "entreprenuership"]
+				}
+			},
+			"json": {
+				"name": "User"
+			}
+		},
+		"userId": {
+			"type": "number",
+			"example": 1
+		}
   }
 }
