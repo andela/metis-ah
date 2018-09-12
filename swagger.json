@@ -91,11 +91,65 @@
 						"401": {
 							"description": "Invalid credentials supplied"
 						}
+      }
+    }
+  },
+      "/api/verify/{token}": {
+        "put": {
+          "summary": "Verify user account",
+          "description": "User recive an email like account verified",
+          "operationId": "getToken",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "token",
+              "in": "path",
+              "description": "Token generated for user",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200":{
+              "description": "Your account is verified successfully"
+            },
+            "401": {
+              "description": "Your account is already verified"
+            }
           }
         }
-			}
+      }
     },
     "definitions": {
+      "signin": {
+        "type": "object",
+        "required": [
+          "firstname",
+          "lastname",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "firstname": {
+            "type": "string",
+            "example": "Opeoluwa"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Iyi-Kuyoro"
+          },
+          "email": {
+            "type": "string",
+            "example": "ope.iky@ah.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "PassWords"
+          }
+        }
+			},
 			"Signup": {
 				"type": "object",
 				"properties": {
@@ -134,3 +188,4 @@
 			}
     }
   }
+

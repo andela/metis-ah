@@ -1,12 +1,22 @@
 import chai from 'chai';
+import Cryptr from 'cryptr';
+import dotenv from 'dotenv';
+import nock from 'nock';
 import chaiHttp from 'chai-http';
 import app from '../server/app';
 import './socialLogin.spec';
+import generateToken from '../server/helpers/generateToken';
+import Mailer from '../server/helpers/utils/mailer';
 
+dotenv.config();
 chai.use(chaiHttp);
+const cryptr = new Cryptr(process.env.SECRET);
 const { should, expect } = chai;
 should();
 
+const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
+const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
+const verifiedToken = generateToken(7200, { id: 2, isVerified: true });
 describe('TEST ALL ENDPOINT', () => {
   describe('Initial testing', () => {
     it('should return welcome to sims', (done) => {
@@ -212,7 +222,7 @@ describe('TEST ALL ENDPOINT', () => {
         })
         .end((err, res) => {
           expect(res.body).to.be.an('object');
-          expect(res.body.data.message).to.equal('user is signed up successfully');
+          expect(res.body.data.message).to.equal('User is signed up, an email is sent to your mail account, please verify your mail account to complete registration');
           done();
         });
     });
@@ -253,87 +263,228 @@ describe('TEST ALL ENDPOINT', () => {
         });
     });
   });
-});
+  describe('USER SIGN UP TEST', () => {
+    it('should return user signed up successfully and return token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/signup')
+        .send({
+          username: 'JojitoonName',
+          email: 'user@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('success');
+          expect(res.body.data.token);
+          expect(res.body.data.message).to.equal('User is signed up, an email is sent to your mail account, please verify your mail account to complete registration');
+          done();
+        });
+    });
 
-describe('USER SIGN UP TEST', () => {
-  it('should return user signed up successfully and return token', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/signup')
-      .send({
-        username: 'JojitoonName',
-        email: 'user@gmail.com',
-        password: 'Password'
+    it('should return email already exist', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/signup')
+        .send({
+          username: 'JojitoonName',
+          email: 'user@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.data.message).to.equal('email already exist!');
+          done();
+        });
+    });
+  });
+  describe('VERIFY ACCOUNT', () => {
+    before(() => {
+      nock('https://api.sendgrid.com', {
+        reqheaders: {
+          authorization: process.env.SENDGRID_API_KEY,
+          'Content-Type': 'application/json'
+        }
       })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('success');
-        expect(res.body.data.token);
-        expect(res.body.data.message).to.equal('user is signed up successfully');
-        done();
-      });
+        .post('/v3/mail/send');
+    });
+    it('should send mail to a user', (done) => {
+      const testMail = {
+        email: 'daniel.adekunle@andela.com',
+        subject: 'Just testing out function',
+        message: '<strong>Please delete, I am just testing</strong>'
+      };
+      Mailer.emailHelperfunc(testMail);
+      done();
+    });
+    it('Should return a 200 status code', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/users/verify/${unVerifiedToken}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('data');
+          res.body.data.message.should.be.eql('Your account is verified successfully');
+          res.body.data.should.have.property('token');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .put(`/api/v1/users/verify/${verifiedToken}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('message');
+          res.body.message.should.be.eql('Your account is already been verified');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .put('/api/v1/users/verify/hjgug878gyf65dr4uyiuo8fd5')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.should.have.property('message');
+          res.body.data.message.should.be.eql('Failed to authenticate token! Valid token required');
+          done();
+        });
+    });
   });
 
-  it('should return email already exist', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/signup')
-      .send({
-        username: 'JojitoonName',
-        email: 'user@gmail.com',
-        password: 'Password'
-      })
-      .end((err, res) => {
-        expect(res.body.data.message).to.equal('email already exist!');
-        done();
-      });
+  describe('Find All Users', () => {
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.message.should.be.eql('No token provided');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', `${unVerifiedToken}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.data.message.should.be.eql('You dont have access. please verify your account');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', 'afa0efneoinej8ehbfiow')
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.message.should.be.eql('Failed to authenticate token! Valid token required');
+          done();
+        });
+    });
+    it('Should return a 401 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', `${faketoken}`)
+        .end((err, res) => {
+          res.should.have.status(401);
+          res.body.should.be.an('object');
+          res.body.data.should.have.property('auth');
+          res.body.data.auth.should.be.equal(false);
+          res.body.data.message.should.be.eql('Failed to authenticate token! Valid token required');
+          done();
+        });
+    });
+    it('Should return a 200 status code', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/users/all')
+        .set('Authorization', `${verifiedToken}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.data.message.should.be.eql('Success!');
+          done();
+        });
+    });
   });
-});
+  describe('USER SIGN IN TEST', () => {
+    it('should return user doesnt exist', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          username: 'myName',
+          email: 'use@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Invalid credentials supplied');
+          done();
+        });
+    });
 
-describe('USER SIGN IN TEST', () => {
-  it('should return user doesnt exist', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/login')
-      .send({
-        username: 'myName',
-        email: 'use@gmail.com',
-        password: 'Password'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('error');
-        expect(res.body.message).to.equal('Invalid credentials supplied');
-        done();
-      });
-  });
+    it('should return invalid credentials', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'user@gmail.com',
+          password: 'Passwwor'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Invalid credentials supplied');
+          done();
+        });
+    });
 
-  it('should return invalid credentials', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/login')
-      .send({
-        email: 'user@gmail.com',
-        password: 'Passwwor'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('error');
-        expect(res.body.message).to.equal('Invalid credentials supplied');
-        done();
-      });
-  });
-
-  it('should return sign in successful and return token', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/users/auth/login')
-      .send({
-        email: 'user@gmail.com',
-        password: 'Password'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('success');
-        expect(res.body.data.token);
-        expect(res.body.data.message).to.equal('user is signed in successfully');
-        done();
-      });
+    it('should return sign in successful and return token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'user@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('You have not verified your account yet! An Email is sent to you for account verification');
+          done();
+        });
+    });
+    it('should return sign in successful and return token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'postman@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('success');
+          expect(res.body.data.message).to.equal('user is signed in successfully');
+          done();
+        });
+    });
   });
 });

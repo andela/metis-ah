@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "app.js",
   "scripts": {
-    "pretest": "NODE_ENV=test sequelize db:migrate",
+    "pretest": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
     "test": "NODE_ENV=test nyc mocha --exit --require babel-core/register",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "test:dev": "npm run posttest && npm test",
@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^3.0.0",
+    "@sendgrid/mail": "^6.3.1",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.11.0",
     "cors": "^2.8.4",
@@ -31,7 +32,6 @@
     "formidable": "^1.2.1",
     "jsend": "^1.0.2",
     "jsonwebtoken": "^8.3.0",
-    "nodemon": "^1.18.4",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth20": "^1.0.0",
