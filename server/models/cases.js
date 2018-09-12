@@ -18,19 +18,19 @@ const cases = (sequelize, DataTypes) => {
     },
     resolved: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
+      allowNull: true
     }
   });
 
   Cases.associate = (models) => {
     Cases.belongsTo(models.Users, {
       foreignKey: 'userId',
-      onDelete: 'CASCADE'
+      onDelete: 'SET NULL'
     });
 
     Cases.belongsTo(models.Articles, {
       foreignKey: 'articleId',
-      onDelete: 'NO ACTION'
+      onDelete: 'SET NULL'
     });
   };
 

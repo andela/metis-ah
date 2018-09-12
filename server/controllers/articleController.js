@@ -97,7 +97,7 @@ const articlesController = {
         userId: req.currentUser,
         articleId: req.params.articleId
       },
-      default: {
+      defaults: {
         userId: req.currentUser,
         articleId: req.params.articleId,
         violation: req.body.violation,
@@ -110,7 +110,7 @@ const articlesController = {
         });
       }
 
-      return res.status(201).jsend.fail({
+      return res.status(201).jsend.success({
         message: 'This case has been recorded and will be reviewed'
       });
     });

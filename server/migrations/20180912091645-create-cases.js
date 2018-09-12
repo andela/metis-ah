@@ -8,7 +8,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
@@ -18,7 +18,7 @@ module.exports = {
         }
       },
       articleId: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
@@ -50,7 +50,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('Cases');
   }
 };

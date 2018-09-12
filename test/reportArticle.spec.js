@@ -42,8 +42,8 @@ describe('REPORT AN ARTICLE:', () => {
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
-        expect(res.body).to.have.property('message');
-        expect(res.body.message).to.equal('You have reported this article already');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.eql('You have reported this article already');
         done();
       });
   });
