@@ -152,7 +152,7 @@ const helpers = {
       });
     });
   },
-
+  
   /**
    * @description Converts a string separated by spaces to an array of integers found in the string
    * @param  {srtring} str A string containing integers
