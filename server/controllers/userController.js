@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { config } from 'dotenv';
 import models from '../models';
 import generateToken from '../helpers/generateToken';
@@ -25,7 +24,7 @@ const userController = {
       defaults: {
         username: req.body.username,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: req.body.password
       }
     })
       .spread((user, created) => {
