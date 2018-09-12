@@ -1,3 +1,5 @@
+import generateToken from '../helpers/generateToken';
+
 const authController = {
   /**
    * @description This methods handles successful authentication
@@ -6,6 +8,9 @@ const authController = {
    * @returns {object} The response object
    */
   returnUser: (req, res) => {
+    const token = generateToken(req.user.id, 7200);
+    req.user.token = token;
+
     if (req.user.created) {
       return res.status(201).jsend.success(req.user);
     }
