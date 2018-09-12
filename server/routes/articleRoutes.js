@@ -51,8 +51,8 @@ articleRoutes.post('/:articleId/:likeType', auth, checkParams.id, checkParams.li
 articleRoutes.post(
   '/:articleId/report',
   auth,
-  validateViolation,
   validateRequestObject,
+  validateViolation,
   reportArticle
 );
 
