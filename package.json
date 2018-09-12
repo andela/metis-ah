@@ -9,7 +9,7 @@
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "test:dev": "npm run posttest && npm test",
     "start": "babel-node server/app.js",
-    "start_dev": "nodemon --exec babel-node server/app.js",
+    "start_dev": "NODE_ENV=development nodemon --exec babel-node server/app.js",
     "migrate": "sequelize db:migrate",
     "unmigrate": "sequelize db:migrate:undo:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -32,6 +32,9 @@
     "jsend": "^1.0.2",
     "jsonwebtoken": "^8.3.0",
     "nodemon": "^1.18.4",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.38.0",

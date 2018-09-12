@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import models from '../models';
 import generateToken from '../helpers/generateToken';
 
@@ -18,7 +19,7 @@ const userController = {
       defaults: {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: bcrypt.hashSync(req.body.password, 8)
       }
     })
       .spread((user, created) => {

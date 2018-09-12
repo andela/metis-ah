@@ -20,7 +20,7 @@ const users = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true,
     },
     bio: {
       type: DataTypes.STRING
@@ -65,10 +65,6 @@ const users = (sequelize, DataTypes) => {
       as: 'subscription'
     });
   };
-
-  Users.beforeCreate((user) => {
-    user.password = bcrypt.hashSync(user.password, 8);
-  });
 
   Users.checkPassword = (password, user) => bcrypt.compareSync(password, user);
   return Users;

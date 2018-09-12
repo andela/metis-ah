@@ -1,6 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../server/app';
+import './socialLogin.spec';
 
 chai.use(chaiHttp);
 const { should, expect } = chai;
@@ -212,6 +213,42 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           expect(res.body).to.be.an('object');
           expect(res.body.data.message).to.equal('user is signed up successfully');
+          done();
+        });
+    });
+    it('users signup with google', (done) => {
+      chai
+        .request(app)
+        .post('/api/users/auth/google/redirect')
+        .send({
+          user: {
+            id: 1,
+            firstname: 'Opeoluwa',
+            lastname: 'Iyi-Kuyoro',
+            email: 'op@ah.metis.com',
+            created: true
+          }
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          done();
+        });
+    });
+    it('users signup with google', (done) => {
+      chai
+        .request(app)
+        .post('/api/users/auth/google/redirect')
+        .send({
+          user: {
+            id: 1,
+            firstname: 'Opeoluwa',
+            lastname: 'Iyi-Kuyoro',
+            email: 'op@ah.metis.com',
+            created: true
+          }
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
           done();
         });
     });
