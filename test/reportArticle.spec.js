@@ -10,6 +10,21 @@ should();
 describe('REPORT AN ARTICLE:', () => {
   const token = generateToken(2, 7200);
 
+  it('get all reported cased \'no case\'', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/cases')
+      .set({
+        authorization: token
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.cases.length).to.eql(0);
+        expect(res.body.data.message).to.equal('There are no cases');
+        done();
+      });
+  });
+
   it('successful', (done) => {
     chai
       .request(app)
@@ -99,6 +114,20 @@ describe('REPORT AN ARTICLE:', () => {
         expect(res.body.status).to.equal('fail');
         expect(res.body.data).to.have.property('messages');
         expect(res.body.data.messages).to.eql(['Please provide violation', 'Please provide description']);
+        done();
+      });
+  });
+
+  it('get all reported cases', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/cases')
+      .set({
+        authorization: token
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.cases.length).to.eql(1);
         done();
       });
   });

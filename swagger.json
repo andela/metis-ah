@@ -416,9 +416,7 @@
       },
       "/api/v1/articles/:articleId/report": {
         "post": {
-          "tags": [
-            "User"
-          ],
+          "tags": [ "Articles" ],
           "summary": "Report an article that violates our policies",
           "description": "This endpoint enables users report violating articles by specifying what violation was made.",
           "parameters": [
@@ -441,6 +439,50 @@
             },
             "400": {
               "description": "Several bad request errors may occur with a descriptive error message"
+            }
+          }
+        }
+      },
+      "/api/v1/articles/cases": {
+        "get": {
+          "tags": [ "Articles" ],
+          "summary": "Gets all reported cases on the platform",
+          "description": "This endpoint gives access to all reported cases on the platform",
+          "parameters": [
+            {
+              "in": "headers",
+              "name": "JSON Web Token",
+              "description": "The authentication token",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/jwt"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "gets all cases",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "cases": {
+                      "type": "Array"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There are no cases"
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -586,6 +628,18 @@
       },
       "json": {
         "name": "Comment"
+      }
+    },
+    "jwt": {
+      "type": "object",
+      "properties": {
+        "authorization": {
+          "type": "string",
+          "example": "89ohsdc89efoaefh9w8ehfdlvnsdv89e08hfw089hefsodivh09whefsdo0vihsd0vh"
+        }
+      },
+      "json": {
+        "name": "User"
       }
     }
   }

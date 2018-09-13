@@ -9,6 +9,7 @@ import reportValidation from '../middleware/reportValidation';
 import usersValidations from '../middleware/usersValidations';
 import checkParams from '../middleware/checkParams';
 import { multerUploads } from '../config/multer/multerConfig';
+import caseController from '../controllers/casesController';
 
 const { reportArticle, rateArticle, create, like } = articleController;
 const { addComment } = commentController;
@@ -26,6 +27,9 @@ const {
   validateViolation,
   validateRequestObject
 } = reportValidation;
+const {
+  getCases
+} = caseController;
 
 const articleRoutes = express.Router();
 
@@ -54,6 +58,11 @@ articleRoutes.post(
   validateRequestObject,
   validateViolation,
   reportArticle
+);
+articleRoutes.get(
+  '/cases',
+  auth,
+  getCases
 );
 
 export default articleRoutes;
