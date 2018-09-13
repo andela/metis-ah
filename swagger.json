@@ -574,6 +574,7 @@
           "example": "Password"
         }
       },
+<<<<<<< HEAD
       "json": {
         "name": "User"
       }
@@ -640,6 +641,35 @@
       },
       "json": {
         "name": "User"
+=======
+      "Login": {
+				"type": "object",
+				"properties": {
+					"email": {
+						"type": "string",
+						"example": "metis@gmail.com"
+					},
+					"password": {
+						"type": "string",
+						"example": "Password"
+					}
+				},
+				"json": {
+					"name": "User"
+				}
+      },
+      "jwt": {
+        "type": "object",
+        "properties": {
+          "authorization": {
+            "type": "string",
+            "example": "89ohsdc89efoaefh9w8ehfdlvnsdv89e08hfw089hefsodivh09whefsdo0vihsd0vh"
+          }
+        },
+        "json": {
+					"name": "User"
+				}
+>>>>>>> feat(articles): get all reported cases> - add data seeders> - get all reported cased> - document this feature[Finishes #159987418]
       }
     }
   }
