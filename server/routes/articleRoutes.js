@@ -27,9 +27,6 @@ const {
   validateViolation,
   validateRequestObject
 } = reportValidation;
-const {
-  getCases
-} = caseController;
 
 const articleRoutes = express.Router();
 
@@ -58,11 +55,6 @@ articleRoutes.post(
   validateRequestObject,
   validateViolation,
   reportArticle
-);
-articleRoutes.get(
-  '/cases',
-  auth,
-  getCases
 );
 
 export default articleRoutes;

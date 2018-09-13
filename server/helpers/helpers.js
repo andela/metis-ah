@@ -149,6 +149,19 @@ const helpers = {
         created
       });
     });
+  },
+
+  /**
+   * @description Converts a string separated by spaces to an array of integers found in the string
+   * @param  {srtring} str A string containing integers
+   * @returns {array} An array of integers
+   */
+  getIntArray: (str) => {
+    const arrayStr = str.split(' ');
+    const eleStr = arrayStr.filter(element => !Number.isNaN(Number(element)));
+    const eleInt = eleStr.map(element => Number(element));
+
+    return eleInt;
   }
 };
 

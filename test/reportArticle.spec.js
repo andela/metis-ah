@@ -13,7 +13,7 @@ describe('REPORT AN ARTICLE:', () => {
   it('get all reported cased \'no case\'', (done) => {
     chai
       .request(app)
-      .get('/api/v1/articles/cases')
+      .get('/api/v1/cases')
       .set({
         authorization: token
       })
@@ -121,13 +121,28 @@ describe('REPORT AN ARTICLE:', () => {
   it('get all reported cases', (done) => {
     chai
       .request(app)
-      .get('/api/v1/articles/cases')
+      .get('/api/v1/cases')
       .set({
         authorization: token
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('success');
         expect(res.body.data.cases.length).to.eql(1);
+        done();
+      });
+  });
+
+  it('get all reported cases (no cases)', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/cases/?a=0+2+3+ed')
+      .set({
+        authorization: token
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.cases.length).to.eql(0);
+        expect(res.body.data.message).to.equal('There are no cases');
         done();
       });
   });

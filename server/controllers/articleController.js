@@ -105,7 +105,7 @@ const articlesController = {
       }
     }).spread((user, created) => {
       if (!created) {
-        return res.status(400).jsend.fail({
+        return res.status(409).jsend.fail({
           message: 'You have reported this article already'
         });
       }

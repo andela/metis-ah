@@ -421,6 +421,12 @@
           "description": "This endpoint enables users report violating articles by specifying what violation was made.",
           "parameters": [
             {
+              "in": "headers",
+              "name": "authentication",
+              "description": "The authentication token",
+              "required": true
+            },
+            {
               "in": "body",
               "name": "body",
               "description": "The report object",
@@ -443,7 +449,7 @@
           }
         }
       },
-      "/api/v1/articles/cases": {
+      "/api/v1/cases/": {
         "get": {
           "tags": [ "Articles" ],
           "summary": "Gets all reported cases on the platform",
@@ -451,12 +457,15 @@
           "parameters": [
             {
               "in": "headers",
-              "name": "JSON Web Token",
+              "name": "authentication",
               "description": "The authentication token",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/jwt"
-              }
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "a",
+              "description": "a list of article ids separated with '+'",
+              "required": true
             }
           ],
           "produces": [

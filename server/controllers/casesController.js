@@ -1,8 +1,10 @@
 import models from '../models';
+import helpers from '../helpers/helpers';
 
 const {
   Cases
 } = models;
+const { getIntArray } = helpers;
 
 const caseController = {
   /**
@@ -12,7 +14,19 @@ const caseController = {
    * @returns {object} The HTTP response object
    */
   getCases: (req, res) => {
-    Cases.findAll().then((cases) => {
+    let searched = {};
+
+    // Check if a query parameter was passed and parse it into an array
+    if (req.query.a) {
+      const articles = getIntArray(req.query.a);
+      searched = {
+        articleId: articles
+      };
+    }
+
+    Cases.findAll({
+      where: searched
+    }).then((cases) => {
       if (cases.length === 0) {
         return res.status(200).jsend.success({
           cases,
