@@ -361,7 +361,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('Should return a 401 status code', (done) => {
       chai
         .request(app)
-        .get('/api/v1/users/all')
+        .get('/api/v1/users')
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.an('object');
@@ -374,7 +374,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('Should return a 401 status code', (done) => {
       chai
         .request(app)
-        .get('/api/v1/users/all')
+        .get('/api/v1/users')
         .set('Authorization', `${unVerifiedToken}`)
         .end((err, res) => {
           res.should.have.status(401);
@@ -387,7 +387,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('Should return a 401 status code', (done) => {
       chai
         .request(app)
-        .get('/api/v1/users/all')
+        .get('/api/v1/users')
         .set('Authorization', 'afa0efneoinej8ehbfiow')
         .end((err, res) => {
           res.should.have.status(401);
@@ -401,7 +401,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('Should return a 401 status code', (done) => {
       chai
         .request(app)
-        .get('/api/v1/users/all')
+        .get('/api/v1/users')
         .set('Authorization', `${faketoken}`)
         .end((err, res) => {
           res.should.have.status(401);
@@ -415,7 +415,7 @@ describe('TEST ALL ENDPOINT', () => {
     it('Should return a 200 status code', (done) => {
       chai
         .request(app)
-        .get('/api/v1/users/all')
+        .get('/api/v1/users')
         .set('Authorization', `${verifiedToken}`)
         .end((err, res) => {
           res.should.have.status(200);

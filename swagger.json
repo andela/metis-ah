@@ -8,7 +8,7 @@
         "email": "metis.ah2018@gmail.com"
       }
     },
-    "host": "metis-ah-staging.herokuapp.com",
+    "host": "localhost:8000",
     "basePath": "/",
     "tags": [
       {
@@ -93,8 +93,8 @@
 						}
       }
     }
-  },
-      "/api/verify/{token}": {
+      },
+      "/api/v1/users/verify/{token}": {
         "put": {
           "summary": "Verify user account",
           "description": "User recive an email like account verified",
@@ -120,7 +120,33 @@
             }
           }
         }
+      },
+      "/api/v1/users/": {
+        "get": {
+          "tags": [ "User" ],
+          "summary": "A logged in user can retrieve all users",
+          "description": "Users retrieve all users",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success!"
+          },
+          "401": {
+            "description": "Failed to authenticate token! Valid token required"
+          }
+        }
       }
+    }
     },
     "definitions": {
       "signin": {

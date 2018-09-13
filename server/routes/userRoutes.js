@@ -11,5 +11,5 @@ const userRoutes = express.Router();
 userRoutes.post('/auth/signup', validateSignUp, userController.signUp);
 userRoutes.post('/auth/login', validateLogin, userController.login);
 userRoutes.put('/verify/:token', auth, userController.verify);
-userRoutes.get('/all', auth, userController.allUsers);
+userRoutes.get('/', auth, userController.allUsers);
 export default userRoutes;

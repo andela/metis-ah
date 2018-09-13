@@ -124,7 +124,9 @@ const userController = {
 
   allUsers: (req, res) => {
     Users
-      .findAll()
+      .findAll({
+        attributes: ['id', 'username', 'email', 'bio', 'image', 'premium', 'isVerified', 'interests', 'createdAt', 'updatedAt']
+      })
       .then(users => res.status(200).jsend.success({
         message: 'Success!',
         users,
