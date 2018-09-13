@@ -1,13 +1,18 @@
+import bcrypt from 'bcrypt';
 import { config } from 'dotenv';
 import models from '../models';
 import generateToken from '../helpers/generateToken';
 import mailer from '../helpers/utils/mailer';
+import helpers from '../helpers/helpers';
 import msg from '../helpers/utils/eMsgs';
+import emsg from '../helpers/eMsgs';
 
 config();
+const url = process.env.BASE_URL;
 
 const { verifiedMessage, successSignupMessage } = msg;
 const { Users, Followings } = models;
+const { msgForPasswordReset } = emsg;
 
 const userController = {
   /**
@@ -41,8 +46,9 @@ const userController = {
           message: successSignupMessage,
           token
         });
-      })
-      .catch(() => res.status(500).jsend.error({ message: 'Signup was not successful. Please try again' }));
+      }).catch(() => {
+        res.status(500).jsend.fail({ message: 'Signup was not successful. Please try again' });
+      });
   },
   /**
    * @description The login method
@@ -80,7 +86,67 @@ const userController = {
           message: 'user is signed in successfully',
           token
         });
+      }).catch(() => {
+        res.status(500).jsend.fail({ message: 'Login was not successful. Please try again' });
       });
+  },
+  /**
+   * @description This is the method that generates the password reset email
+   * @param  {object} req The request object
+   * @param  {object} res The response object
+   * @returns {object} json response
+   */
+  resetPassword: (req, res) => {
+    Users
+      .findOne({
+        where: { email: req.body.email }
+      })
+      .then((user) => {
+        if (!user) {
+          return res.status(401).jsend.error({
+            message: 'Invalid credentials supplied',
+          });
+        }
+        // generate token
+        const token = generateToken(600, { id: user.id, updatedAt: user.updatedAt });
+
+        mailer.sender({
+          to: user.email,
+          subject: 'Password reset',
+          message: msgForPasswordReset(user.username, url, token)
+        });
+        return res.status(200).jsend.success({
+          message: 'Password reset link has been sent to your email',
+        });
+      }).catch(() => {
+        res.status(500).jsend.fail({ message: 'Request could not be processed. Please try again' });
+      });
+  },
+  /**
+   * @description This is method that resets the users password
+   * @param  {object} req The request object
+   * @param  {object} res The response object
+   * @returns {object} json response
+   */
+  reset: (req, res) => {
+    Users.findOne({
+      where: { id: req.currentUser.id }
+    }).then((user) => {
+      if (!helpers.compareDate(req.currentUser.updatedAt, user.updatedAt)) {
+        return res.status(401).jsend.error({ message: 'Verification link not valid' });
+      }
+      Users.update({
+        password: bcrypt.hashSync(req.body.password, 8)
+      }, {
+        where: { id: req.currentUser.id }
+      }).then(() => res.status(200).jsend.success({
+        message: 'Password reset successful',
+      })).catch(() => {
+        res.status(500).jsend.fail({ message: 'Request could not be completed. Please try again' });
+      });
+    }).catch(() => {
+      res.status(500).jsend.fail({ message: 'Request could not be completed. Please try again' });
+    });
   },
 
   /**

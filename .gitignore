@@ -48,3 +48,6 @@ package-lock.json
 
 # environmental variables
 .env
+
+# bash file
+export_env.bash

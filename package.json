@@ -22,8 +22,8 @@
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^3.0.0",
     "@sendgrid/mail": "^6.3.1",
+    "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.11.0",
     "cors": "^2.8.4",

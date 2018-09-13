@@ -172,24 +172,8 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.data.should.have.property('messages');
-          res.body.data.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
-          done();
-        });
-    });
-    it('login password error', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/users/auth/login')
-        .send({
-          email: 'test.tester@email.com',
-          password: 'asswordlksndv'
-        })
-        .end((err, res) => {
-          res.body.should.be.an('object');
-          res.body.should.have.property('status');
-          res.body.data.should.have.property('messages');
-          res.body.data.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
+          res.body.should.have.property('message');
+          res.body.message.should.eql('Invalid credentials supplied');
           done();
         });
     });
@@ -505,6 +489,95 @@ describe('TEST ALL ENDPOINT', () => {
           done();
         });
     });
+  });
+
+  describe('Password reset test', () => {
+    it('should return invalid credentials', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/reset-password')
+        .send({
+          email: 'tomi@gmail.com'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Invalid credentials supplied');
+          done();
+        });
+    });
+
+    it('should return invalid credentials', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/reset-password')
+        .send({
+          email: 'user@gmail.com'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('success');
+          expect(res.body.data.message).to.equal('Password reset link has been sent to your email');
+          done();
+        });
+    });
+
+    it('should return invalid credentials', (done) => {
+      const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
+      chai
+        .request(app)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
+        .send({
+          password: 'Userboyboy'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Verification link not valid');
+          done();
+        });
+    });
+
+    it('should return invalid credentials', (done) => {
+      const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
+      chai
+        .request(app)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
+        .send({
+          password: 'Userboyboy'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Verification link not valid');
+          done();
+        });
+    });
+
+    it('reset password properties incomplete', (done) => {
+      const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
+      chai
+        .request(app)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
+        .send({
+        })
+        .end((err, res) => {
+          expect(res.body.status);
+          expect(res.body.data.messages[0]).to.equal('Please provide password');
+          done();
+        });
+    });
+
+    it('reset password properties incomplete', (done) => {
+      const token = generateToken(600, { id: 1, updatedAt: '2018-09-06 14:34:18.664+01' });
+      chai
+        .request(app)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
+        .send({
+          password: 'adebncxsdds'
+        })
+        .end((err, res) => {
+          expect(res.body.status);
+          expect(res.body.data.messages[0]).to.equal('Password must include at least one uppercase and lowercase character');
+          done();
+        });
+    });
 
     it('Invalid Token', (done) => {
       chai
@@ -519,6 +592,20 @@ describe('TEST ALL ENDPOINT', () => {
           expect(res.body.data).to.be.a('object');
           expect(res.body.data).to.have.property('message');
           expect(res.body.data.message).to.equal('Failed to authenticate token! Valid token required');
+          done();
+        });
+    });
+    it('should return password reset successful', (done) => {
+      const token = generateToken(600, { id: 1, isVerified: true, updatedAt: '2018-09-08' });
+      chai
+        .request(app)
+        .put(`/api/v1/users/auth/reset-password/${token}`)
+        .send({
+          password: 'Userboyboy'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('success');
+          expect(res.body.data.message).to.equal('Password reset successful');
           done();
         });
     });
