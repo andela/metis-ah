@@ -82,11 +82,11 @@ const articlesController = {
     Ratings.findOrCreate({
       where: {
         articleId: req.params.articleID,
-        userId: req.currentUser
+        userId: req.currentUser.id
       },
       defaults: {
         articleId: req.params.articleID,
-        userId: req.currentUser,
+        userId: req.currentUser.id,
         rating: req.body.rating
       }
     }).spread((record, created) => {

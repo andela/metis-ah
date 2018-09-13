@@ -8,9 +8,9 @@ const { should, expect } = chai;
 should();
 
 describe('ARTICLES RATING TESTS', () => {
-  const token = generateToken(1, 7200);
-  const token2 = generateToken(3, 7200);
-  const tokenStone = generateToken(2, 7200);
+  const token = generateToken(7200, { id: 1, isVerified: true });
+  const token2 = generateToken(7200, { id: 3, isVerified: true });
+  const tokenStone = generateToken(7200, { id: 2, isVerified: true });
 
   it('incorrect articleID', (done) => {
     chai

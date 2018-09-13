@@ -18,7 +18,7 @@ const ratingValidation = {
     Articles.findOne({
       where: {
         id: req.params.articleID,
-        userId: req.currentUser
+        userId: req.currentUser.id
       }
     }).then((article) => {
       if (article) {
