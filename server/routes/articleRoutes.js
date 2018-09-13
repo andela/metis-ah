@@ -1,11 +1,35 @@
 import express from 'express';
-import articleController from '../controllers/articleController';
 import auth from '../middleware/auth';
+import articleController from '../controllers/articleController';
+import ratingValidation from '../middleware/ratingValidation';
 import inputValidator from '../middleware/inputValidator';
 
-const route = express.Router();
+const {
+  rateArticle,
+  create
+} = articleController;
+const {
+  validArticleId,
+  validateRating,
+  validateObject,
+  validateUser
+} = ratingValidation;
+const {
+  validateArticle
+} = inputValidator;
+
+const articleRoutes = express.Router();
 
 // POST ARTICLE ROUTE
-route.post('/', auth, inputValidator.validateArticle, articleController.create);
+articleRoutes.post('/', auth, validateArticle, create);
+articleRoutes.post(
+  '/:articleID/rate',
+  auth,
+  validArticleId,
+  validateObject,
+  validateRating,
+  validateUser,
+  rateArticle
+);
 
-export default route;
+export default articleRoutes;

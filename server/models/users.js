@@ -64,6 +64,10 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'subscription'
     });
+    Users.hasMany(models.Ratings, {
+      foreignKey: 'userId',
+      as: 'ratings'
+    });
   };
   Users.beforeCreate((user) => {
     user.password = user.password ? bcrypt.hashSync(user.password, 8) : null;

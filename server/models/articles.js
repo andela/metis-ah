@@ -13,11 +13,15 @@ const articles = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false
     },
     imageUrl: {
       type: DataTypes.STRING
+    },
+    rating: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     }
   });
 
@@ -46,6 +50,11 @@ const articles = (sequelize, DataTypes) => {
       as: 'articleTags',
       through: 'Tagging',
       foreignKey: 'articleId'
+    });
+
+    Articles.hasMany(models.Ratings, {
+      foreignKey: 'articleId',
+      as: 'ratings'
     });
   };
 

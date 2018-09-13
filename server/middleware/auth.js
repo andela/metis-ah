@@ -21,9 +21,12 @@ const auth = (req, res, next) => {
       message: 'No token provided',
     });
   }
+  // decrypt token with cryptr
   try {
-    const unhashtoken = cryptr.decrypt(token);
-    jwt.verify(unhashtoken, secret, (err, decoded) => {
+    const unHashToken = cryptr.decrypt(token);
+
+    // verify token with jwt
+    jwt.verify(unHashToken, secret, (err, decoded) => {
       if (err) {
         return res.status(401).jsend.fail({
           auth: false,

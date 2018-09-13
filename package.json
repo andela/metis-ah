@@ -4,7 +4,7 @@
   "description": "A Social platform for the creative at heart",
   "main": "app.js",
   "scripts": {
-    "pretest": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
+    "pretest": "NODE_ENV=test sequelize db:migrate;NODE_ENV=test sequelize db:seed:all",
     "test": "NODE_ENV=test nyc mocha --exit --require babel-core/register",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "test:dev": "npm run posttest && npm test",
@@ -12,6 +12,7 @@
     "start_dev": "NODE_ENV=development nodemon --exec babel-node server/app.js",
     "migrate": "sequelize db:migrate",
     "unmigrate": "sequelize db:migrate:undo:all",
+    "seed_data": "NODE_ENV=development sequelize db:seed:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {

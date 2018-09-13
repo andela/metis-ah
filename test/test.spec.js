@@ -4,9 +4,10 @@ import dotenv from 'dotenv';
 import nock from 'nock';
 import chaiHttp from 'chai-http';
 import app from '../server/app';
-import './socialLogin.spec';
 import generateToken from '../server/helpers/generateToken';
 import Mailer from '../server/helpers/utils/mailer';
+import './socialLogin.spec';
+import './rateArticles.spec';
 
 dotenv.config();
 chai.use(chaiHttp);
@@ -469,6 +470,55 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           expect(res.body.status).to.equal('error');
           expect(res.body.message).to.equal('You have not verified your account yet! An Email is sent to you for account verification');
+          done();
+        });
+    });
+    it('should return sign in successful and return token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'postman@gmail.com',
+          password: 'Password'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('success');
+          expect(res.body.data.token);
+          expect(res.body.data.message).to.equal('user is signed in successfully');
+          done();
+        });
+    });
+  });
+  describe('TOKEN AUTHENTICATION', () => {
+    it('No Token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles/2/rate')
+        .send({
+          rating: 5
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('fail');
+          expect(res.body.data).to.be.a('object');
+          expect(res.body.data).to.have.property('message');
+          expect(res.body.data.message).to.equal('No token provided');
+          done();
+        });
+    });
+
+    it('Invalid Token', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles/5/rate')
+        .set('authorization', 'token')
+        .send({
+          rating: 5
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('fail');
+          expect(res.body.data).to.be.a('object');
+          expect(res.body.data).to.have.property('message');
+          expect(res.body.data.message).to.equal('Failed to authenticate token! Valid token required');
           done();
         });
     });
