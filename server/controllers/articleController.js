@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 import slug from 'slug';
 import uuid from 'uuid-random';
 import ratingHelpers from '../helpers/ratingHelpers';
+import helpers from '../helpers/helpers';
 import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
@@ -16,7 +17,8 @@ const {
   Ratings,
   ArticleLikes,
   Tags,
-  Categories
+  Categories,
+  Bookmarks
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -24,6 +26,7 @@ const {
   getArticlesAndLikesCountForTheWeek, getPopularArticles
 } = GetAuthorsOfTheWeekHelpers;
 
+const { parsedId } = helpers;
 /**
  * @desc This a controller object literal that handles
  * containing functions that handles action relating to Articles
@@ -264,7 +267,63 @@ const articlesController = {
         'There was an error processing your request'
       );
     }
-  }
+  },
+  /**
+   * @method createBookmark
+   * @description allows users to book mark an article
+   * @param {Object} req the response object
+   * @param {Object} res the response object
+   * @returns {res} the booked marked articles
+   */
+  createBookmark: (req, res) => {
+    const { title } = req.body;
+    const articleId = parsedId(req.params.articleId);
+    if (!Number.isInteger(articleId)) {
+      return res.status(400).jsend.fail({
+        message: 'Article is not valid'
+      });
+    }
+    Bookmarks.findOrCreate({
+      where: {
+        title,
+        userId: req.currentUser.id,
+        articleId,
+      }
+    })
+      .spread((bookmark, created) => (!(created)
+        ? res.status(400).jsend.fail({ message: 'You have already bookmarked this article' })
+        : res.status(201).jsend.success({
+          bookmark,
+          message: 'Your bookmark has been created successfully'
+        })))
+      .catch(err => res.status(500).jsend.fail({
+        message: 'Something went wrong, please try again',
+        error: err.message
+      }));
+  },
+
+  /**
+   * @method fetcBookmark
+   * @description allows users to fetch all their bookmarks
+   * @param {Object} req the response object
+   * @param {Object} res the response object
+   * @returns {res} an array of bookmarks
+   */
+  fetchBookmark: (req, res) => {
+    const { id } = req.currentUser;
+    Bookmarks.findAll({
+      where: {
+        userId: id
+      }
+    })
+      .then(bookmarks => ((bookmarks.length === 0)
+        ? res.status(404).jsend.fail({
+          message: 'You have not bookmarked any article'
+        })
+        : res.status(200).jsend.success({
+          bookmarks
+        })));
+  },
 };
 
 export default articlesController;

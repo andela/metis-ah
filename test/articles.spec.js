@@ -5,6 +5,7 @@ import nock from 'nock';
 import fs from 'fs';
 import app from '../server/app';
 import response from './responses/cloudinaryApiResponse';
+import generateToken from '../server/helpers/generateToken';
 
 chai.use(chaiHttp);
 const { expect, should } = chai;
@@ -382,6 +383,97 @@ describe('GET FEATURED ARTICLES TESTS', () => {
         res.body.status.should.equal('success');
         res.body.data.featuredArticles.should.be.an('Array');
         res.body.data.featuredArticles.length.should.eql(3);
+        done();
+      });
+  });
+});
+
+const verifiedToken = generateToken(7200, { id: 1, isVerified: true });
+const verifiedToken2 = generateToken(7200, { id: 41, isVerified: true });
+describe('BOOKMARK AN ARTICLE', () => {
+  it('Should create a bookmark', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/bookmarks/add/1')
+      .set('Authorization', verifiedToken)
+      .send({
+        title: 'How I Learnt React in Andela',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(201);
+        expect(res.body).to.be.an('object');
+        expect(res.body.data.message).to.equal('Your bookmark has been created successfully');
+        done();
+      });
+  });
+  it('Should not bookmark an article when it has already been bookmarked', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/bookmarks/add/1')
+      .set('Authorization', verifiedToken)
+      .send({
+        title: 'How I Learnt React in Andela',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body.data.message).to.equal('You have already bookmarked this article');
+        done();
+      });
+  });
+  it('Should not bookmark an article when fields are empty or not a number', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/bookmarks/add/bnnjk')
+      .set('Authorization', verifiedToken)
+      .send({
+        title: 'Hello world',
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body.data.message).to.equal('Article is not valid');
+        done();
+      });
+  });
+  it('Should not bookmark an article when article does not exist', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/bookmarks/add/43')
+      .set('Authorization', verifiedToken)
+      .send({
+        title: 'Hello world'
+      })
+      .end((err, res) => {
+        expect(res).to.have.status(500);
+        expect(res.body).to.be.an('object');
+        expect(res.body.data.message).to.equal('Something went wrong, please try again');
+        done();
+      });
+  });
+});
+describe('FETCH ALL BOOKMARK', () => {
+  it('Should fetch all the users bookmark', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/bookmarks/user/all')
+      .set('Authorization', verifiedToken)
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('object');
+
+        done();
+      });
+  });
+  it('Should fetch all the users bookmark', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/bookmarks/user/all')
+      .set('Authorization', verifiedToken2)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body).to.be.an('object');
+        expect(res.body.data.message).to.equal('You have not bookmarked any article');
         done();
       });
   });

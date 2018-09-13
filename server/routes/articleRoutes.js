@@ -23,7 +23,9 @@ const {
   like,
   getArticles,
   getFeaturedArticles,
-  getPopularArticlesForTheWeek
+  getPopularArticlesForTheWeek,
+  createBookmark,
+  fetchBookmark
 } = articleController;
 const { addComment, updateComment, updateReply } = commentController;
 const {
@@ -122,5 +124,11 @@ articleRoutes.post(
 articleRoutes.get('/search', searchController);
 articleRoutes.get('/featured', getFeaturedArticles);
 articleRoutes.get('/popular', getPopularArticlesForTheWeek);
+
+// CREATE BOOKMARK ROUTE
+articleRoutes.post('/bookmarks/add/:articleId', auth, createBookmark);
+
+// GET ALL THE BOOKMARKS OF A USER
+articleRoutes.get('/bookmarks/user/all', auth, fetchBookmark);
 
 export default articleRoutes;

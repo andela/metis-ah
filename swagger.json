@@ -1405,7 +1405,38 @@
           }
         }
       }
-    }
+    },
+    "/api/v1/articles/bookmarks": {
+			"parameters": [{
+				"name": "token",
+				"in": "headers",
+				"required": true,
+				"description": "Authorization header",
+				"type": "string"
+			}],
+			"post": {
+				"summary": "Allows users to bookmark an article",
+				"description": "",
+				"schema": {
+					"$ref": "#/definitions/Bookmarks"
+				},
+				"responses": {
+					"200": {
+						"description": "Add articles to bookmark"
+					}
+				}
+			},
+			"get": {
+				"summary": "Allows users view the list of all articles that have been bookmarked",
+				"description": "Allows and authenticated user to view the list of all articles he has bookmarked",
+				"responses": {
+					"200": {
+						"description": "Returns bookmarked all articles"
+					}
+				}
+			}
+	
+		}
   },
   "definitions": {
     "signin": {
@@ -1809,42 +1840,15 @@
 		"Update": {
 			"type": "object",
 			"properties": {
-				"firstname": {
+				"title": {
 					"type": "string",
-					"example": "joe"
+					"example": "The day I'll never forget"
 				},
-				"lastname": {
-					"type": "string",
-					"example": "easy"
-				},
-				"username": {
-					"type": "string",
-					"example": "metis"
-				},
-				"email": {
-					"type": "string",
-					"example": "metis@gmail.com"
-				},
-				"password": {
-					"type": "string",
-					"example": "password"
-				},
-				"bio": {
-					"type": "string",
-					"example": "Here is a brief information about me"
-				},
-				"interest": {
-					"type": "array",
-					"example": ["gaming", "entreprenuership"]
+				"id": {
+					"type": "number",
+					"example": 1
 				}
-			},
-			"json": {
-				"name": "User"
 			}
-		},
-		"userId": {
-			"type": "number",
-			"example": 1
 		}
   },
   "ArticleRequestBody": {
