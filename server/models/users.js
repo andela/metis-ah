@@ -46,9 +46,15 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'favourites'
     });
-    Users.hasMany(models.Followings, {
+    Users.belongsToMany(Users, {
+      as: 'follower',
+      through: models.Followings,
+      foreignKey: 'follower',
+    });
+    Users.belongsToMany(Users, {
+      as: 'followed',
+      through: models.Followings,
       foreignKey: 'followed',
-      as: 'followings'
     });
     Users.hasMany(models.Replies, {
       foreignKey: 'userId',
@@ -60,7 +66,7 @@ const users = (sequelize, DataTypes) => {
     });
   };
   Users.beforeCreate((user) => {
-    user.password = bcrypt.hashSync(user.password, 8);
+    user.password = user.password ? bcrypt.hashSync(user.password, 8) : null;
   });
   Users.checkPassword = (password, user) => bcrypt.compareSync(password, user);
   return Users;
