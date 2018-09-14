@@ -32,7 +32,7 @@ const ratingValidation = {
   },
 
   /**
-   * @description Handel's articleID validation
+   * @description Handel's articleId validation
    * @param  {object} req The HTTP request object
    * @param  {object} res The HTTP response object
    * @param  {function} next The next middleware

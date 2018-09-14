@@ -14,7 +14,7 @@ const ratingHelper = {
   editArticleRating: (req, sum, count, res) => {
     Articles.findOne({
       where: {
-        id: req.params.articleID
+        id: req.params.articleId
       }
     }).then((article) => {
       article.rating = Math.floor(sum / count);
@@ -56,7 +56,7 @@ const ratingHelper = {
   analyseRatings: (req, res) => {
     Ratings.findAll({
       where: {
-        articleId: req.params.articleID
+        articleId: req.params.articleId
       }
     }).then(ratings => ratingHelper.computeNewAverage(ratings, req, res));
   }

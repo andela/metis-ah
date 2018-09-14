@@ -5,14 +5,12 @@ import generateToken from '../helpers/generateToken';
 import mailer from '../helpers/utils/mailer';
 import helpers from '../helpers/helpers';
 import msg from '../helpers/utils/eMsgs';
-import emsg from '../helpers/eMsgs';
 
 config();
 const url = process.env.BASE_URL;
 
-const { verifiedMessage, successSignupMessage } = msg;
+const { verifiedMessage, successSignupMessage, msgForPasswordReset } = msg;
 const { Users, Followings } = models;
-const { msgForPasswordReset } = emsg;
 
 const userController = {
   /**

@@ -1,9 +1,10 @@
-import cloudinary from 'cloudinary';
+
 import slug from 'slug';
 import uuid from 'uuid-random';
-import cloudinaryConfig from '../config/cloudinary/cloudinaryConfig';
 import ratingHelpers from '../helpers/ratingHelpers';
 import models from '../models';
+import { dataUri } from '../config/multer/multerConfig';
+import imageUpload from '../helpers/imageUpload';
 
 const { Articles, Ratings, ArticleLikes } = models;
 const { analyseRatings } = ratingHelpers;
@@ -20,24 +21,13 @@ const articlesController = {
    * @returns {res} http response object
    */
   create: async (req, res) => {
-    const { files, fields } = req.articleFormData;
+    const fields = req.body;
     let imageUrl = null;
-    // check for image
-    if (files.image) {
-      const temporaryPath = files.image.path;
-      // INITIALIZES CLOUDINARY LOCAL CONFIGURATIONS
-      cloudinaryConfig();
+    // check for image exists in the request body
+    if (req.file) {
+      const file = dataUri(req);
       // SAVES IMAGE TO CLOUDINARY
-      imageUrl = await cloudinary.v2.uploader.upload(temporaryPath, (error, result) => {
-        if (error) {
-          return res.status(500).jsend.fail({
-            message: 'Something, went wrong. please try again',
-            error: error.message,
-            formData: fields,
-          });
-        }
-        return result;
-      });
+      imageUrl = await imageUpload(file, res, fields);
       imageUrl = imageUrl.url;
     }
     // SAVE ARTICLE
