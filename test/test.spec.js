@@ -52,8 +52,7 @@ describe('TEST ALL ENDPOINT', () => {
       chai
         .request(app)
         .post('/api/v1/users/auth/login')
-        .send({
-        })
+        .send({})
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
@@ -122,8 +121,8 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.data.should.have.property('messages');
-          res.body.data.messages.should.eql(['Invalid email provided']);
+          res.body.should.have.property('message');
+          res.body.message.should.eql('Invalid credentials supplied');
           done();
         });
     });
@@ -139,8 +138,8 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
-          res.body.data.should.have.property('messages');
-          res.body.data.messages.should.eql(['Invalid email provided']);
+          res.body.should.have.property('message');
+          res.body.message.should.eql('Invalid credentials supplied');
           done();
         });
     });
@@ -158,6 +157,22 @@ describe('TEST ALL ENDPOINT', () => {
           res.body.should.have.property('status');
           res.body.data.should.have.property('messages');
           res.body.data.messages.should.eql(['Password must include at least one uppercase and lowercase character']);
+          done();
+        });
+    });
+    it('login password error', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'test.tester@email.com',
+          password: 'asswordlksndv'
+        })
+        .end((err, res) => {
+          res.body.should.be.an('object');
+          res.body.should.have.property('status');
+          res.body.should.have.property('message');
+          res.body.message.should.eql('Invalid credentials supplied');
           done();
         });
     });
@@ -469,6 +484,36 @@ describe('TEST ALL ENDPOINT', () => {
           expect(res.body.status).to.equal('success');
           expect(res.body.data.token);
           expect(res.body.data.message).to.equal('user is signed in successfully');
+          done();
+        });
+    });
+    //--
+    it('should return an error when password does not meet set rules', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: '',
+          password: 'passwwor'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('fail');
+          expect(res.body.data.messages[0]).to.equal('Please provide email');
+          done();
+        });
+    });
+
+    it('should return an error when email is invalid', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/login')
+        .send({
+          email: 'someemail.co',
+          password: 'passwwor'
+        })
+        .end((err, res) => {
+          expect(res.body.status).to.equal('error');
+          expect(res.body.message).to.equal('Invalid credentials supplied');
           done();
         });
     });

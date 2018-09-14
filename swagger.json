@@ -317,6 +317,32 @@
           }
         }
       }
+    },
+    "/api/v1/articles/:articleId": {
+      "post": {
+        "tags": [ "Articles" ],
+        "summary": "Route for authenticated users to post comments on an article",
+        "description": "Returns the user and the user's comment",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "comment object to be returned when a user makes a post request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Comment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Comment posted successfully"
+          },
+          "400": {
+            "description": "Comment is empty"
+          }
+        }
+      }
     }
   },
     "definitions": {
@@ -406,7 +432,18 @@
 				"json": {
 					"name": "User"
 				}
-			}
+			},
+      "Comment": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "Great post!"
+          }
+        },
+        "json": {
+          "name": "Comment"
+        }
+      }
     }
   }
-

@@ -21,5 +21,5 @@ module.exports = {
     updatedAt: '2018-09-09'
   }]),
 
-  down: (queryInterface, Sequelize) => queryInterface.bulkDelete('Categories', null, {})
+  down: queryInterface => queryInterface.bulkDelete('Categories')
 };

@@ -1,4 +1,11 @@
-import helper from '../helpers/helpers';
+import helpers from '../helpers/helpers';
+
+const {
+  checkProps,
+  validEmail,
+  validPassword,
+  validString
+} = helpers;
 
 const usersValidations = {
   /** @description This method helps validate a user signups
@@ -12,8 +19,9 @@ const usersValidations = {
     let messages = [];
 
     // Check the passed body for required properties
-    const { valid, invalidMessages } = helper
-      .checkProps(req.body, 'username', 'email', 'password');
+    const {
+      valid, invalidMessages
+    } = checkProps(req.body, 'username', 'email', 'password');
 
     if (!valid) {
       return res.status(400)
@@ -23,21 +31,20 @@ const usersValidations = {
     }
 
     // Validate the email address provided
-    if (!helper.validEmail(req.body.email)) {
+    if (!validEmail(req.body.email)) {
       status = 'fail';
       messages.push('Invalid email provided');
     }
 
-
     // Validate the password provided
-    if (!helper.validPassword(req.body.password).valid) {
+    if (!validPassword(req.body.password).valid) {
       status = 'fail';
       messages = messages
-        .concat(helper.validPassword(req.body.password).invalidMessages);
+        .concat(validPassword(req.body.password).invalidMessages);
     }
 
-    // validate the userName;
-    if (!helper.validString(req.body.username)) {
+    // validate the firstName;
+    if (!validString(req.body.username)) {
       status = 'fail';
       messages.push('username cannot be an empty string');
     }
@@ -59,31 +66,14 @@ const usersValidations = {
    * @returns {object} undefined
    */
   validateLogin: (req, res, next) => {
-    let status = 'success';
-    const messages = [];
-
     // Check the passed body for required properties
-    const { valid, invalidMessages } = helper
+    const { valid, invalidMessages } = helpers
       .checkProps(req.body, 'email', 'password');
 
     if (!valid) {
-      return res.status(400)
-        .jsend.fail({
-          messages: invalidMessages
-        });
-    }
-
-    // Validate the email address provided
-    if (!helper.validEmail(req.body.email)) {
-      status = 'fail';
-      messages.push('Invalid email provided');
-    }
-
-    if (status === 'fail') {
-      return res.status(400)
-        .jsend.fail({
-          messages
-        });
+      return res.status(400).jsend.fail({
+        messages: invalidMessages
+      });
     }
     return next();
   },
@@ -92,8 +82,7 @@ const usersValidations = {
     let status = 'success';
     let messages = [];
 
-    const { valid, invalidMessages } = helper
-      .checkProps(req.body, 'password');
+    const { valid, invalidMessages } = checkProps(req.body, 'password');
 
     if (!valid) {
       return res.status(400)
@@ -102,9 +91,9 @@ const usersValidations = {
         });
     }
 
-    if (!helper.validPassword(req.body.password).valid) {
+    if (!validPassword(req.body.password).valid) {
       status = 'fail';
-      messages = messages.concat(helper.validPassword(req.body.password).invalidMessages);
+      messages = messages.concat(validPassword(req.body.password).invalidMessages);
     }
 
     if (status === 'fail') {

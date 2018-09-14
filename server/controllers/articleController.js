@@ -30,7 +30,7 @@ const articlesController = {
         temporaryPath, (error, result) => {
           if (error) {
             return res.status(500).jsend.fail({
-              message: 'Something, went wrong. please try again',
+              message: 'Something went wrong. Please try again.',
               error: error.message,
               formData: fields,
             });
@@ -48,7 +48,7 @@ const articlesController = {
             article: createdArticle,
             message: 'Article published successfully'
           })).catch(err => res.status(500).jsend.fail({
-            message: 'Something, went wrong. please try again',
+            message: 'Something went wrong. Please try again.',
             error: err.message
           }));
         }
@@ -65,7 +65,7 @@ const articlesController = {
         article: createdArticle,
         message: 'Article published successfully'
       })).catch(err => res.status(500).jsend.fail({
-        message: 'Something, went wrong. please try again',
+        message: 'Something went wrong. Please try again.',
         error: err.message
       }));
     }
@@ -81,11 +81,11 @@ const articlesController = {
     // Find or create a rating by current user on specified article
     Ratings.findOrCreate({
       where: {
-        articleId: req.params.articleID,
+        articleId: req.params.articleId,
         userId: req.currentUser.id
       },
       defaults: {
-        articleId: req.params.articleID,
+        articleId: req.params.articleId,
         userId: req.currentUser.id,
         rating: req.body.rating
       }
