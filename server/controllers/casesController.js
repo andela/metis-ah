@@ -1,5 +1,6 @@
 import models from '../models';
 import helpers from '../helpers/helpers';
+import errorHelpers from '../helpers/errorHelpers';
 
 const {
   Cases
@@ -38,6 +39,20 @@ const caseController = {
         cases
       });
     }).catch(() => res.status(500).jsend.error('Oops, something has gone wrong'));
+  },
+
+  resolveCase: (req, res) => {
+    Cases.findById(req.params.caseId).then((record) => {
+      if (!record) {
+        return errorHelpers.notFound(req, res, 'Case');
+      }
+
+      record.resolved = true;
+      record.save();
+      return res.status(200).jsend.success({
+        message: 'Case resolved'
+      });
+    }).catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
   }
 };
 

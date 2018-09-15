@@ -147,3 +147,35 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 });
+
+describe('RESOLVE a reorted case', () => {
+  const token = generateToken(7200, { id: 5, isVerified: true });
+
+  it('incorrect caseId', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/cases/100/resolve')
+      .set({
+        authorization: token
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Case not found');
+        done();
+      });
+  });
+
+  it('success', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/cases/1/resolve')
+      .set({
+        authorization: token
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.message).to.equal('Case resolved');
+        done();
+      });
+  });
+});
