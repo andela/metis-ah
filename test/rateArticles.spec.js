@@ -8,7 +8,7 @@ const { should, expect } = chai;
 should();
 
 describe('ARTICLES RATING TESTS', () => {
-  const token = generateToken(7200, { id: 1, isVerified: true });
+  const token = generateToken(7200, { id: 4, isVerified: true });
   const token2 = generateToken(7200, { id: 3, isVerified: true });
   const tokenStone = generateToken(7200, { id: 2, isVerified: true });
 

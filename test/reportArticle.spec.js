@@ -8,7 +8,7 @@ const { should, expect } = chai;
 should();
 
 describe('REPORT AN ARTICLE:', () => {
-  const token = generateToken(2, 7200);
+  const token = generateToken(7200, { id: 5, isVerified: true });
 
   it('get all reported cased \'no case\'', (done) => {
     chai
@@ -63,24 +63,24 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  // it('article not found', (done) => {
-  //   chai
-  //     .request(app)
-  //     .post('/api/v1/articles/10000000/report')
-  //     .set({
-  //       authorization: token
-  //     })
-  //     .send({
-  //       violation: 'Discrimination',
-  //       description: 'This article depicts men as ignorant!'
-  //     })
-  //     .end((err, res) => {
-  //       expect(res.body.status).to.equal('fail');
-  //       expect(res.body.data).to.have.property('message');
-  //       expect(res.body.data.message).to.equal('Article not found');
-  //       done();
-  //     });
-  // });
+  it('article not found', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/10000000/report')
+      .set({
+        authorization: token
+      })
+      .send({
+        violation: 'Discrimination',
+        description: 'This article depicts men as ignorant!'
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.have.property('message');
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
 
   it('invalid violation', (done) => {
     chai

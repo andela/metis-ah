@@ -94,11 +94,11 @@ const articlesController = {
   reportArticle: (req, res) => {
     Cases.findOrCreate({
       where: {
-        userId: req.currentUser,
+        userId: req.currentUser.id,
         articleId: req.params.articleId
       },
       defaults: {
-        userId: req.currentUser,
+        userId: req.currentUser.id,
         articleId: req.params.articleId,
         violation: req.body.violation,
         description: req.body.description || ''

@@ -26,6 +26,10 @@
     {
       "name": "Like",
       "description": "Everything about all likes"
+    },
+    {
+      "name": "Cases",
+      "description": "Everything about reported articles"
     }
   ],
   "schemes": [
@@ -108,6 +112,70 @@
           },
           "401": {
             "description": "Invalid credentials supplied"
+          }
+        }
+      }
+    },
+    "/api/v1/users/auth/google": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Authenticate user with google",
+        "description": "Signup or login a user with the person's google account",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing user logged in",
+            "schema": {
+              "$ref": "#/definitions/OAuth1"
+            }
+          },
+          "201": {
+            "description": "New user created",
+            "schema": {
+              "$ref": "#/definitions/OAuth2"
+            }
+          },
+          "500": {
+            "description": "Authentication failed",
+            "schema": {
+              "$ref": "#/definitions/OAuthFail"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/auth/facebook": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Authenticate user with facebook",
+        "description": "Signup or login a user with the person's facebook account",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing user logged in",
+            "schema": {
+              "$ref": "#/definitions/OAuth1"
+            }
+          },
+          "201": {
+            "description": "New user created",
+            "schema": {
+              "$ref": "#/definitions/OAuth2"
+            }
+          },
+          "500": {
+            "description": "Authentication failed",
+            "schema": {
+              "$ref": "#/definitions/OAuthFail"
+            }
           }
         }
       }
@@ -497,7 +565,7 @@
         }
       }
     },
-    "/api/v1/articles/:articleId": {
+    "/api/v1/articles/{articleId}": {
       "post": {
         "tags": [
           "Articles"
@@ -521,6 +589,135 @@
           },
           "400": {
             "description": "Comment is empty"
+          }
+        }
+      }
+    },
+    "/api/v1/articles/{articleId}/rate": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Route for authenticated users to rate articles",
+        "description": "Returns the new average rating of the article",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object containing the rating given to this article",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/rating"
+            }
+          },
+          {
+            "in": "path",
+            "name": "articleId",
+            "description": "The id for the article to be rated",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "article rating successfully changed",
+            "schema": {
+              "$ref": "#/definitions/ratingRes"
+            }
+          },
+          "201": {
+            "description": "article successfully rated for the first time",
+            "schema": {
+              "$ref": "#/definitions/ratingRes"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/articles/{articleId}/report": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Route for authenticated users to report articles",
+        "description": "Returns a message on the status of the case",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object containing the violation details of the article",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/report"
+            }
+          },
+          {
+            "in": "path",
+            "name": "articleId",
+            "description": "The id for the article to be reported",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "article successfully reported",
+            "schema": {
+              "$ref": "#/definitions/reportRes1"
+            }
+          },
+          "409": {
+            "description": "article has been reported by authenticated user before",
+            "schema": {
+              "$ref": "#/definitions/reportRes2"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/": {
+      "get": {
+        "tags": [
+          "Cases"
+        ],
+        "summary": "Route for authenticated users to get reported cases",
+        "description": "Returns a list of cases for specified or all articles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "a",
+            "description": "The ids of the article cases to be searched",
+            "required": false
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "cases found and returned",
+            "schema": {
+              "$ref": "#/definitions/casesRes1"
+            }
+          },
+          "204": {
+            "description": "no reported cases found",
+            "schema": {
+              "$ref": "#/definitions/casesRes2"
+            }
           }
         }
       }
@@ -583,7 +780,6 @@
           "example": "Password"
         }
       },
-<<<<<<< HEAD
       "json": {
         "name": "User"
       }
@@ -640,45 +836,196 @@
         "name": "Comment"
       }
     },
-    "jwt": {
+    "OAuth1": {
       "type": "object",
       "properties": {
-        "authorization": {
+        "status": {
           "type": "string",
-          "example": "89ohsdc89efoaefh9w8ehfdlvnsdv89e08hfw089hefsodivh09whefsdo0vihsd0vh"
-        }
-      },
-      "json": {
-        "name": "User"
-=======
-      "Login": {
-				"type": "object",
-				"properties": {
-					"email": {
-						"type": "string",
-						"example": "metis@gmail.com"
-					},
-					"password": {
-						"type": "string",
-						"example": "Password"
-					}
-				},
-				"json": {
-					"name": "User"
-				}
-      },
-      "jwt": {
-        "type": "object",
-        "properties": {
-          "authorization": {
-            "type": "string",
-            "example": "89ohsdc89efoaefh9w8ehfdlvnsdv89e08hfw089hefsodivh09whefsdo0vihsd0vh"
-          }
+          "example": "Success"
         },
-        "json": {
-					"name": "User"
-				}
->>>>>>> feat(articles): get all reported cases> - add data seeders> - get all reported cased> - document this feature[Finishes #159987418]
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": "1"
+            },
+            "email": {
+              "type": "string",
+              "example": "james.blane@ah.com"
+            },
+            "created": {
+              "type": "boolean",
+              "example": "true"
+            },
+            "token": {
+              "type": "string",
+              "example": "41cb94404576c3a025785f18ff5ad62d1cf8d2de6796edf9d61fb61cdd85ac9055884c5ab9ce25070d2d42abcb1a0b96b10f244a1ee8986ab9aed0d7437a55089f9ce53e94760d6ebefa3d2eae33f87cf66a1ca7a19e280f89f9e28e58695278ea7281338b03e63348a83833a55d08cd3271dff2785ff06ed2f2387f1827207337857db46aa328dc83cadd075392131a1f07f5ea5c308facb94df612bec478157488723dbff152fae"
+            }
+          }
+        }
+      }
+    },
+    "OAuth2": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "Success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": "1"
+            },
+            "email": {
+              "type": "string",
+              "example": "james.blane@ah.com"
+            },
+            "created": {
+              "type": "boolean",
+              "example": "false"
+            },
+            "token": {
+              "type": "string",
+              "example": "41cb94404576c3a025785f18ff5ad62d1cf8d2de6796edf9d61fb61cdd85ac9055884c5ab9ce25070d2d42abcb1a0b96b10f244a1ee8986ab9aed0d7437a55089f9ce53e94760d6ebefa3d2eae33f87cf66a1ca7a19e280f89f9e28e58695278ea7281338b03e63348a83833a55d08cd3271dff2785ff06ed2f2387f1827207337857db46aa328dc83cadd075392131a1f07f5ea5c308facb94df612bec478157488723dbff152fae"
+            }
+          }
+        }
+      }
+    },
+    "OAuthFail": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "Fail"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "User could not be authenticated"
+            }
+          }
+        }
+      }
+    },
+    "rating": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "type": "number",
+          "example": "4"
+        }
+      }
+    },
+    "ratingRes": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "averageRating": {
+              "type": "number",
+              "example": 3
+            }
+          }
+        }
+      }
+    },
+    "reportRes1": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "This case has been recorded and will be reviewed"
+            }
+          }
+        }
+      }
+    },
+    "reportRes2": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "You have reported this article already"
+            }
+          }
+        }
+      }
+    },
+    "casesRes1": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "cases": {
+              "type": "array",
+              "example": [
+                {
+                  "id": 1,
+                  "userId": 5,
+                  "articleId": 1,
+                  "violation": "Sexual Content",
+                  "description": "It is very erotic",
+                  "resolved": false,
+                  "createdAt": "2018-09-15T19:32:36.164Z",
+                  "updatedAt": "2018-09-15T19:32:36.164Z"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "casesRes2": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "cases": {
+              "type": "array",
+              "example": []
+            },
+            "message": {
+              "type": "string",
+              "example": "There are no cases"
+            }
+          }
+        }
       }
     }
   }

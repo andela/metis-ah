@@ -22,10 +22,9 @@ const {
   validateObject,
   validateUser
 } = ratingValidation;
-// TODO, varlidateArticleId is to be added when rate articles feature has been merged to develop.
 const {
   validateViolation,
-  validateRequestObject
+  validateRequestObject,
 } = reportValidation;
 
 const articleRoutes = express.Router();
@@ -54,6 +53,7 @@ articleRoutes.post(
   auth,
   validateRequestObject,
   validateViolation,
+  validArticleId,
   reportArticle
 );
 

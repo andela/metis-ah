@@ -96,7 +96,8 @@ const helpers = {
         firstname: profile.name.givenName,
         lastname: profile.name.familyName,
         email: profile.emails[0].value,
-        username: profile.emails[0].value
+        username: profile.emails[0].value,
+        isVerified: true
       }
     }).spread((user, created) => {
       const {
@@ -132,7 +133,8 @@ const helpers = {
         firstname: profile.name.givenName,
         lastname: profile.name.familyName,
         email: profile.emails[0].value,
-        username: profile.emails[0].value
+        username: profile.emails[0].value,
+        isVerified: true
       }
     }).spread((user, created) => {
       const {

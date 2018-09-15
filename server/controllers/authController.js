@@ -23,7 +23,7 @@ const authController = {
    * @param  {object} res The response object
    * @returns {object} The response object
    */
-  returnError: (req, res) => res.status(400).jsend.fail({
+  returnError: (req, res) => res.status(500).jsend.fail({
     message: 'User could not be authenticated'
   })
 };
