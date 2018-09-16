@@ -6,7 +6,7 @@ const tags = (sequelize, DataTypes) => {
   Tags.associate = (models) => {
     Tags.belongsToMany(models.Articles, {
       as: 'tagArticle',
-      through: 'Tagging',
+      through: 'ArticleTags',
       foreignKey: 'tagId'
     });
   };

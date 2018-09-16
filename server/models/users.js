@@ -7,6 +7,12 @@ const users = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
+    firstname: {
+      type: DataTypes.STRING
+    },
+    lastname: {
+      type: DataTypes.STRING
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,

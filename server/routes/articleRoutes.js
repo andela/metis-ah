@@ -2,6 +2,7 @@ import express from 'express';
 import articleController from '../controllers/articleController';
 import commentController from '../controllers/commentController';
 import likeController from '../controllers/likeController';
+import searchController from '../controllers/searchController';
 import auth from '../middleware/auth';
 import ratingValidation from '../middleware/ratingValidation';
 import inputValidator from '../middleware/inputValidator';
@@ -60,5 +61,5 @@ articleRoutes.post(
   validArticleId,
   reportArticle
 );
-
+articleRoutes.get('/search', searchController);
 export default articleRoutes;
