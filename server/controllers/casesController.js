@@ -30,11 +30,12 @@ const caseController = {
     Cases.findAll({
       where: searched,
       include: [{
-        model: Users,
-        attributes: ['id', 'email', 'username', 'image']
-      }, {
         model: Articles,
-        attributes: ['id', 'title']
+        attributes: ['id', 'title'],
+        include: [{
+          model: Users,
+          attributes: ['id', 'email', 'username', 'image']
+        }]
       }]
     }).then((cases) => {
       if (cases.length === 0) {
