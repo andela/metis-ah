@@ -3,7 +3,9 @@ import helpers from '../helpers/helpers';
 import errorHelpers from '../helpers/errorHelpers';
 
 const {
-  Cases
+  Cases,
+  Users,
+  Articles
 } = models;
 const { getIntArray } = helpers;
 
@@ -26,7 +28,14 @@ const caseController = {
     }
 
     Cases.findAll({
-      where: searched
+      where: searched,
+      include: [{
+        model: Users,
+        attributes: ['id', 'email', 'username', 'image']
+      }, {
+        model: Articles,
+        attributes: ['id', 'title']
+      }]
     }).then((cases) => {
       if (cases.length === 0) {
         return res.status(200).jsend.success({
