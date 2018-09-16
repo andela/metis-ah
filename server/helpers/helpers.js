@@ -149,6 +149,30 @@ const helpers = {
         created
       });
     });
+  },
+
+
+  /**
+   * @description This is the callback function for twitter's authentication
+   * @param  {string} token The access token passed by twitter
+   * @param  {string} tokenSecret The secrete passed by twitter
+   * @param  {object} profile The returned profile information
+   * @param  {function} done The next function
+   * @returns {object} undefined
+   */
+  twitterCallback: (token, tokenSecret, profile, done) => {
+    console.log(profile);
+    done(null, {
+      id: profile.id
+    });
+    // Users.findOrCreate({
+    //   where: {
+    //     email: profile.emails
+    //   },
+    //   defaults: {
+    //     firstname: profile.name
+    //   }
+    // })
   }
 };
 

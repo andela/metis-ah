@@ -51,3 +51,4 @@ package-lock.json
 
 # bash file
 export_env.bash
+.Compiled
