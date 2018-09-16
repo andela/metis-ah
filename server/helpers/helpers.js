@@ -165,7 +165,36 @@ const helpers = {
 
     return eleInt;
   },
+
+  /**
+   * @description This helps parse the id to an integer
+   * @param {string} id The Id to be parsed
+   * @returns {Number} The integer number equivalent of the id
+   */
   parsedId: id => ((!(/^\d+$/.test(id))) ? NaN : parseInt(id, 10)),
+
+  /**
+   * @description This is the callback function for twitter's authentication
+   * @param  {string} token The access token passed by twitter
+   * @param  {string} tokenSecret The secrete passed by twitter
+   * @param  {object} profile The returned profile information
+   * @param  {function} done The next function
+   * @returns {object} undefined
+   */
+  twitterCallback: (token, tokenSecret, profile, done) => {
+    console.log(profile);
+    done(null, {
+      id: profile.id
+    });
+    // Users.findOrCreate({
+    //   where: {
+    //     email: profile.emails
+    //   },
+    //   defaults: {
+    //     firstname: profile.name
+    //   }
+    // })
+  }
 };
 
 export default helpers;

@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import express from 'express';
+import expressSession from 'express-session';
 import cors from 'cors';
 import jsend from 'jsend';
 import dotenv from 'dotenv';
@@ -27,7 +28,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(jsend.middleware);
 app.use(urlencoded);
 app.use(json);
+app.use(jsend.middleware);
+
+app.use(expressSession({ secret: process.env.SECRET }));
 app.use(passportSetup.initialize());
+app.use(passportSetup.session());
 
 // Use user routes
 app.use('/api/v1/users', userRoutes);
