@@ -59,6 +59,41 @@ describe('ROLE BASED ACCESS:', () => {
       });
   });
 
+  it('should fail when permissions sent are wrong', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/roles')
+      .set({
+        authorization: tokenAdmin
+      })
+      .send({
+        role: 'reader',
+        permissions: ['gold', 'fish']
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.eql('The following permissions are invalid gold,fish');
+        done();
+      });
+  });
+
+  it('should fail when incomplete data is passed', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/roles')
+      .set({
+        authorization: tokenAdmin
+      })
+      .send({
+        role: 'reader',
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.messages).to.eql(['Please provide permissions']);
+        done();
+      });
+  });
+
   it('should return a 201 when trying to create a new role', (done) => {
     chai
       .request(app)
@@ -73,25 +108,7 @@ describe('ROLE BASED ACCESS:', () => {
       .end((err, res) => {
         expect(res.body.status).to.equal('success');
         expect(res.body.data).to.have.property('role');
-        expect(res.body.data.message).to.eql('New role saved');
-        done();
-      });
-  });
-
-  it('should return a 400 when trying pass invalid permission', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/roles')
-      .set({
-        authorization: tokenAdmin
-      })
-      .send({
-        role: 'reader',
-        permissions: ['feed']
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message).to.eql('This permission is invalid');
+        expect(res.body.data.message).to.eql('New role created');
         done();
       });
   });
@@ -125,11 +142,29 @@ describe('ROLE BASED ACCESS:', () => {
       .send({
         role: 'user',
         removePermissions: ['read'],
-        addPermissions: ['write']
+        addPermissions: ['view cases']
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message).to.eql('Only an admin can edit roles');
+        expect(res.body.data.message).to.eql('Only an admin can access this resource');
+        done();
+      });
+  });
+
+  it('should return a fail if incomplete data is passed', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/roles')
+      .set({
+        authorization: tokenAdmin
+      })
+      .send({
+        role: 'user',
+        removePermissions: ['read']
+      })
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.messages).to.eql(['Please provide addPermissions']);
         done();
       });
   });
@@ -144,7 +179,7 @@ describe('ROLE BASED ACCESS:', () => {
       .send({
         role: 'user',
         removePermissions: ['read'],
-        addPermissions: ['write']
+        addPermissions: ['view cases']
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('success');
@@ -173,87 +208,21 @@ describe('ROLE BASED ACCESS:', () => {
       });
   });
 
-  it('should return a fail when non admin tries to delete a role', (done) => {
+  it('should fail when permissions sent are wrong', (done) => {
     chai
       .request(app)
-      .delete('/api/v1/roles')
-      .set({
-        authorization: token
-      })
-      .send({
-        role: 'reader',
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message).to.eql('Only an admin can delete a role');
-        done();
-      });
-  });
-
-  it('should return a 200 on successful delete', (done) => {
-    chai
-      .request(app)
-      .delete('/api/v1/roles')
+      .put('/api/v1/roles')
       .set({
         authorization: tokenAdmin
       })
       .send({
         role: 'reader',
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('success');
-        expect(res.body.data.message).to.eql('Role has been deleted');
-        done();
-      });
-  });
-
-  it('should return a 400 when trying to delete the admin', (done) => {
-    chai
-      .request(app)
-      .delete('/api/v1/roles')
-      .set({
-        authorization: tokenAdmin
-      })
-      .send({
-        role: 'admin',
+        addPermissions: ['gold', 'fish'],
+        removePermissions: ['eat', 'dance']
       })
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message).to.eql('Admin cannot be deleted');
-        done();
-      });
-  });
-
-  it('should return a 400 when trying to delete the user role', (done) => {
-    chai
-      .request(app)
-      .delete('/api/v1/roles')
-      .set({
-        authorization: tokenAdmin
-      })
-      .send({
-        role: 'user',
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message).to.eql('user cannot be deleted');
-        done();
-      });
-  });
-
-  it('should return a 424 when trying  to delete an assigned role', (done) => {
-    chai
-      .request(app)
-      .delete('/api/v1/roles')
-      .set({
-        authorization: tokenAdmin
-      })
-      .send({
-        role: 'user',
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message).to.eql('This role is still assigned to a user');
+        expect(res.body.data.message).to.eql('The following permissions are invalid gold,fish,eat,dance');
         done();
       });
   });
