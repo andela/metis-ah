@@ -60,6 +60,9 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'replies'
     });
+    Users.hasMany(models.Cases, {
+      foreignKey: 'userId'
+    });
     Users.hasOne(models.Subscriptions, {
       foreignKey: 'userId',
       as: 'subscription'

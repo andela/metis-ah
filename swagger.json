@@ -1,145 +1,225 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "description": "Author's Haven [https://metis-ah-staging.herokuapp.com/](https://metis-ah-staging.herokuapp.com/) is a platform that allows you to share your knowledge across the world",
-      "version": "1.0.0",
-      "title": "Author's Haven",
-      "contact": {
-        "email": "metis.ah2018@gmail.com"
+  "swagger": "2.0",
+  "info": {
+    "description": "Author's Haven [https://metis-ah-staging.herokuapp.com/](https://metis-ah-staging.herokuapp.com/) is a platform that allows you to share your knowledge across the world",
+    "version": "1.0.0",
+    "title": "Author's Haven",
+    "contact": {
+      "email": "metis.ah2018@gmail.com"
+    }
+  },
+  "host": "localhost:8000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "User",
+      "description": "Everything about all Users"
+    },
+    {
+      "name": "User",
+      "description": "Everything about all Users"
+    },
+    {
+      "name": "Articles",
+      "description": "Everything about all Articles"
+    },
+    {
+      "name": "Like",
+      "description": "Everything about all likes"
+    },
+    {
+      "name": "Cases",
+      "description": "Everything about reported articles"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Welcomes users to app",
+        "description": "Users recieves a welcome message",
+        "responses": {
+          "200": {
+            "description": "Welcome to the simulation program"
+          }
+        }
       }
     },
-    "host": "localhost:8000",
-    "basePath": "/",
-    "tags": [
-      {
-        "name": "User",
-        "description": "Everything about all Users"
-      },
-      {
-        "name": "Articles",
-        "description": "Everything about all Articles"
-      },
-      {
-        "name": "Like",
-        "description": "Everything about all likes"
+    "/api/v1/users/auth/signup": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to sign up with username, email and password",
+        "description": "User recieves JWtoken as he supplies his username, email and password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User's object that need to be parsed",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Signup"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User is signed up successfully"
+          },
+          "400": {
+            "description": "Email already exist!"
+          }
+        }
       }
-    ],
-    "schemes": [
-      "https",
-      "http"
-    ],
-    "paths": {
-      "/": {
-        "get": {
-          "summary": "Welcomes users to app",
-          "description": "Users recieves a welcome message",
-          "responses": {
-            "200": {
-              "description": "Welcome to the simulation program"
+    },
+    "/api/v1/users/auth/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to login email and password",
+        "description": "User receives JWtoken on successful login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User's object that need to be parsed",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
             }
           }
-        }
-			},
-			"/api/v1/users/auth/signup": {
-        "post": {
-					"tags": [ "User" ],
-          "summary": "Allows user to sign up with username, email and password",
-          "description": "User recieves JWtoken as he supplies his username, email and password",
-          "consumes": [
-						"application/json"
-					],
-					"produces": [
-						"application/json"
-					],
-					"parameters": [
-						{
-							"in": "body",
-							"name": "body",
-							"description": "User's object that need to be parsed",
-							"required": true,
-							"schema": {
-								"$ref": "#/definitions/Signup"
-							}
-						}
-					],
-          "responses": {
-            "201": {
-              "description": "User is signed up successfully"
-						},
-						"400": {
-							"description": "Email already exist!"
-						}
+        ],
+        "responses": {
+          "200": {
+            "description": "User is signed in successfully"
+          },
+          "401": {
+            "description": "Invalid credentials supplied"
           }
         }
-			},
-			"/api/v1/users/auth/login": {
-        "post": {
-					"tags": [ "User" ],
-          "summary": "Allows user to login email and password",
-					"description": "User receives JWtoken on successful login",
-					"consumes": [
-						"application/json"
-					],
-					"produces": [
-						"application/json"
-					],
-					"parameters": [
-						{
-							"in": "body",
-							"name": "body",
-							"description": "User's object that need to be parsed",
-							"required": true,
-							"schema": {
-								"$ref": "#/definitions/Login"
-							}
-						}
-					],
-          "responses": {
-            "200": {
-              "description": "User is signed in successfully"
-						},
-						"401": {
-							"description": "Invalid credentials supplied"
-						}
       }
-    }
-      },
-      "/api/v1/users/verify/{token}": {
-        "put": {
-          "tags": ["User"],
-          "summary": "Verify user account",
-          "description": "User recive an email like account verified",
-          "operationId": "getToken",
-          "consumes": [
-            "application/json"
-          ],
-          "produces": [
-						"application/json"
-					],
-          "parameters": [
-            {
-              "name": "token",
-              "in": "path",
-              "description": "Token generated for user",
-              "required": true,
-              "type": "string"
+    },
+    "/api/v1/users/auth/google": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Authenticate user with google",
+        "description": "Signup or login a user with the person's google account",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing user logged in",
+            "schema": {
+              "$ref": "#/definitions/OAuth1"
             }
-          ],
-          "responses": {
-            "200":{
-              "description": "Your account is verified successfully"
-            },
-            "401": {
-              "description": "Your account is already verified"
+          },
+          "201": {
+            "description": "New user created",
+            "schema": {
+              "$ref": "#/definitions/OAuth2"
+            }
+          },
+          "500": {
+            "description": "Authentication failed",
+            "schema": {
+              "$ref": "#/definitions/OAuthFail"
             }
           }
         }
-      },
-      "/api/v1/users/": {
-        "get": {
-          "tags": [ "User" ],
-          "summary": "A logged in user can retrieve all users",
-          "description": "Users retrieve all users",
+      }
+    },
+    "/api/v1/users/auth/facebook": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Authenticate user with facebook",
+        "description": "Signup or login a user with the person's facebook account",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Existing user logged in",
+            "schema": {
+              "$ref": "#/definitions/OAuth1"
+            }
+          },
+          "201": {
+            "description": "New user created",
+            "schema": {
+              "$ref": "#/definitions/OAuth2"
+            }
+          },
+          "500": {
+            "description": "Authentication failed",
+            "schema": {
+              "$ref": "#/definitions/OAuthFail"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/verify/{token}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Verify user account",
+        "description": "User recive an email like account verified",
+        "operationId": "getToken",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "Token generated for user",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your account is verified successfully"
+          },
+          "401": {
+            "description": "Your account is already verified"
+          }
+        }
+      }
+    },
+    "/api/v1/users/": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "A logged in user can retrieve all users",
+        "description": "Users retrieve all users",
         "produces": [
           "application/json"
         ],
@@ -201,144 +281,154 @@
         }
 			}
     },
-      "/api/v1/users/auth/reset-password": {
-        "post": {
-					"tags": [ "User" ],
-          "summary": "Allows user to request for a password reset",
-					"description": "User receives an email with a link to reset password",
-					"consumes": [
-						"application/json"
-					],
-					"produces": [
-						"application/xml"
-					],
-					"parameters": [
-						{
-							"in": "body",
-							"name": "body",
-							"description": "User's object that need to be parsed",
-							"required": true,
-							"schema": {
-								"$ref": "#/definitions/reset-password-email"
-							}
-						}
-					],
-          "responses": {
-            "200": {
-              "description": "Password reset link has been sent to your email"
-						},
-						"401": {
-							"description": "Invalid credentials supplied"
-						}
-          }
-        }
-      },
-      "/api/v1/users/auth/reset-password/{token}": {
-        "put": {
-					"tags": [ "User" ],
-          "summary": "Allows user to reset password",
-					"description": "User password reset endpoint",
-					"consumes": [
-						"application/json"
-					],
-					"produces": [
-						"application/xml"
-					],
-					"parameters": [
-						{
-							"in": "path",
-							"name": "token",
-							"description": "Token sent to the user's email for password reset",
-              "required": true,
-              "type": "string"
-            },
-            {
-							"in": "body",
-							"name": "body",
-							"description": "User's object that need to be parsed",
-							"required": true,
-							"schema": {
-								"$ref": "#/definitions/reset-password"
-							}
-            }
-					],
-          "responses": {
-            "200": {
-              "description": "Password reset successful"
-						},
-						"401": {
-							"description": "Verification link not valid"
-            },
-            "500": {
-              "description": "Request could not be completed. Please try again"
+    "/api/v1/users/auth/reset-password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to request for a password reset",
+        "description": "User receives an email with a link to reset password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User's object that need to be parsed",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reset-password-email"
             }
           }
-        }
-			},
-      "/api/v1/users/{userId}/follow": {
-        "post": {
-					"tags": [ "User" ],
-          "summary": "Allows user to follow other users",
-					"description": "User will become a follower of another user",
-					"consumes": [
-						"application/json"
-					],
-					"parameters": [
-						{
-							"in": "header",
-							"name": "authorization",
-							"description": "user token",
-							"required": true
-            },
-            {
-							"in": "path",
-							"name": "userId",
-							"description": "user id to follow",
-							"required": true
-						}
-					],
-          "responses": {
-            "200": {
-              "description": "you are now following the user"
-						}
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset link has been sent to your email"
+          },
+          "401": {
+            "description": "Invalid credentials supplied"
           }
         }
-      },
-      "/api/v1/users/{userId}/unfollow": {
-        "delete": {
-					"tags": [ "User" ],
-          "summary": "Allows user to unfollow other users",
-					"description": "User will unfollow another user",
-					"consumes": [
-						"application/json"
-					],
-					"produces": [
-						"application/json"
-					],
-					"parameters": [
-						{
-							"in": "header",
-							"name": "authorization",
-							"description": "user token",
-							"required": true
-            },
-            {
-							"in": "path",
-							"name": "userId",
-							"description": "user id to unfollow",
-							"required": true
-						}
-					],
-          "responses": {
-            "200": {
-              "description": "you are now longer following the user"
-						}
+      }
+    },
+    "/api/v1/users/auth/reset-password/{token}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to reset password",
+        "description": "User password reset endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "description": "Token sent to the user's email for password reset",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User's object that need to be parsed",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reset-password"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset successful"
+          },
+          "401": {
+            "description": "Verification link not valid"
+          },
+          "500": {
+            "description": "Request could not be completed. Please try again"
           }
         }
-			},
+      }
+    },
+    "/api/v1/users/{userId}/follow": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to follow other users",
+        "description": "User will become a follower of another user",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "user id to follow",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "you are now following the user"
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userId}/unfollow": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to unfollow other users",
+        "description": "User will unfollow another user",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "user id to unfollow",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "you are now longer following the user"
+          }
+        }
+      }
+    },
     "/api/v1/users/followings": {
       "get": {
-        "tags": [ "User" ],
+        "tags": [
+          "User"
+        ],
         "summary": "Allows user to see followers",
         "description": "User will view followers",
         "consumes": [
@@ -360,40 +450,126 @@
             "description": "you are now following the user"
           }
         }
-			},
+      },
       "/api/v1/articles/:articleId/comments/:commentId/like": {
         "post": {
-					"tags": [ "Like" ],
+          "tags": [
+            "Like"
+          ],
           "summary": "Route for authenticated users to like or unlike a comments on an article",
-					"description": "Returns a confirmation is like or unlike is successful",
-					"parameters": [
-						{
-							"in": "params",
-							"name": "commentId",
-							"description": "the id of the comment to be liked",
-							"required": true
-						}
-					],
+          "description": "Returns a confirmation is like or unlike is successful",
+          "parameters": [
+            {
+              "in": "params",
+              "name": "commentId",
+              "description": "the id of the comment to be liked",
+              "required": true
+            }
+          ],
           "responses": {
             "201": {
               "description": "Returns a 201 status code on the first like"
-						},
+            },
             "200": {
               "description": "Returns a 200 when like is toggled based on yours like/unlike action"
-						},
-						"400": {
-							"description": "Returns a 400 if params is not valid"
-						},
+            },
+            "400": {
+              "description": "Returns a 400 if params is not valid"
+            },
             "500": {
-							"description": "Returns a 500 if comment no longer exists"
-						}
+              "description": "Returns a 500 if comment no longer exists"
+            }
+          }
+        }
+      },
+      "/api/v1/articles/:articleId/report": {
+        "post": {
+          "tags": [ "Articles" ],
+          "summary": "Report an article that violates our policies",
+          "description": "This endpoint enables users report violating articles by specifying what violation was made.",
+          "parameters": [
+            {
+              "in": "headers",
+              "name": "authentication",
+              "description": "The authentication token",
+              "required": true
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "The report object",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/report"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "Successfully report an article"
+            },
+            "400": {
+              "description": "Several bad request errors may occur with a descriptive error message"
+            }
+          }
+        }
+      },
+      "/api/v1/cases/": {
+        "get": {
+          "tags": [ "Articles" ],
+          "summary": "Gets all reported cases on the platform",
+          "description": "This endpoint gives access to all reported cases on the platform",
+          "parameters": [
+            {
+              "in": "headers",
+              "name": "authentication",
+              "description": "The authentication token",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "a",
+              "description": "a list of article ids separated with '+'",
+              "required": true
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "gets all cases",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "success"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "cases": {
+                      "type": "Array"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "There are no cases"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/api/v1/articles/:articleId": {
+    "/api/v1/articles/{articleId}": {
       "post": {
-        "tags": [ "Articles" ],
+        "tags": [
+          "Articles"
+        ],
         "summary": "Route for authenticated users to post comments on an article",
         "description": "Returns the user and the user's comment",
         "parameters": [
@@ -416,107 +592,441 @@
           }
         }
       }
-    }
-  },
-    "definitions": {
-      "signin": {
-        "type": "object",
-        "required": [
-          "firstname",
-          "lastname",
-          "email",
-          "password"
+    },
+    "/api/v1/articles/{articleId}/rate": {
+      "post": {
+        "tags": [
+          "Articles"
         ],
-        "properties": {
-          "firstname": {
-            "type": "string",
-            "example": "Opeoluwa"
+        "summary": "Route for authenticated users to rate articles",
+        "description": "Returns the new average rating of the article",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object containing the rating given to this article",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/rating"
+            }
           },
-          "lastname": {
-            "type": "string",
-            "example": "Iyi-Kuyoro"
+          {
+            "in": "path",
+            "name": "articleId",
+            "description": "The id for the article to be rated",
+            "required": true
           },
-          "email": {
-            "type": "string",
-            "example": "ope.iky@ah.com"
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "article rating successfully changed",
+            "schema": {
+              "$ref": "#/definitions/ratingRes"
+            }
           },
-          "password": {
-            "type": "string",
-            "example": "PassWords"
+          "201": {
+            "description": "article successfully rated for the first time",
+            "schema": {
+              "$ref": "#/definitions/ratingRes"
+            }
           }
         }
-			},
-			"Signup": {
-				"type": "object",
-				"properties": {
-					"username": {
-						"type": "string",
-						"example": "metis"
-					},
-					"email": {
-						"type": "string",
-						"example": "metis@gmail.com"
-					},
-					"password": {
-						"type": "string",
-						"example": "Password"
-					}
-				},
-				"json": {
-					"name": "User"
-				}
-      },
-      "Login": {
-				"type": "object",
-				"properties": {
-					"email": {
-						"type": "string",
-						"example": "metis@gmail.com"
-					},
-					"password": {
-						"type": "string",
-						"example": "Password"
-					}
-				},
-				"json": {
-					"name": "User"
-				}
-      },
-      "reset-password-email": {
-				"type": "object",
-				"properties": {
-					"email": {
-						"type": "string",
-						"example": "metis@gmail.com"
-					}
-				},
-				"json": {
-					"name": "User"
-				}
-      },
-      "reset-password": {
-				"type": "object",
-				"properties": {
-					"password": {
-						"type": "string",
-						"example": "Jojitoon"
-					}
-				},
-				"json": {
-					"name": "User"
-				}
-			},
-      "Comment": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "string",
-            "example": "Great post!"
+      }
+    },
+    "/api/v1/articles/{articleId}/report": {
+      "post": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Route for authenticated users to report articles",
+        "description": "Returns a message on the status of the case",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object containing the violation details of the article",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/report"
+            }
+          },
+          {
+            "in": "path",
+            "name": "articleId",
+            "description": "The id for the article to be reported",
+            "required": true
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
           }
+        ],
+        "responses": {
+          "201": {
+            "description": "article successfully reported",
+            "schema": {
+              "$ref": "#/definitions/reportRes1"
+            }
+          },
+          "409": {
+            "description": "article has been reported by authenticated user before",
+            "schema": {
+              "$ref": "#/definitions/reportRes2"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/": {
+      "get": {
+        "tags": [
+          "Cases"
+        ],
+        "summary": "Route for authenticated users to get reported cases",
+        "description": "Returns a list of cases for specified or all articles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "a",
+            "description": "The ids of the article cases to be searched",
+            "required": false
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "cases found and returned",
+            "schema": {
+              "$ref": "#/definitions/casesRes1"
+            }
+          },
+          "204": {
+            "description": "no reported cases found",
+            "schema": {
+              "$ref": "#/definitions/casesRes2"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "signin": {
+      "type": "object",
+      "required": [
+        "firstname",
+        "lastname",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "firstname": {
+          "type": "string",
+          "example": "Opeoluwa"
         },
-        "json": {
-          "name": "Comment"
+        "lastname": {
+          "type": "string",
+          "example": "Iyi-Kuyoro"
+        },
+        "email": {
+          "type": "string",
+          "example": "ope.iky@ah.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "PassWords"
+        }
+      }
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "violation": {
+          "type": "string",
+          "example": "Discrimination"
+        },
+        "description": {
+          "type": "string",
+          "example": "I just don't like this article"
+        }
+      }
+    },
+    "Signup": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "metis"
+        },
+        "email": {
+          "type": "string",
+          "example": "metis@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Password"
+        }
+      },
+      "json": {
+        "name": "User"
+      }
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "metis@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "Password"
+        }
+      },
+      "json": {
+        "name": "User"
+      }
+    },
+    "reset-password-email": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "metis@gmail.com"
+        }
+      },
+      "json": {
+        "name": "User"
+      }
+    },
+    "reset-password": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "example": "Jojitoon"
+        }
+      },
+      "json": {
+        "name": "User"
+      }
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "example": "Great post!"
+        }
+      },
+      "json": {
+        "name": "Comment"
+      }
+    },
+    "OAuth1": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "Success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": "1"
+            },
+            "email": {
+              "type": "string",
+              "example": "james.blane@ah.com"
+            },
+            "created": {
+              "type": "boolean",
+              "example": "true"
+            },
+            "token": {
+              "type": "string",
+              "example": "41cb94404576c3a025785f18ff5ad62d1cf8d2de6796edf9d61fb61cdd85ac9055884c5ab9ce25070d2d42abcb1a0b96b10f244a1ee8986ab9aed0d7437a55089f9ce53e94760d6ebefa3d2eae33f87cf66a1ca7a19e280f89f9e28e58695278ea7281338b03e63348a83833a55d08cd3271dff2785ff06ed2f2387f1827207337857db46aa328dc83cadd075392131a1f07f5ea5c308facb94df612bec478157488723dbff152fae"
+            }
+          }
+        }
+      }
+    },
+    "OAuth2": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "Success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number",
+              "example": "1"
+            },
+            "email": {
+              "type": "string",
+              "example": "james.blane@ah.com"
+            },
+            "created": {
+              "type": "boolean",
+              "example": "false"
+            },
+            "token": {
+              "type": "string",
+              "example": "41cb94404576c3a025785f18ff5ad62d1cf8d2de6796edf9d61fb61cdd85ac9055884c5ab9ce25070d2d42abcb1a0b96b10f244a1ee8986ab9aed0d7437a55089f9ce53e94760d6ebefa3d2eae33f87cf66a1ca7a19e280f89f9e28e58695278ea7281338b03e63348a83833a55d08cd3271dff2785ff06ed2f2387f1827207337857db46aa328dc83cadd075392131a1f07f5ea5c308facb94df612bec478157488723dbff152fae"
+            }
+          }
+        }
+      }
+    },
+    "OAuthFail": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "Fail"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "User could not be authenticated"
+            }
+          }
+        }
+      }
+    },
+    "rating": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "type": "number",
+          "example": "4"
+        }
+      }
+    },
+    "ratingRes": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "averageRating": {
+              "type": "number",
+              "example": 3
+            }
+          }
+        }
+      }
+    },
+    "reportRes1": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "This case has been recorded and will be reviewed"
+            }
+          }
+        }
+      }
+    },
+    "reportRes2": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "example": "You have reported this article already"
+            }
+          }
+        }
+      }
+    },
+    "casesRes1": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "cases": {
+              "type": "array",
+              "example": [
+                {
+                  "id": 1,
+                  "userId": 5,
+                  "articleId": 1,
+                  "violation": "Sexual Content",
+                  "description": "It is very erotic",
+                  "resolved": false,
+                  "createdAt": "2018-09-15T19:32:36.164Z",
+                  "updatedAt": "2018-09-15T19:32:36.164Z"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "casesRes2": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "cases": {
+              "type": "array",
+              "example": []
+            },
+            "message": {
+              "type": "string",
+              "example": "There are no cases"
+            }
+          }
         }
       }
     }
   }
+}

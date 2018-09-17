@@ -9,6 +9,7 @@ import userRoutes from './routes/userRoutes';
 import articleRoutes from './routes/articleRoutes';
 import passportSetup from './config/passportSetup';
 import authRoutes from './routes/authRoutes';
+import caseRoutes from './routes/caseRoutes';
 
 dotenv.config();
 const app = express();
@@ -38,6 +39,7 @@ app.use(passportSetup.initialize());
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/users/auth', authRoutes);
 app.use('/api/v1/articles', articleRoutes);
+app.use('/api/v1/cases', caseRoutes);
 
 app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'

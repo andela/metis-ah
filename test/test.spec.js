@@ -8,6 +8,7 @@ import generateToken from '../server/helpers/generateToken';
 import Mailer from '../server/helpers/utils/mailer';
 import './socialLogin.spec';
 import './rateArticles.spec';
+import './reportArticle.spec';
 
 dotenv.config();
 chai.use(chaiHttp);

@@ -13,7 +13,8 @@
     "migrate": "sequelize db:migrate",
     "unmigrate": "sequelize db:migrate:undo:all",
     "seed_data": "NODE_ENV=development sequelize db:seed:all",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "compile": "babel server --out-dir .compiled --source-maps --watch"
   },
   "repository": {
     "type": "git",

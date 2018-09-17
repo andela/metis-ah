@@ -8,7 +8,7 @@ module.exports = {
     Etiam tellus leo, tincidunt ac leo quis, placerat fermentum ligula. Praesent tellus enim, ultrices in justo ut, rhoncus auctor justo. Donec nec tellus lectus. Vivamus sapien lorem, maximus quis ornare et, sollicitudin sit amet sapien. Aenean euismod a justo quis bibendum. Etiam feugiat massa ut metus hendrerit commodo. Fusce quis sodales diam. Pellentesque mattis mauris ac ornare vestibulum.
 
     Fusce hendrerit, nisi non pretium accumsan, velit ipsum tempus turpis, in ullamcorper nisi tortor sit amet nibh. Praesent id tortor erat. Praesent odio massa, congue eu commodo eu, fermentum eget nibh. Nulla eu tellus lectus. Nam sed pellentesque metus. Vestibulum odio nisl, efficitur blandit ipsum a, imperdiet vestibulum tortor. Nullam commodo nisi elit, eleifend pellentesque sem sagittis ut. Sed sit amet convallis lectus. Suspendisse a massa vitae sem iaculis finibus ut vel mauris. Praesent et viverra ex, non molestie lorem.`,
-    userId: 1,
+    userId: 4,
     categoryId: 1,
     createdAt: '2018-09-09',
     updatedAt: '2018-09-09'

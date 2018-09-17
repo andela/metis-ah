@@ -51,3 +51,7 @@ package-lock.json
 
 # bash file
 export_env.bash
+#vscode files
+.vscode
+
+.compiled

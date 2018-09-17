@@ -36,6 +36,11 @@ const articles = (sequelize, DataTypes) => {
       as: 'category'
     });
 
+    Articles.hasMany(models.Cases, {
+      foreignKey: 'articleId',
+      as: 'cases'
+    });
+
     Articles.hasMany(models.Comments, {
       foreignKey: 'articleId',
       as: 'comments'
