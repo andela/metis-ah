@@ -113,6 +113,26 @@ const roleValidator = {
     }
 
     return next();
+  },
+
+  isAdmin: (req, res, next) => {
+    if (req.currentUser.roleId !== 1) {
+      return res.status(401).jsend.fail({
+        message: 'Need an admin access level'
+      });
+    }
+
+    return next();
+  },
+
+  isUser: (req, res, next) => {
+    if (req.currentUser.roleId !== 2 && req.currentUser.roleId !== 1) {
+      return res.status(401).jsend.fail({
+        message: 'Need a user access level'
+      });
+    }
+
+    return next();
   }
 };
 

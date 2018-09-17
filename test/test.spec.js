@@ -20,7 +20,7 @@ should();
 
 const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
 const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
-const verifiedToken = generateToken(7200, { id: 2, isVerified: true });
+const verifiedToken = generateToken(7200, { id: 2, isVerified: true, roleId: 1 });
 describe('TEST ALL ENDPOINT', () => {
   describe('Initial testing', () => {
     it('should return welcome to sims', (done) => {

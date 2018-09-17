@@ -9,7 +9,7 @@ const cryptr = new Cryptr(secret);
 chai.use(chaiHttp);
 const { should, expect } = chai;
 should();
-const token = generateToken(7200, { id: 1, isVerified: true });
+const token = generateToken(7200, { id: 1, isVerified: true, roleId: 1 });
 const faketoken = cryptr.encrypt('nothing');
 
 describe('USER WITHOUT TOKEN', () => {

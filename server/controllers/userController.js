@@ -37,7 +37,7 @@ const userController = {
         if (!created) {
           return res.status(400).jsend.fail({ message: 'email already exist!' });
         }
-        const token = generateToken(7200, { id: user.id, isVerified: user.isVerified });
+        const token = generateToken(7200, { id: user.id, isVerified: user.isVerified, roleId: user.roleId });
 
         // THIS FUNCTION SEND AN EMAIL TO USER FOR VERIFICATION OF ACCOUNT
         mailer.onUserRegistration(user.username, user.email, token);
@@ -73,7 +73,7 @@ const userController = {
             message: 'Invalid credentials supplied',
           });
         }
-        const token = generateToken(7200, { id: user.id, isVerified: user.isVerified });
+        const token = generateToken(7200, { id: user.id, isVerified: user.isVerified, roleId: user.roleId });
         if (!user.isVerified) {
           mailer.onUserRegistration(user.username, user.email, token);
           return res.status(400).jsend.error({
