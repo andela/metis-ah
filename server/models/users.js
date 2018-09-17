@@ -36,6 +36,10 @@ const users = (sequelize, DataTypes) => {
     },
     interests: {
       type: DataTypes.ARRAY(DataTypes.TEXT)
+    },
+    roleId: {
+      type: DataTypes.INTEGER,
+      defaultValue: 2
     }
   });
 
@@ -80,6 +84,10 @@ const users = (sequelize, DataTypes) => {
     Users.hasMany(models.ArticleLikes, {
       foreignKey: 'userId',
       as: 'articleLikes'
+    });
+    Users.belongsTo(models.Roles, {
+      foreignKey: 'roleId',
+      as: 'role'
     });
   };
   Users.beforeCreate((user) => {
