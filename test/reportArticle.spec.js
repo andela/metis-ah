@@ -28,7 +28,7 @@ describe('REPORT AN ARTICLE:', () => {
   it('successful', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/report')
+      .post('/api/v1/articles/1/report/cases')
       .set({
         authorization: token
       })
@@ -47,7 +47,7 @@ describe('REPORT AN ARTICLE:', () => {
   it('report same article', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/report')
+      .post('/api/v1/articles/1/report/cases')
       .set({
         authorization: token
       })
@@ -66,7 +66,7 @@ describe('REPORT AN ARTICLE:', () => {
   it('article not found', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/10000000/report')
+      .post('/api/v1/articles/10000000/report/cases')
       .set({
         authorization: token
       })
@@ -85,7 +85,7 @@ describe('REPORT AN ARTICLE:', () => {
   it('invalid violation', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/report')
+      .post('/api/v1/articles/1/report/cases')
       .set({
         authorization: token
       })
@@ -104,7 +104,7 @@ describe('REPORT AN ARTICLE:', () => {
   it('invalid request body', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/report')
+      .post('/api/v1/articles/1/report/cases')
       .set({
         authorization: token
       })
@@ -148,7 +148,7 @@ describe('REPORT AN ARTICLE:', () => {
   });
 });
 
-describe('RESOLVE a reorted case', () => {
+describe('RESOLVE a reported case', () => {
   const token = generateToken(7200, { id: 5, isVerified: true });
 
   it('incorrect caseId', (done) => {

@@ -9,9 +9,13 @@ import reportValidation from '../middleware/reportValidation';
 import usersValidations from '../middleware/usersValidations';
 import checkParams from '../middleware/checkParams';
 import { multerUploads } from '../config/multer/multerConfig';
-import caseController from '../controllers/casesController';
 
-const { reportArticle, rateArticle, create, like } = articleController;
+const {
+  reportArticle,
+  rateArticle,
+  create,
+  like
+} = articleController;
 const { addComment } = commentController;
 const { validateArticle, validateComments } = inputValidator;
 const { validateLikeObject } = usersValidations;
@@ -49,7 +53,7 @@ articleRoutes.post(
 articleRoutes.post('/', auth, multerUploads, validateArticle, create);
 articleRoutes.post('/:articleId/:likeType', auth, checkParams.id, checkParams.likeType, like);
 articleRoutes.post(
-  '/:articleId/report',
+  '/:articleId/report/cases',
   auth,
   validateRequestObject,
   validateViolation,
