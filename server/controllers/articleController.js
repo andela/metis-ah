@@ -163,7 +163,7 @@ const articlesController = {
             });
           });
       } else {
-        // Get all ratings on specified article
+        // Analyse and recompute average rating on article
         analyseRatings(req, res);
       }
     });
