@@ -45,6 +45,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('title', 'How I Learnt React in Andela')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .type('form')
         .end((err, res) => {
           res.status.should.equal(201);
           res.body.should.be.an('object');
@@ -64,6 +65,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('title', 'How I Learnt React in Andela')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .type('form')
         .end((err, res) => {
           res.status.should.equal(401);
           res.body.data.message.should.equal('No token provided');
@@ -122,25 +124,6 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         });
     });
 
-    it('should fail when uploading an image beyond 2 mb', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/articles')
-        .set('Content-Type', 'multipart/form-data')
-        .set('authorization', hashedToken)
-        .field('title', 'How I Learnt React in Andela')
-        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
-        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
-        .attach('image', fs.readFileSync(`${__dirname}/images/Ft5_3mb.JPG`), 'Ft5_3mb.JPG')
-        .end((err, res) => {
-          res.body.status.should.equal('fail');
-          res.status.should.equal(500);
-          res.body.data.should.have.property('error');
-          res.body.data.error.should.contain('maxFileSize exceeded');
-          done();
-        });
-    });
-
     it('should upload image successfully when provided with an image', (done) => {
       chai
         .request(app)
@@ -151,6 +134,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('title', 'How I Learnt React in Andela')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .type('form')
         .end((err, res) => {
           res.body.status.should.equal('success');
           res.status.should.equal(201);
@@ -159,5 +143,72 @@ describe('ARTICLE ENDPOINT TESTS', () => {
           done();
         });
     });
+  });
+});
+
+describe('Articles likes test', () => {
+  it('should return Invalid likeType', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/adam')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Invalid likeType... likeType has to be - like, dislike or unlike');
+        done();
+      });
+  });
+
+  it('should return Invalid likeType', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/a/like')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Invalid articleId');
+        done();
+      });
+  });
+
+  it('should return you liked the article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/like')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.message).to.equal('you liked the article');
+        done();
+      });
+  });
+
+  it('should return you unliked the article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/unlike')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.message).to.equal('you unliked the article');
+        done();
+      });
+  });
+
+  it('should return you article not found', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/100/unlike')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
   });
 });

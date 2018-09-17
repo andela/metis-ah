@@ -12,7 +12,7 @@ describe('ARTICLES RATING TESTS', () => {
   const token2 = generateToken(7200, { id: 3, isVerified: true });
   const tokenStone = generateToken(7200, { id: 2, isVerified: true });
 
-  it('incorrect articleID', (done) => {
+  it('incorrect articleId', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/ed/rate')
@@ -29,7 +29,7 @@ describe('ARTICLES RATING TESTS', () => {
       });
   });
 
-  it('incorrect articleID', (done) => {
+  it('article not found', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/10000000/rate')
@@ -124,6 +124,7 @@ describe('ARTICLES RATING TESTS', () => {
         expect(res.body.status).to.equal('success');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('averageRating');
+        expect(res.body.data.averageRating).to.equal(3);
         done();
       });
   });
@@ -140,6 +141,7 @@ describe('ARTICLES RATING TESTS', () => {
         expect(res.body.status).to.equal('success');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('averageRating');
+        expect(res.body.data.averageRating).to.equal(4);
         done();
       });
   });
