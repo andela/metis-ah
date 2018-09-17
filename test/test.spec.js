@@ -6,10 +6,11 @@ import chaiHttp from 'chai-http';
 import app from '../server/app';
 import generateToken from '../server/helpers/generateToken';
 import Mailer from '../server/helpers/utils/mailer';
+import helpers from '../server/helpers/helpers';
 import './socialLogin.spec';
 import './rateArticles.spec';
 import './reportArticle.spec';
-import helpers from '../server/helpers/helpers';
+import './roles.spec';
 
 dotenv.config();
 chai.use(chaiHttp);
