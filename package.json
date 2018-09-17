@@ -10,7 +10,7 @@
     "test:dev": "npm run posttest && npm test",
     "start": "babel-node server/app.js",
     "start_dev": "NODE_ENV=development nodemon --exec babel-node server/app.js",
-    "migrate": "sequelize db:migrate",
+    "migrate": "sequelize db:migrate; sequelize db:seed --seed 20180920065415-roles",
     "unmigrate": "sequelize db:migrate:undo:all",
     "seed_data": "NODE_ENV=development sequelize db:seed:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls",

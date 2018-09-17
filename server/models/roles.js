@@ -6,7 +6,8 @@ const roles = (sequelize, DataTypes) => {
       unique: true,
     },
     permissions: {
-      type: DataTypes.ARRAY(DataTypes.ENUM(
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      isIn: [[
         'write',
         'read',
         'like',
@@ -18,7 +19,7 @@ const roles = (sequelize, DataTypes) => {
         'follow',
         'view cases',
         'view all users'
-      )),
+      ]],
       allowNull: false
     }
   });
