@@ -29,7 +29,7 @@ describe('ARTICLES RATING TESTS', () => {
       });
   });
 
-  it('incorrect articleId', (done) => {
+  it('article not found', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/10000000/rate')

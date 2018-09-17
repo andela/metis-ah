@@ -186,7 +186,7 @@ describe('Articles likes test', () => {
       });
   });
 
-  it('should return you unliked the articlee', (done) => {
+  it('should return you unliked the article', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/unlike')
@@ -199,7 +199,7 @@ describe('Articles likes test', () => {
       });
   });
 
-  it('should return you unliked the articlee', (done) => {
+  it('should return you article not found', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/100/unlike')
