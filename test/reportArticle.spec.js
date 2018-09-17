@@ -7,10 +7,10 @@ chai.use(chaiHttp);
 const { should, expect } = chai;
 should();
 
-describe('REPORT AN ARTICLE:', () => {
+describe('REPORT ARTICLES:', () => {
   const token = generateToken(7200, { id: 5, isVerified: true });
 
-  it('get all reported cased \'no case\'', (done) => {
+  it('should return a descriptive message if there are no cases found', (done) => {
     chai
       .request(app)
       .get('/api/v1/cases')
@@ -25,7 +25,7 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  it('successful', (done) => {
+  it('should return a success message if the case was reported', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/report/cases')
@@ -44,7 +44,7 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  it('report same article', (done) => {
+  it('should return an already reported conflict error if article has been reported already', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/report/cases')
@@ -63,7 +63,7 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  it('article not found', (done) => {
+  it('should return an article not found error if the article doesn\'t exist', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/10000000/report/cases')
@@ -82,7 +82,7 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  it('invalid violation', (done) => {
+  it('should return an invalid violation message if the violation specified is wrong', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/report/cases')
@@ -101,7 +101,7 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  it('invalid request body', (done) => {
+  it('should return an invalid request body if all the parameters where not sent', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/report/cases')
@@ -118,7 +118,7 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  it('get all reported cases', (done) => {
+  it('should return all the reported cases if the all conditions pass', (done) => {
     chai
       .request(app)
       .get('/api/v1/cases')
@@ -132,10 +132,10 @@ describe('REPORT AN ARTICLE:', () => {
       });
   });
 
-  it('get all reported cases (no cases)', (done) => {
+  it('should return no case if specified articles have no reported cases', (done) => {
     chai
       .request(app)
-      .get('/api/v1/cases/?a=0+2+3+ed')
+      .get('/api/v1/cases/?articles=0,2,3,ed')
       .set({
         authorization: token
       })
@@ -148,10 +148,10 @@ describe('REPORT AN ARTICLE:', () => {
   });
 });
 
-describe('RESOLVE a reported case', () => {
+describe('RESOLVE REPORTED CASES', () => {
   const token = generateToken(7200, { id: 5, isVerified: true });
 
-  it('incorrect caseId', (done) => {
+  it('should return incorrect case id message if the case id is wrong', (done) => {
     chai
       .request(app)
       .put('/api/v1/cases/100/resolve')
@@ -165,7 +165,7 @@ describe('RESOLVE a reported case', () => {
       });
   });
 
-  it('success', (done) => {
+  it('should return a success message if the case was successfully resolved', (done) => {
     chai
       .request(app)
       .put('/api/v1/cases/1/resolve')
