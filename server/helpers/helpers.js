@@ -182,18 +182,29 @@ const helpers = {
    * @returns {object} undefined
    */
   twitterCallback: (token, tokenSecret, profile, done) => {
-    console.log(profile);
-    done(null, {
-      id: profile.id
+    Users.findOrCreate({
+      where: {
+        email: profile.emails[0].value
+      },
+      defaults: {
+        email: profile.emails[0].value,
+        username: profile.username
+      }
+    }).spread((user, created) => {
+      const {
+        id,
+        firstname,
+        lastname,
+        email
+      } = user.dataValues;
+      return done(null, {
+        id,
+        firstname,
+        lastname,
+        email,
+        created
+      });
     });
-    // Users.findOrCreate({
-    //   where: {
-    //     email: profile.emails
-    //   },
-    //   defaults: {
-    //     firstname: profile.name
-    //   }
-    // })
   }
 };
 

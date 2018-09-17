@@ -18,7 +18,8 @@ router.get('/facebook', passport.authenticate('facebook', {
 
 // The twitter authentication route
 router.get('/twitter', passport.authenticate('twitter', {
-  session: true
+  session: true,
+  scope: ['emails']
 }));
 
 // The google authentication failure route

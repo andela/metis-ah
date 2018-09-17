@@ -37,6 +37,7 @@ passport.use(new FaceBookStrategy({
 passport.use(new TwitterStrategy({
   consumerKey: process.env.TWITTER_CLIENT_ID,
   consumerSecret: process.env.TWITTER_CLIENT_SECRET,
+  userProfileURL: 'https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true',
   callbackURL: process.env.TWITTER_CLIENT_CALLBACK_URI,
 }, helpers.twitterCallback));
 
