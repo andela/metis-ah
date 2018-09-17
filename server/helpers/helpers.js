@@ -162,7 +162,19 @@ const helpers = {
     const arrayStr = str.split(',');
     const eleStr = arrayStr.filter(element => !Number.isNaN(Number(element)));
     const eleInt = eleStr.map(element => Number(element));
+    console.log(`
 
+
+
+
+
+    eleInt
+
+
+
+
+
+    `);
     return eleInt;
   }
 };
