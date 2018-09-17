@@ -159,7 +159,7 @@ const helpers = {
    * @returns {array} An array of integers
    */
   getIntArray: (str) => {
-    const arrayStr = str.split(' ');
+    const arrayStr = str.split(',');
     const eleStr = arrayStr.filter(element => !Number.isNaN(Number(element)));
     const eleInt = eleStr.map(element => Number(element));
 

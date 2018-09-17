@@ -20,8 +20,8 @@ const caseController = {
     let searched = {};
 
     // Check if a query parameter was passed and parse it into an array
-    if (req.query.a) {
-      const articles = getIntArray(req.query.a);
+    if (req.query.articles) {
+      const articles = getIntArray(req.query.articles);
       searched = {
         articleId: articles
       };
