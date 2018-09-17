@@ -6,7 +6,12 @@ import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
 
-const { Cases, Articles, Ratings, ArticleLikes } = models;
+const {
+  Cases,
+  Articles,
+  Ratings,
+  ArticleLikes
+} = models;
 const { analyseRatings } = ratingHelpers;
 
 /**
