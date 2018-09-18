@@ -451,11 +451,9 @@
           }
         }
       },
-      "/api/v1/articles/:articleId/comments/:commentId/like": {
+      "/api/v1/articles/:articleId/comments/like": {
         "post": {
-          "tags": [
-            "Like"
-          ],
+          "tags": [ "Like" ],
           "summary": "Route for authenticated users to like or unlike a comments on an article",
           "description": "Returns a confirmation is like or unlike is successful",
           "parameters": [
@@ -718,6 +716,32 @@
             "schema": {
               "$ref": "#/definitions/casesRes2"
             }
+          }
+        }
+      }
+    },
+    "/api/v1/articles/search?{query}": {
+      "post": {
+        "tags": [ "Articles" ],
+        "summary": "Route for authenticated users to post comments on an article",
+        "description": "Returns the user and the user's comment",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "description": "The query string helps the user filter search results",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search successfully returns results"
+          },
+          "400": {
+            "description": "bad request; empty query string"
+          },
+          "400": {
+            "description": "invalid query; invalid page number"
           }
         }
       }
