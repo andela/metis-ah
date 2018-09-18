@@ -156,6 +156,34 @@ const articlesController = {
         analyseRatings(req, res);
       }
     });
+  },
+  /**
+  * @desc validates article input fields
+  * @param  {object} req Http Request object
+  * @param  {object} res Http Response object
+  * @returns {object} httpResponse object
+  */
+  getArticles: (req, res) => {
+    const queryParams = req.paginationQueryParams;
+    // CALCULATE OFFSET
+    const offset = ((queryParams.page - 1) * queryParams.limit);
+    Articles.findAndCountAll({
+      offset,
+      limit: queryParams.limit
+    }).then((result) => {
+      const totalPages = Math.ceil(result.count / queryParams.limit);
+
+      return res.status(200).jsend.success({
+        message: 'Operation Successful',
+        articles: result.rows,
+        metadata: {
+          totalArticles: result.count,
+          currentPage: queryParams.page,
+          limit: queryParams.limit,
+          totalPages
+        }
+      });
+    });
   }
 };
 

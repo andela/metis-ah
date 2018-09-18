@@ -10,12 +10,14 @@ import reportValidation from '../middleware/reportValidation';
 import usersValidations from '../middleware/usersValidations';
 import checkParams from '../middleware/checkParams';
 import { multerUploads } from '../config/multer/multerConfig';
+import paginationParamsValidations from '../middleware/paginationParamsValidations';
 
 const {
   reportArticle,
   rateArticle,
   create,
-  like
+  like,
+  getArticles
 } = articleController;
 const { addComment } = commentController;
 const { validateArticle, validateComments } = inputValidator;
@@ -35,6 +37,7 @@ const {
 const articleRoutes = express.Router();
 
 // POST ARTICLE ROUTE
+articleRoutes.get('/', auth, paginationParamsValidations, getArticles);
 articleRoutes.post('/:articleId', auth, validArticleId, validateComments, addComment);
 articleRoutes.post(
   '/:articleId/comments/like',

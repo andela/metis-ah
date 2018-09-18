@@ -745,6 +745,115 @@
           }
         }
       }
+    },
+    "/api/v1/articles": {
+      "post": {
+        "tags": [ "Articles" ],
+        "summary": "Allows user to create and publish articles",
+        "description": "This gives user the ability to create and publish articles with support for images",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "Article's title",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "A description of an article",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "body",
+            "type": "string",
+            "description": "Article's body",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "image",
+            "type": "file",
+            "description": "An image reflecting the content of an article",
+            "required": false
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Article published successfully"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "400": {
+            "description": "Invalid User Input"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "tags": [ "Articles" ],
+        "summary": "Pagination support for getting articles",
+        "description": "Allows users to specify the number of articles they want to view within a specified limit",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "authentication access token for users to access this endpoint",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "this indicates the number of articles to be return per page",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "description": "this indicates the current page number for viewing articles",
+            "required": false,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Operation successfully"
+          },
+          "401": {
+            "description": "Authentication failed"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1048,6 +1157,90 @@
               "type": "string",
               "example": "There are no cases"
             }
+          }
+        }
+      }
+    }
+  },
+  "ArticleRequestBody": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "example": "How the Metis ruled the world"
+      },
+      "slug": {
+        "type": "string",
+        "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+      },
+      "description": {
+        "type": "string",
+        "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+      },
+      "body": {
+        "type": "string",
+        "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+      },
+      "image": {
+        "type": "string",
+        "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+      }
+    }
+  },
+  "ArticleResponseBody": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "example": "How the Metis ruled the world"
+      },
+      "slug": {
+        "type": "string",
+        "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+      },
+      "description": {
+        "type": "string",
+        "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+      },
+      "body": {
+        "type": "string",
+        "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+      },
+      "image": {
+        "type": "string",
+        "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "datetime",
+        "example": "2018-09-05T00:00:00.000Z"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "datetime",
+        "example": "2018-09-05T00:00:00.000Z"
+      }
+    }
+  },
+  "ArticlesResponseBody": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "example": "success"
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "articles": {
+            "type": "array",
+            "items": {
+              "$ref" : "#/definitions/ArticleResponseBody"
+            }
+          },
+          "currentPage": {
+            "type": "integer",
+            "example": 1
           }
         }
       }
