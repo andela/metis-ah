@@ -19,7 +19,8 @@ describe('User can like a comment test', () => {
           password: 'paSS1234',
         })
         .end((err, res) => {
-          token = res.body.data.token;
+          // token = res.body.data.token;
+          ({ token } = res.body.data);
           res.body.should.have.property('data');
           done();
         });

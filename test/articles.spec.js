@@ -161,7 +161,7 @@ describe('Articles likes test', () => {
       });
   });
 
-  it('should return Invalid likeType', (done) => {
+  it('should return Invalid articleId', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/a/like/like')

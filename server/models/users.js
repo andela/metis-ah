@@ -98,6 +98,14 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'userInterests'
     });
+    Users.hasMany(models.SocialShares, {
+      foreignKey: 'userId',
+      as: 'mySocialShares'
+    });
+    Users.hasMany(models.SocialShares, {
+      foreignKey: 'authorId',
+      as: 'SocialShares'
+    });
   };
   Users.beforeValidate((user) => {
     user.password = user.password ? bcrypt.hashSync(user.password, 8) : null;

@@ -25,11 +25,15 @@ const {
   getFeaturedArticles,
   getPopularArticlesForTheWeek,
   createBookmark,
-  fetchBookmark
+  fetchBookmark,
+  shareArticle
 } = articleController;
+
 const { addComment, updateComment, updateReply } = commentController;
 const {
-  validateComments, validateLikeObject, authorizeCommentUpdate
+  validateComments,
+  validateLikeObject,
+  authorizeCommentUpdate
 } = commentValidator;
 const { validateArticle } = inputValidator;
 
@@ -39,14 +43,8 @@ const {
   validateObject,
   validateUser
 } = ratingValidation;
-const {
-  validateViolation,
-  validateRequestObject,
-} = reportValidation;
-const {
-  isUser
-} = roleValidator;
-
+const { validateViolation, validateRequestObject } = reportValidation;
+const { isUser } = roleValidator;
 
 // Comment routes
 // Add comment
@@ -97,6 +95,8 @@ articleRoutes.post(
 
 // POST ARTICLE ROUTE
 articleRoutes.get('/', auth, paginationParamsValidations, isUser, getArticles);
+
+// RATE ARTICLE ENDPOINT
 articleRoutes.post(
   '/:articleId/rate',
   auth,
@@ -108,9 +108,23 @@ articleRoutes.post(
   rateArticle
 );
 
+// CREATE ARTICLE ENDPOINT
 articleRoutes.post('/', auth, multerUploads, validateArticle, isUser, create);
-articleRoutes.post('/:articleId/like/:likeType', auth, checkParams.id, checkParams.likeType, isUser, like);
 
+// SHARE ARTICLE ENDPOINT
+articleRoutes.post('/:articleId/share', auth, checkParams.id, shareArticle);
+
+// LIKE ARTICLE ENDPOINT
+articleRoutes.post(
+  '/:articleId/like/:likeType',
+  auth,
+  checkParams.id,
+  checkParams.likeType,
+  isUser,
+  like
+);
+
+// REPORT ARTICLE ENDPOINT
 articleRoutes.post(
   '/:articleId/report/cases',
   auth,
@@ -121,7 +135,10 @@ articleRoutes.post(
   reportArticle
 );
 
+// SEARCH ARTICLE ENDPOINT
 articleRoutes.get('/search', searchController);
+
+// FEATURED ARTICLE ENDPOINT
 articleRoutes.get('/featured', getFeaturedArticles);
 articleRoutes.get('/popular', getPopularArticlesForTheWeek);
 
