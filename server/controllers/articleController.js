@@ -9,6 +9,7 @@ import imageUpload from '../helpers/imageUpload';
 import tagManager from '../helpers/tagManager';
 import getBeginningOfWeek from '../helpers/getBeginningOfWeek';
 import GetAuthorsOfTheWeekHelpers from '../helpers/GetAuthorsOfTheWeekHelpers';
+import saveStats from '../helpers/saveStats';
 
 const { gte } = Op;
 const {
@@ -19,7 +20,8 @@ const {
   Tags,
   Categories,
   Bookmarks,
-  SocialShares
+  SocialShares,
+  Users,
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -256,6 +258,47 @@ const articlesController = {
           featuredArticles: result
         });
       }
+    });
+  },
+  /**
+   * @description Rate an article and adjust records
+   * @param  {object} req The HTTP request object
+   * @param  {object} res The HTTP response object
+   * @returns {object} Undefined
+   */
+  getSingleArticle: (req, res) => {
+    const articleId = parseInt(req.params.articleId, 10);
+    if (!Number.isInteger(articleId)) {
+      return res.status(400).jsend.fail({
+        message: 'Invalid Article ID supplied'
+      });
+    }
+
+    Articles.findOne({
+      where: {
+        articleId
+      },
+      include: [{
+        model: Users,
+        attributes: ['id', 'image', 'username'],
+      }, {
+        as: 'articleTags',
+        attributes: ['id', 'email', 'username', 'image']
+      }]
+    }).then((article) => {
+      if (!article) {
+        return res.status(404).jsend.fail({
+          message: 'Article not found'
+        });
+      }
+      const tagsNum = article.getTagArticle().count();
+      saveStats(req, articleId);
+
+      return res.status(200).jsend.success({
+        message: 'Operation successful',
+        article,
+        tagsNum
+      });
     });
   },
   getPopularArticlesForTheWeek: async (req, res) => {
