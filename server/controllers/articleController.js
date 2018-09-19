@@ -5,12 +5,14 @@ import ratingHelpers from '../helpers/ratingHelpers';
 import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
+import tagManager from '../helpers/tagManager';
 
 const {
   Cases,
   Articles,
   Ratings,
-  ArticleLikes
+  ArticleLikes,
+  Tags
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -43,10 +45,19 @@ const articlesController = {
       description: fields.description,
       body: fields.body,
       imageUrl
-    }).then(createdArticle => res.status(201).jsend.success({
-      article: createdArticle,
-      message: 'Article published successfully'
-    })).catch(err => res.status(500).jsend.fail({
+    }).then((createdArticle) => {
+      // checks if tags exist
+      const tags = !fields.tags || fields.tags === ''
+        ? []
+        : fields.tags.replace(/\s+/g, '').split(',');
+
+      tagManager.createTag(res, tags, Tags, createdArticle);
+      return res.status(201).jsend.success({
+        article: createdArticle,
+        tags,
+        message: 'Article published successfully'
+      });
+    }).catch(err => res.status(500).jsend.fail({
       message: 'Something, went wrong. please try again',
       error: err.message
     }));

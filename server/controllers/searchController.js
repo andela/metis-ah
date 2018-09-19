@@ -6,7 +6,7 @@ import search from '../helpers/search';
 const { escape } = validator;
 const { getIds, searcher } = search;
 const {
-  Articles, Users, Tags, Categories, ArticleTags
+  Articles, Users, Tags, Categories, ArticlesTags
 } = models;
 
 const searchController = (req, res) => {
@@ -62,7 +62,7 @@ const searchController = (req, res) => {
           }],
           ...searchOptions
         };
-        return searcher(res, ArticleTags, queryOptions, currentPage, 'tag', escape(tag));
+        return searcher(res, ArticlesTags, queryOptions, currentPage, 'tag', escape(tag));
       });
   }
 

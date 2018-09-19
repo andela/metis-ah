@@ -10,8 +10,7 @@
   },
   "host": "localhost:8000",
   "basePath": "/",
-  "tags": [
-    {
+  "tags": [{
       "name": "User",
       "description": "Everything about all Users"
     },
@@ -61,17 +60,15 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "User's object that need to be parsed",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Signup"
-            }
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "User's object that need to be parsed",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Signup"
           }
-        ],
+        }],
         "responses": {
           "201": {
             "description": "User is signed up successfully"
@@ -95,17 +92,15 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "User's object that need to be parsed",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Login"
-            }
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "User's object that need to be parsed",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Login"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "User is signed in successfully"
@@ -194,15 +189,13 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "name": "token",
-            "in": "path",
-            "description": "Token generated for user",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "name": "token",
+          "in": "path",
+          "description": "Token generated for user",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "Your account is verified successfully"
@@ -223,14 +216,12 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "authorization",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "in": "header",
+          "name": "authorization",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "Success!"
@@ -242,44 +233,104 @@
       },
       "/api/v1/articles/{articleId}/{likeType}": {
         "post": {
-					"tags": [ "Like" ],
+          "tags": ["Like"],
           "summary": "Allows user to like, dislike and unlike article",
-					"description": "Article like, dislike and unlike endpoint",
-					"consumes": [
-						"application/json"
-					],
-					"produces": [
-						"application/xml"
-					],
-					"parameters": [
-						{
-							"in": "path",
-							"name": "articleId",
-							"description": "The id of the article to be liked",
+          "description": "Article like, dislike and unlike endpoint",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [{
+              "in": "path",
+              "name": "articleId",
+              "description": "The id of the article to be liked",
               "required": true,
               "type": "number"
             },
             {
-							"in": "path",
-							"name": "likeType",
-							"description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
+              "in": "path",
+              "name": "likeType",
+              "description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
               "required": true,
               "type": "string"
             }
-					],
+          ],
           "responses": {
             "200": {
               "description": "Password reset successful"
-						},
-						"401": {
-							"description": "Verification link not valid"
+            },
+            "401": {
+              "description": "Verification link not valid"
             },
             "500": {
               "description": "Request could not be completed. Please try again"
             }
           }
         }
-			}
+      },
+      "/api/v1/tags": {
+        "get": {
+          "tags": ["Tags"],
+          "summary": "Allows user view all tags",
+          "description": "User views all tags in database",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [{
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true,
+            "type": "string"
+          }],
+          "responses": {
+            "200": {
+              "description": "array of tags"
+            }
+          }
+        }
+      },
+      "/api/v1/tags/{tagName}": {
+        "get": {
+          "tags": ["Tags"],
+          "summary": "Allows user view a tag",
+          "description": "User views a tag in database with all is associated articles",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [{
+              "in": "header",
+              "name": "authorization",
+              "description": "user token",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "path",
+              "name": "tagName",
+              "description": "tag name",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "tag with articles"
+            },
+            "404": {
+              "description": "no tag found"
+            }
+          }
+        }
+      }
     },
     "/api/v1/users/auth/reset-password": {
       "post": {
@@ -294,17 +345,15 @@
         "produces": [
           "application/xml"
         ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "User's object that need to be parsed",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/reset-password-email"
-            }
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "User's object that need to be parsed",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/reset-password-email"
           }
-        ],
+        }],
         "responses": {
           "200": {
             "description": "Password reset link has been sent to your email"
@@ -328,8 +377,7 @@
         "produces": [
           "application/xml"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "in": "path",
             "name": "token",
             "description": "Token sent to the user's email for password reset",
@@ -369,8 +417,7 @@
         "consumes": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "in": "header",
             "name": "authorization",
             "description": "user token",
@@ -403,8 +450,7 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
+        "parameters": [{
             "in": "header",
             "name": "authorization",
             "description": "user token",
@@ -437,14 +483,12 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "authorization",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [{
+          "in": "header",
+          "name": "authorization",
+          "required": true,
+          "type": "string"
+        }],
         "responses": {
           "200": {
             "description": "you are now following the user"
@@ -456,14 +500,12 @@
           "tags": [ "Like" ],
           "summary": "Route for authenticated users to like or unlike a comments on an article",
           "description": "Returns a confirmation is like or unlike is successful",
-          "parameters": [
-            {
-              "in": "params",
-              "name": "commentId",
-              "description": "the id of the comment to be liked",
-              "required": true
-            }
-          ],
+          "parameters": [{
+            "in": "params",
+            "name": "commentId",
+            "description": "the id of the comment to be liked",
+            "required": true
+          }],
           "responses": {
             "201": {
               "description": "Returns a 201 status code on the first like"
@@ -482,11 +524,10 @@
       },
       "/api/v1/articles/:articleId/report": {
         "post": {
-          "tags": [ "Articles" ],
+          "tags": ["Articles"],
           "summary": "Report an article that violates our policies",
           "description": "This endpoint enables users report violating articles by specifying what violation was made.",
-          "parameters": [
-            {
+          "parameters": [{
               "in": "headers",
               "name": "authentication",
               "description": "The authentication token",
@@ -517,11 +558,10 @@
       },
       "/api/v1/cases/": {
         "get": {
-          "tags": [ "Articles" ],
+          "tags": ["Articles"],
           "summary": "Gets all reported cases on the platform",
           "description": "This endpoint gives access to all reported cases on the platform",
-          "parameters": [
-            {
+          "parameters": [{
               "in": "headers",
               "name": "authentication",
               "description": "The authentication token",
@@ -570,17 +610,15 @@
         ],
         "summary": "Route for authenticated users to post comments on an article",
         "description": "Returns the user and the user's comment",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "comment object to be returned when a user makes a post request",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Comment"
-            }
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "comment object to be returned when a user makes a post request",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/Comment"
           }
-        ],
+        }],
         "responses": {
           "201": {
             "description": "Comment posted successfully"
@@ -598,8 +636,7 @@
         ],
         "summary": "Route for authenticated users to rate articles",
         "description": "Returns the new average rating of the article",
-        "parameters": [
-          {
+        "parameters": [{
             "in": "body",
             "name": "body",
             "description": "object containing the rating given to this article",
@@ -644,8 +681,7 @@
         ],
         "summary": "Route for authenticated users to report articles",
         "description": "Returns a message on the status of the case",
-        "parameters": [
-          {
+        "parameters": [{
             "in": "body",
             "name": "body",
             "description": "object containing the violation details of the article",
@@ -690,8 +726,7 @@
         ],
         "summary": "Route for authenticated users to get reported cases",
         "description": "Returns a list of cases for specified or all articles",
-        "parameters": [
-          {
+        "parameters": [{
             "in": "query",
             "name": "a",
             "description": "The ids of the article cases to be searched",
@@ -1122,18 +1157,16 @@
           "properties": {
             "cases": {
               "type": "array",
-              "example": [
-                {
-                  "id": 1,
-                  "userId": 5,
-                  "articleId": 1,
-                  "violation": "Sexual Content",
-                  "description": "It is very erotic",
-                  "resolved": false,
-                  "createdAt": "2018-09-15T19:32:36.164Z",
-                  "updatedAt": "2018-09-15T19:32:36.164Z"
-                }
-              ]
+              "example": [{
+                "id": 1,
+                "userId": 5,
+                "articleId": 1,
+                "violation": "Sexual Content",
+                "description": "It is very erotic",
+                "resolved": false,
+                "createdAt": "2018-09-15T19:32:36.164Z",
+                "updatedAt": "2018-09-15T19:32:36.164Z"
+              }]
             }
           }
         }
