@@ -36,6 +36,10 @@ const users = (sequelize, DataTypes) => {
     },
     interests: {
       type: DataTypes.ARRAY(DataTypes.TEXT)
+    },
+    wordsPerMinute: {
+      type: DataTypes.INTEGER,
+      defaultValue: 200
     }
   });
 

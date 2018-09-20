@@ -17,7 +17,8 @@ const {
   rateArticle,
   create,
   like,
-  getArticles
+  getArticles,
+  getSingleArticle
 } = articleController;
 const { addComment } = commentController;
 const { validateArticle, validateComments } = inputValidator;
@@ -35,10 +36,14 @@ const {
 } = reportValidation;
 
 const articleRoutes = express.Router();
+articleRoutes.get('/', auth, paginationParamsValidations, getArticles);
+articleRoutes.get('/search', searchController);
 
 // POST ARTICLE ROUTE
 articleRoutes.get('/', auth, paginationParamsValidations, getArticles);
-articleRoutes.post('/:articleId', auth, validArticleId, validateComments, addComment);
+articleRoutes.post('/:articleId/comments', auth, validArticleId, validateComments, addComment);
+articleRoutes.get('/:articleId', auth, checkParams.id, getSingleArticle);
+
 articleRoutes.post(
   '/:articleId/comments/like',
   auth,
@@ -55,7 +60,7 @@ articleRoutes.post(
   rateArticle
 );
 articleRoutes.post('/', auth, multerUploads, validateArticle, create);
-articleRoutes.post('/:articleId/:likeType', auth, checkParams.id, checkParams.likeType, like);
+articleRoutes.post('/:articleId/like/:likeType', auth, checkParams.id, checkParams.likeType, like);
 articleRoutes.post(
   '/:articleId/report/cases',
   auth,
@@ -65,4 +70,5 @@ articleRoutes.post(
   reportArticle
 );
 articleRoutes.get('/search', searchController);
+
 export default articleRoutes;

@@ -22,6 +22,9 @@ const articles = (sequelize, DataTypes) => {
     rating: {
       type: DataTypes.INTEGER,
       allowNull: true
+    },
+    noOfWords: {
+      type: DataTypes.INTEGER
     }
   });
 
@@ -67,7 +70,10 @@ const articles = (sequelize, DataTypes) => {
       as: 'ratings'
     });
   };
-
+  Articles.beforeValidate((article) => {
+    const text = article.body;
+    article.noOfWords = text.split(/\s/g).length;
+  });
   return Articles;
 };
 
