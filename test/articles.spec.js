@@ -366,6 +366,7 @@ describe('GET SINGLE ARTICLE TEST', () => {
         res.body.data.should.have.property('metadata');
         res.body.data.should.have.property('message');
         res.body.data.articleData.should.have.property('body');
+        res.body.data.articleData.id.should.equal(2);
         done();
       });
   });

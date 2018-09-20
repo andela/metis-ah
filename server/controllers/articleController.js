@@ -270,7 +270,7 @@ const articlesController = {
     });
   },
   /**
-   * @description Rate an article and adjust records
+   * @description This returns details of a single article if it exists
    * @param  {object} req The HTTP request object
    * @param  {object} res The HTTP response object
    * @returns {object} Undefined
@@ -343,7 +343,6 @@ const articlesController = {
         commentCounts: article.comments.length,
         category: article.category
       };
-
 
       return res.status(200).jsend.success({
         message: 'Operation successful',
