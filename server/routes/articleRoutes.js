@@ -17,7 +17,8 @@ const {
   rateArticle,
   create,
   like,
-  getArticles
+  getArticles,
+  getSingleArticle
 } = articleController;
 const { addComment } = commentController;
 const { validateArticle, validateComments } = inputValidator;
@@ -35,10 +36,13 @@ const {
 } = reportValidation;
 
 const articleRoutes = express.Router();
+articleRoutes.get('/', auth, paginationParamsValidations, getArticles);
+articleRoutes.get('/search', searchController);
 
 // POST ARTICLE ROUTE
-articleRoutes.get('/', auth, paginationParamsValidations, getArticles);
 articleRoutes.post('/:articleId', auth, validArticleId, validateComments, addComment);
+articleRoutes.get('/:articleId', auth, checkParams.id, getSingleArticle);
+
 articleRoutes.post(
   '/:articleId/comments/like',
   auth,
@@ -64,5 +68,5 @@ articleRoutes.post(
   validArticleId,
   reportArticle
 );
-articleRoutes.get('/search', searchController);
+
 export default articleRoutes;

@@ -12,7 +12,10 @@ const {
   Articles,
   Ratings,
   ArticleLikes,
-  Tags
+  Tags,
+  Users,
+  Categories,
+  Comments
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -44,6 +47,7 @@ const articlesController = {
       slug: `${slug(fields.title)}-${uuid()}`,
       description: fields.description,
       body: fields.body,
+      categoryId: parseInt(fields.categoryId, 10) || 1,
       imageUrl
     }).then((createdArticle) => {
       // checks if tags exist
@@ -195,6 +199,94 @@ const articlesController = {
         }
       });
     });
+  },
+  /**
+   * @description Rate an article and adjust records
+   * @param  {object} req The HTTP request object
+   * @param  {object} res The HTTP response object
+   * @returns {object} Undefined
+   */
+  getSingleArticle: async (req, res) => {
+    const articleId = Number(req.params.articleId);
+
+    try {
+      const article = await Articles.findOne({
+        where: {
+          id: articleId
+        },
+        include: [{
+          model: Users,
+          attributes: ['id', 'image', 'username'],
+        }, {
+          model: Tags,
+          as: 'tags',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: ArticleLikes,
+          as: 'articleLikes',
+          attributes: ['id', 'like', 'dislike']
+        },
+        {
+          model: Categories,
+          as: 'category',
+          attributes: ['name']
+        },
+        {
+          model: Comments,
+          as: 'comments',
+          attributes: ['id']
+        }]
+      });
+
+      if (!article) {
+        return res.status(404).jsend.fail({
+          message: 'Article not found'
+        });
+      }
+
+      const likes = article.articleLikes.filter(like => like.like === true).length;
+      const dislikes = article.articleLikes.filter(like => like.dislike === true).length;
+
+      const articleData = {
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        body: article.body,
+        imageUrl: article.imageUrl,
+        rating: article.rating,
+        createdDate: article.createdAt,
+        updatedDate: article.updatedAt
+      };
+
+      const metadata = {
+        author: {
+          id: article.User.id,
+          username: article.User.username,
+          imageUrl: article.User.image
+        },
+        tags: article.tags,
+        likes,
+        dislikes,
+        commentCounts: article.comments.length,
+        category: article.category
+      };
+
+
+      return res.status(200).jsend.success({
+        message: 'Operation successful',
+        articleData,
+        metadata
+      });
+    } catch (error) {
+      res.status(500).jsend.fail({
+        message: 'Oop!, Something went wrong. Please try again',
+        error: error.message
+      });
+    }
   }
 };
 

@@ -389,3 +389,35 @@ describe('Articles likes test', () => {
       });
   });
 });
+
+describe('GET SINGLE ARTICLE TEST', () => {
+  it('should fail when article is not found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/1008790')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.status).to.equal(404);
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+
+  it('should return successfully when article is found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/2')
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.status.should.equal('success');
+        res.body.data.should.have.property('articleData');
+        res.body.data.should.have.property('metadata');
+        res.body.data.should.have.property('message');
+        res.body.data.articleData.should.have.property('body');
+        done();
+      });
+  });
+});
