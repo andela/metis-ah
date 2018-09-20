@@ -7,12 +7,9 @@ import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
 import tagManager from '../helpers/tagManager';
-<<<<<<< HEAD
 import getBeginningOfWeek from '../helpers/getBeginningOfWeek';
 import GetAuthorsOfTheWeekHelpers from '../helpers/GetAuthorsOfTheWeekHelpers';
-import saveStats from '../helpers/saveStats';
-=======
->>>>>>> feat(get-article): implement user can view single article functionality
+
 
 const { gte } = Op;
 const {
@@ -25,7 +22,6 @@ const {
   Bookmarks,
   SocialShares,
   Users,
-  Categories,
   Comments
 } = models;
 const { analyseRatings } = ratingHelpers;
@@ -48,7 +44,7 @@ const articlesController = {
    */
   create: async (req, res) => {
     const fields = req.body;
-    let imageUrl = null;
+    let imageUrl = 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1540379606/article-default-image.jpg';
     // check for image exists in the request body
     if (req.file) {
       const file = dataUri(req);
@@ -63,7 +59,7 @@ const articlesController = {
       slug: `${slug(fields.title)}-${uuid()}`,
       description: fields.description,
       body: fields.body,
-      categoryId: parseInt(fields.categoryId, 10) || 1,
+      categoryId: parseInt(fields.categoryId, 10),
       imageUrl
     }).then((createdArticle) => {
       // checks if tags exist
@@ -218,7 +214,6 @@ const articlesController = {
           }
         });
       });
-<<<<<<< HEAD
   },
   /**
   * @desc get Featured Articles
@@ -265,12 +260,10 @@ const articlesController = {
           featuredArticles: result
         });
       }
-=======
->>>>>>> feat(get-article): implement user can view single article functionality
     });
   },
   /**
-   * @description This returns details of a single article if it exists
+   * @description Rate an article and adjust records
    * @param  {object} req The HTTP request object
    * @param  {object} res The HTTP response object
    * @returns {object} Undefined
@@ -297,7 +290,7 @@ const articlesController = {
         {
           model: ArticleLikes,
           as: 'articleLikes',
-          attributes: ['id', 'like', 'dislike']
+          attributes: ['id', 'liked', 'disliked']
         },
         {
           model: Categories,
@@ -317,8 +310,8 @@ const articlesController = {
         });
       }
 
-      const likes = article.articleLikes.filter(like => like.like === true).length;
-      const dislikes = article.articleLikes.filter(like => like.dislike === true).length;
+      const likes = article.articleLikes.filter(like => like.liked === true).length;
+      const dislikes = article.articleLikes.filter(like => like.disliked === true).length;
 
       const articleData = {
         id: article.id,
@@ -344,14 +337,20 @@ const articlesController = {
         category: article.category
       };
 
+
       return res.status(200).jsend.success({
         message: 'Operation successful',
         articleData,
         metadata
       });
-<<<<<<< HEAD
-    });
+    } catch (error) {
+      res.status(500).jsend.fail({
+        message: 'Oop!, Something went wrong. Please try again',
+        error: error.message
+      });
+    }
   },
+
   getPopularArticlesForTheWeek: async (req, res) => {
     try {
       // Get results from the database
@@ -450,14 +449,6 @@ const articlesController = {
         message: 'Request could not be processed',
         error: err.message
       }));
-=======
-    } catch (error) {
-      res.status(500).jsend.fail({
-        message: 'Oop!, Something went wrong. Please try again',
-        error: error.message
-      });
-    }
->>>>>>> feat(get-article): implement user can view single article functionality
   }
 };
 

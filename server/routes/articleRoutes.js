@@ -22,15 +22,12 @@ const {
   create,
   like,
   getArticles,
-<<<<<<< HEAD
   getFeaturedArticles,
   getPopularArticlesForTheWeek,
   createBookmark,
   fetchBookmark,
-  shareArticle
-=======
+  shareArticle,
   getSingleArticle
->>>>>>> feat(get-article): implement user can view single article functionality
 } = articleController;
 
 const { addComment, updateComment, updateReply } = commentController;
@@ -47,19 +44,15 @@ const {
   validateObject,
   validateUser
 } = ratingValidation;
-<<<<<<< HEAD
 const { validateViolation, validateRequestObject } = reportValidation;
 const { isUser } = roleValidator;
-=======
-const {
-  validateViolation,
-  validateRequestObject,
-} = reportValidation;
 
-const articleRoutes = express.Router();
+
 articleRoutes.get('/', auth, paginationParamsValidations, getArticles);
 articleRoutes.get('/search', searchController);
->>>>>>> feat(get-article): implement user can view single article functionality
+articleRoutes.get('/popular', getPopularArticlesForTheWeek);
+articleRoutes.get('/featured', getFeaturedArticles);
+// FEATURED ARTICLE ENDPOINT
 
 // Comment routes
 // Add comment
@@ -99,14 +92,10 @@ articleRoutes.put(
 );
 // Like comment
 // POST ARTICLE ROUTE
-<<<<<<< HEAD
 articleRoutes.get('/', paginationParamsValidations, getArticles);
-articleRoutes.post('/:articleId', validArticleId, validateComments, addComment);
-=======
-articleRoutes.post('/:articleId', auth, validArticleId, validateComments, addComment);
 articleRoutes.get('/:articleId', auth, checkParams.id, getSingleArticle);
+articleRoutes.post('/:articleId', auth, validArticleId, validateComments, addComment);
 
->>>>>>> feat(get-article): implement user can view single article functionality
 articleRoutes.post(
   '/:articleId/comments/like',
   auth,
@@ -114,8 +103,6 @@ articleRoutes.post(
   likeController
 );
 
-// POST ARTICLE ROUTE
-articleRoutes.get('/', auth, paginationParamsValidations, isUser, getArticles);
 
 // RATE ARTICLE ENDPOINT
 articleRoutes.post(
@@ -156,13 +143,7 @@ articleRoutes.post(
   reportArticle
 );
 
-<<<<<<< HEAD
 // SEARCH ARTICLE ENDPOINT
-articleRoutes.get('/search', searchController);
-
-// FEATURED ARTICLE ENDPOINT
-articleRoutes.get('/featured', getFeaturedArticles);
-articleRoutes.get('/popular', getPopularArticlesForTheWeek);
 
 // CREATE BOOKMARK ROUTE
 articleRoutes.post('/bookmarks/add/:articleId', auth, createBookmark);
@@ -170,6 +151,4 @@ articleRoutes.post('/bookmarks/add/:articleId', auth, createBookmark);
 // GET ALL THE BOOKMARKS OF A USER
 articleRoutes.get('/bookmarks/user/all', auth, fetchBookmark);
 
-=======
->>>>>>> feat(get-article): implement user can view single article functionality
 export default articleRoutes;
