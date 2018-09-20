@@ -7,9 +7,12 @@ import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
 import tagManager from '../helpers/tagManager';
+<<<<<<< HEAD
 import getBeginningOfWeek from '../helpers/getBeginningOfWeek';
 import GetAuthorsOfTheWeekHelpers from '../helpers/GetAuthorsOfTheWeekHelpers';
 import saveStats from '../helpers/saveStats';
+=======
+>>>>>>> feat(get-article): implement user can view single article functionality
 
 const { gte } = Op;
 const {
@@ -22,6 +25,8 @@ const {
   Bookmarks,
   SocialShares,
   Users,
+  Categories,
+  Comments
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -58,6 +63,7 @@ const articlesController = {
       slug: `${slug(fields.title)}-${uuid()}`,
       description: fields.description,
       body: fields.body,
+      categoryId: parseInt(fields.categoryId, 10) || 1,
       imageUrl
     }).then((createdArticle) => {
       // checks if tags exist
@@ -212,6 +218,7 @@ const articlesController = {
           }
         });
       });
+<<<<<<< HEAD
   },
   /**
   * @desc get Featured Articles
@@ -258,6 +265,8 @@ const articlesController = {
           featuredArticles: result
         });
       }
+=======
+>>>>>>> feat(get-article): implement user can view single article functionality
     });
   },
   /**
@@ -266,39 +275,82 @@ const articlesController = {
    * @param  {object} res The HTTP response object
    * @returns {object} Undefined
    */
-  getSingleArticle: (req, res) => {
-    const articleId = parseInt(req.params.articleId, 10);
-    if (!Number.isInteger(articleId)) {
-      return res.status(400).jsend.fail({
-        message: 'Invalid Article ID supplied'
-      });
-    }
+  getSingleArticle: async (req, res) => {
+    const articleId = Number(req.params.articleId);
 
-    Articles.findOne({
-      where: {
-        articleId
-      },
-      include: [{
-        model: Users,
-        attributes: ['id', 'image', 'username'],
-      }, {
-        as: 'articleTags',
-        attributes: ['id', 'email', 'username', 'image']
-      }]
-    }).then((article) => {
+    try {
+      const article = await Articles.findOne({
+        where: {
+          id: articleId
+        },
+        include: [{
+          model: Users,
+          attributes: ['id', 'image', 'username'],
+        }, {
+          model: Tags,
+          as: 'tags',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: ArticleLikes,
+          as: 'articleLikes',
+          attributes: ['id', 'like', 'dislike']
+        },
+        {
+          model: Categories,
+          as: 'category',
+          attributes: ['name']
+        },
+        {
+          model: Comments,
+          as: 'comments',
+          attributes: ['id']
+        }]
+      });
+
       if (!article) {
         return res.status(404).jsend.fail({
           message: 'Article not found'
         });
       }
-      const tagsNum = article.getTagArticle().count();
-      saveStats(req, articleId);
+
+      const likes = article.articleLikes.filter(like => like.like === true).length;
+      const dislikes = article.articleLikes.filter(like => like.dislike === true).length;
+
+      const articleData = {
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        body: article.body,
+        imageUrl: article.imageUrl,
+        rating: article.rating,
+        createdDate: article.createdAt,
+        updatedDate: article.updatedAt
+      };
+
+      const metadata = {
+        author: {
+          id: article.User.id,
+          username: article.User.username,
+          imageUrl: article.User.image
+        },
+        tags: article.tags,
+        likes,
+        dislikes,
+        commentCounts: article.comments.length,
+        category: article.category
+      };
+
 
       return res.status(200).jsend.success({
         message: 'Operation successful',
-        article,
-        tagsNum
+        articleData,
+        metadata
       });
+<<<<<<< HEAD
     });
   },
   getPopularArticlesForTheWeek: async (req, res) => {
@@ -399,6 +451,14 @@ const articlesController = {
         message: 'Request could not be processed',
         error: err.message
       }));
+=======
+    } catch (error) {
+      res.status(500).jsend.fail({
+        message: 'Oop!, Something went wrong. Please try again',
+        error: error.message
+      });
+    }
+>>>>>>> feat(get-article): implement user can view single article functionality
   }
 };
 
