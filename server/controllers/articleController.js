@@ -1,10 +1,10 @@
-
 import slug from 'slug';
 import uuid from 'uuid-random';
 import ratingHelpers from '../helpers/ratingHelpers';
 import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
+import readTime from '../helpers/readTime';
 import tagManager from '../helpers/tagManager';
 
 const {
@@ -12,7 +12,10 @@ const {
   Articles,
   Ratings,
   ArticleLikes,
-  Tags
+  Tags,
+  Users,
+  Categories,
+  Comments
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -44,6 +47,7 @@ const articlesController = {
       slug: `${slug(fields.title)}-${uuid()}`,
       description: fields.description,
       body: fields.body,
+      categoryId: parseInt(fields.categoryId, 10) || 1,
       imageUrl
     }).then((createdArticle) => {
       // checks if tags exist
@@ -195,6 +199,91 @@ const articlesController = {
         }
       });
     });
+  },
+  /**
+   * @description Get a single article
+   * @param  {object} req The HTTP request object
+   * @param  {object} res The HTTP response object
+   * @returns {object} Json response
+   */
+  getSingleArticle: async (req, res) => {
+    const articleId = Number(req.params.articleId);
+    const currentUserId = Number(req.currentUser.id);
+
+    try {
+      const article = await Articles.findOne({
+        where: {
+          id: articleId
+        },
+        include: [{
+          model: Users,
+          attributes: ['id', 'image', 'username'],
+        }, {
+          model: Tags,
+          as: 'tags',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: ArticleLikes,
+          as: 'articleLikes',
+          attributes: ['id', 'like', 'dislike']
+        },
+        {
+          model: Categories,
+          as: 'category',
+          attributes: ['name']
+        },
+        {
+          model: Comments,
+          as: 'comments',
+          attributes: ['id']
+        }]
+      });
+      const articleReadTime = await readTime(currentUserId, article);
+
+      const likes = article.articleLikes.filter(like => like.like === true).length;
+      const dislikes = article.articleLikes.filter(like => like.dislike === true).length;
+
+      const articleData = {
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        body: article.body,
+        imageUrl: article.imageUrl,
+        rating: article.rating,
+        createdDate: article.createdAt,
+        updatedDate: article.updatedAt
+      };
+
+      const metadata = {
+        author: {
+          id: article.User.id,
+          username: article.User.username,
+          imageUrl: article.User.image
+        },
+        tags: article.tags,
+        likes,
+        dislikes,
+        readTime: articleReadTime,
+        commentCounts: article.comments.length,
+        category: article.category
+      };
+
+
+      return res.status(200).jsend.success({
+        message: 'Article found',
+        articleData,
+        metadata
+      });
+    } catch (error) {
+      res.status(404).jsend.fail({
+        message: 'Article not found',
+        error: error.message
+      });
+    }
   }
 };
 

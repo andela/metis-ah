@@ -28,7 +28,7 @@ describe('Tests for Comments', () => {
     it('User should not be able to comment if not authenticated', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .send({
           content: 'Your post was not inspiring.'
         })
@@ -42,7 +42,7 @@ describe('Tests for Comments', () => {
     it('User should receive an error if authentication fails', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .set('Authorization', '8beccb8ef75986c7096888907ddf4165889255315b67be782a3333eeeeee')
         .send({
           content: 'Your post was not inspiring.'
@@ -57,7 +57,7 @@ describe('Tests for Comments', () => {
     it('It should fail if comment is empty', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .set('Authorization', token)
         .send({
           content: ''
@@ -72,7 +72,7 @@ describe('Tests for Comments', () => {
     it('It should return an object containing a user and a comment object', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .set('Authorization', token)
         .send({
           content: 'Your post was not inspiring.'
@@ -87,7 +87,7 @@ describe('Tests for Comments', () => {
     it('It should fail is article does not exist', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/13431')
+        .post('/api/v1/articles/13431/comments')
         .set('Authorization', token)
         .send({
           content: 'Your post was not inspiring.'

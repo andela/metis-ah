@@ -327,7 +327,7 @@ describe('Articles likes test', () => {
   it('should return Invalid likeType', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/adam')
+      .post('/api/v1/articles/1/like/adam')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -340,7 +340,7 @@ describe('Articles likes test', () => {
   it('should return Invalid likeType', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/a/like')
+      .post('/api/v1/articles/a/like/like')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -353,7 +353,7 @@ describe('Articles likes test', () => {
   it('should return you liked the article', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/like')
+      .post('/api/v1/articles/1/like/like')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -366,7 +366,7 @@ describe('Articles likes test', () => {
   it('should return you unliked the article', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/unlike')
+      .post('/api/v1/articles/1/like/unlike')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -379,12 +379,72 @@ describe('Articles likes test', () => {
   it('should return you article not found', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/100/unlike')
+      .post('/api/v1/articles/10000000/like/unlike')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
         expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+});
+
+describe('Get single article', () => {
+  it('should return article not found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/10000')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+
+  it('should return a single article', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/1')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.message).to.equal('Article found');
+        done();
+      });
+  });
+});
+
+describe('GET SINGLE ARTICLE TEST', () => {
+  it('should fail when article is not found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/1008790')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.status).to.equal(404);
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+
+  it('should return successfully when article is found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/2')
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.status.should.equal('success');
+        res.body.data.should.have.property('articleData');
+        res.body.data.should.have.property('metadata');
+        res.body.data.should.have.property('message');
+        res.body.data.articleData.should.have.property('body');
         done();
       });
   });
