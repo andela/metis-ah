@@ -11,6 +11,8 @@ import usersValidations from '../middleware/usersValidations';
 import checkParams from '../middleware/checkParams';
 import { multerUploads } from '../config/multer/multerConfig';
 import paginationParamsValidations from '../middleware/paginationParamsValidations';
+import highlightController from '../controllers/hightlightController';
+import highlightValidation from '../helpers/highlightHelpers';
 
 const {
   reportArticle,
@@ -33,6 +35,11 @@ const {
   validateViolation,
   validateRequestObject,
 } = reportValidation;
+const {
+  authorId,
+  articleId,
+  comment
+} = highlightValidation;
 
 const articleRoutes = express.Router();
 
@@ -65,4 +72,21 @@ articleRoutes.post(
   reportArticle
 );
 articleRoutes.get('/search', searchController);
+
+// HIGHLIGHT ROUTES
+// create highlights
+articleRoutes.post('/highlights/:articleId/:authorId', auth, articleId, authorId, comment, highlightController.create);
+
+// fetch all reader's highlight
+articleRoutes.get('/highlights/:articleId/:authorId', auth, articleId, authorId, highlightController.fetchReaderHighlight);
+
+// fetch all highlights for author
+articleRoutes.get('/highlights/:articleId/:authorId/all', auth, articleId, authorId, highlightController.fetchReaderHighlight);
+
+// update highlight route
+articleRoutes.put('/highlights/:articleId/:authorId', auth, articleId, authorId, comment, highlightController.update);
+
+// delete an highlight
+articleRoutes.delete('/highlights/:articleId/:authorId', auth, articleId, authorId, highlightController.delete);
+
 export default articleRoutes;

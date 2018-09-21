@@ -876,6 +876,132 @@
             "required": false,
             "type": "number"
           }
+        ]
+      }
+    },
+		"/api/v1/articles/highlights/:articleId/:authorId": {
+			"post": {
+        "tags": [ "Highlight" ],
+        "summary": "Route for authenticated users to highlight and comment on a section of an article",
+        "description": "Returns the user and the user's comment on highlighted text",
+        "parameters": [
+          {
+            "in": "articleId",
+            "name": "articleId",
+            "description": "This params takes in the articleId",
+            "required": true
+					},
+					{
+            "in": "authorId",
+            "name": "articleId",
+            "description": "This params takes in the authorId",
+            "required": true
+					},
+					{
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Highlight comment was posted successfully"
+          },
+          "500": {
+            "description": "something went wrong on the sever side"
+          }
+        }
+			},
+			"get": {
+        "tags": [ "Highlight" ],
+        "summary": "Route for authenticated users to view their comments on articles they've highlighted",
+        "description": "Returns the user's comments on highlighted the article",
+        "parameters": [
+          {
+            "in": "articleId",
+            "name": "articleId",
+            "description": "This params takes in the articleId",
+            "required": true
+					},
+					{
+            "in": "authorId",
+            "name": "articleId",
+            "description": "This params takes in the authorId",
+            "required": true
+					},
+					{
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Highlight comment was posted successfully"
+          },
+          "500": {
+            "description": "something went wrong on the sever side"
+          }
+        }
+			},
+			"put": {
+        "tags": [ "Highlight" ],
+        "summary": "Route for authenticated users to update their comments on articles they've highlighted",
+        "description": "Returns the user's comments on highlighted the article",
+        "parameters": [
+          {
+            "in": "articleId",
+            "name": "articleId",
+            "description": "This params takes in the articleId",
+            "required": true
+					},
+					{
+            "in": "authorId",
+            "name": "articleId",
+            "description": "This params takes in the authorId",
+            "required": true
+					},
+					{
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Highlight comment was posted successfully"
+          },
+          "500": {
+            "description": "something went wrong on the sever side"
+          }
+        }
+			},
+			"delete": {
+        "tags": [ "Highlight" ],
+        "summary": "Route for authenticated readers and author of the article to delete comments on articles they've highlighted",
+        "description": "Returns the user's comments on highlighted the article",
+        "parameters": [
+          {
+            "in": "articleId",
+            "name": "articleId",
+            "description": "This params takes in the articleId",
+            "required": true
+					},
+					{
+            "in": "authorId",
+            "name": "articleId",
+            "description": "This params takes in the authorId",
+            "required": true
+					},
+					{
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
         ],
         "responses": {
           "200": {
@@ -888,6 +1014,12 @@
             "description": "Internal server error"
           }
         }
+      },
+      "200": {
+        "description": "Highlight comment was posted successfully"
+      },
+      "500": {
+        "description": "something went wrong on the sever side"
       }
     }
   },
