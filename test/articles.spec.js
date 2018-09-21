@@ -45,34 +45,12 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('title', 'How I Learnt React in Andela')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
-        .field('tags', 'andela,TIA')
         .type('form')
         .end((err, res) => {
           res.status.should.equal(201);
           res.body.should.be.an('object');
           res.body.data.should.have.property('message');
           res.body.should.have.property('status');
-          res.body.data.should.have.property('tags');
-          res.body.status.should.equal('success');
-          done();
-        });
-    });
-    it('should return with a status of 201 on successful creation of articles without image being uploaded with the same tags', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/articles')
-        .set('authorization', hashedToken)
-        .set('Content-Type', 'multipart/form-data')
-        .field('title', 'How I Learnt React in Andela 2')
-        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article 2')
-        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela 2')
-        .field('tags', 'andela,TIA')
-        .end((err, res) => {
-          res.status.should.equal(201);
-          res.body.should.be.an('object');
-          res.body.data.should.have.property('message');
-          res.body.should.have.property('status');
-          res.body.data.should.have.property('tags');
           res.body.status.should.equal('success');
           done();
         });
@@ -162,161 +140,6 @@ describe('ARTICLE ENDPOINT TESTS', () => {
           res.status.should.equal(201);
           res.body.data.article.imageUrl.should.be.a('string');
           res.body.data.article.imageUrl.length.should.be.greaterThan(0);
-          done();
-        });
-    });
-  });
-
-  describe('GET ARTICLES WITH PAGINATION', () => {
-    it('should return articles successfully for an authenticated user', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.body.status.should.equal('success');
-          res.status.should.equal(200);
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles.length.should.be.greaterThan(0);
-          done();
-        });
-    });
-
-    it('should return articles successfully with current page = 1 when page number is undefined', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ page: undefined, limit: 1 })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.body.status.should.equal('success');
-          res.status.should.equal(200);
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles.length.should.be.greaterThan(0);
-          res.body.data.metadata.currentPage.should.equal(1);
-          done();
-        });
-    });
-
-    it('should return articles successfully with current page = 1 when page number is not a number', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ page: 'kjhs3w', limit: 1 })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.body.status.should.equal('success');
-          res.status.should.equal(200);
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles.length.should.be.greaterThan(0);
-          res.body.data.metadata.currentPage.should.equal(1);
-          done();
-        });
-    });
-
-    it('should return articles successfully with current page = 1, when page number is less than 1', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ page: -4, limit: 1 })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.body.status.should.equal('success');
-          res.status.should.equal(200);
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles.length.should.be.greaterThan(0);
-          res.body.data.metadata.currentPage.should.equal(1);
-          done();
-        });
-    });
-
-    it('should return default 10 articles article successfully when limit is less than 1', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ limit: -2, page: 1 })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.body.status.should.equal('success');
-          res.status.should.equal(200);
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles.length.should.equal(10);
-          done();
-        });
-    });
-
-    it('should return successfully with a default of 10 articles when limit is not a number', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ limit: '', page: [] })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.body.status.should.equal('success');
-          res.status.should.equal(200);
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles.length.should.equal(10);
-          done();
-        });
-    });
-
-    it('should return 12 article successfully when limit equals 12', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ limit: 12, page: 1 })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.body.status.should.equal('success');
-          res.status.should.equal(200);
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles.length.should.equal(12);
-          done();
-        });
-    });
-
-    it('should fail when token is undefined', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ limit: 12, page: 1 })
-        .end((err, res) => {
-          res.status.should.equal(401);
-          res.body.status.should.equal('fail');
-          res.body.data.message.should.equal('No token provided');
-          done();
-        });
-    });
-
-    it('should return first item first', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ limit: 5, page: 1 })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.status.should.equal(200);
-          res.body.status.should.equal('success');
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.articles[0].id.should.equal(1);
-          done();
-        });
-    });
-
-    it('should return successfully with required metadata', (done) => {
-      chai
-        .request(app)
-        .get('/api/v1/articles')
-        .query({ limit: 5, page: 1 })
-        .set('authorization', hashedToken)
-        .end((err, res) => {
-          res.status.should.equal(200);
-          res.body.status.should.equal('success');
-          res.body.data.articles.should.be.an('Array');
-          res.body.data.should.have.property('metadata');
-          res.body.data.metadata.should.have.property('limit');
-          res.body.data.metadata.should.have.property('currentPage');
-          res.body.data.metadata.should.have.property('totalPages');
           done();
         });
     });

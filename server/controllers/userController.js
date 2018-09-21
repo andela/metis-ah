@@ -5,11 +5,14 @@ import generateToken from '../helpers/generateToken';
 import mailer from '../helpers/utils/mailer';
 import helpers from '../helpers/helpers';
 import msg from '../helpers/utils/eMsgs';
+import { cloudinaryConfig, uploader } from '../config/cloudinary/cloudinaryConfig';
+import { multerUploads, dataUri } from '../config/multer/multerConfig';
 
 config();
 const url = process.env.BASE_URL;
 
 const { verifiedMessage, successSignupMessage, msgForPasswordReset } = msg;
+const { parsedId } = helpers;
 const { Users, Followings } = models;
 
 const userController = {
@@ -300,6 +303,88 @@ const userController = {
         return res.status(200).jsend.success({ followed, follower });
       })
       .catch(() => res.status(500).jsend.error({ message: 'we could not get you details at this time . Please try again' }));
+  },
+  /**
+   * @method updateProfile
+   * @description Allows users to edit their profile
+   * @param {Object} req The request object
+   * @param {Object} res The response object
+   * @returns {Object} The modified profile details
+   */
+  updateProfile: (req, res) => {
+    multerUploads(req, res, () => {
+      const { id } = req.currentUser;
+      const {
+        firstname, lastname, username, email, bio,
+      } = req.body;
+      const interest = req.body.interest ? req.body.interest.split(',') : null;
+      const updateUser = (image) => {
+        const updates = {
+          firstname,
+          lastname,
+          username,
+          email,
+          bio,
+          image,
+          interest
+        };
+        if (!req.file) {
+          delete updates.image;
+        }
+        Users.update(updates, {
+          where: {
+            id
+          },
+          returning: true,
+          plain: true
+        }).then(user => res.status(200).jsend.success({
+          message: 'Your profile has been updated successfully',
+          user
+        }));
+      };
+      if (req.file) {
+        const file = dataUri(req);
+        cloudinaryConfig();
+        uploader.upload(
+          file.content,
+          (result) => {
+            const image = result.url;
+            return updateUser(image);
+          },
+        );
+      } else {
+        updateUser();
+      }
+    });
+  },
+
+  /**
+   * @method getUserProfile
+   * @description Allows users to view other user's profile
+   * @param {Object} req The request object
+   * @param {Object} res The the response object
+   * @returns {Object} The modified profile details
+   */
+  getUserProfile: (req, res) => {
+    const userId = parsedId(req.params.userId);
+    if (!(Number.isInteger(userId))) {
+      return res.status(404).jsend.error({
+        message: 'Invalid user details'
+      });
+    }
+    Users.findOne({ where: { id: userId } })
+      .then((user) => {
+        if (!user || user === undefined) {
+          res.status(404).jsend.fail({
+            message: 'No user found'
+          });
+        }
+        delete user.password;
+        res.status(200).jsend.success({
+          message: 'User details',
+          user
+        });
+      });
   }
 };
 

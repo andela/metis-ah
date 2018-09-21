@@ -1,5 +1,5 @@
 import cloudinary from 'cloudinary';
-import cloudinaryConfig from '../config/cloudinary/cloudinaryConfig';
+import { cloudinaryConfig } from '../config/cloudinary/cloudinaryConfig';
 /**
  * @description This function uploads images to cloudinary
  * @param  {object} file The image uri to be uploaded
