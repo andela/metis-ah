@@ -634,6 +634,138 @@
           }
         }
       },
+      "/api/v1/articles/{articleId}/comments": {
+        "post": {
+          "tags": [ "Comment" ],
+          "summary": "This route handles posting of comments",
+          "description": "Returns the comment posted and the details of the user that created the comment",
+          "parameters": [{
+            "in": "params",
+            "name": "articleId",
+            "description": "the id of the article to be commented on",
+            "required": true
+          }],
+          "responses": {
+            "201": {
+              "description": "Returns a 201 status code on on success"
+            },
+            "400": {
+              "description": "Returns a 400 if params is not valid, if content is empty or not a string"
+            },
+            "404": {
+              "description": "Returns a 404 if article no longer exists"
+            },
+            "500": {
+              "description": "Returns a 500 in the event of a generic database connection error"
+            }
+          }
+        }
+      },
+      "/api/v1/articles/{articleId}/comments/{commentId}/reply": {
+        "post": {
+          "tags": [ "Comment" ],
+          "summary": "This route handles posting of replies. The articleId makes no difference but it is required to make a complete url.",
+          "description": "Returns the reply posted and the details of the user that created the reply",
+          "parameters": [{
+            "in": "params",
+            "name": "articleId",
+            "description": "the id of the article whose comment is being replied to",
+            "required": true
+          },
+          {
+            "in": "params",
+            "name": "commentId",
+            "description": "the id of the comment being replied to",
+            "required": true
+          }],
+          "responses": {
+            "201": {
+              "description": "Returns a 201 status code on success"
+            },
+            "400": {
+              "description": "Returns a 400 if params is not valid, if content is empty or not a string"
+            },
+            "404": {
+              "description": "Returns a 404 if article no longer exists"
+            },
+            "500": {
+              "description": "Returns a 500 in the event of a generic database connection error"
+            }
+          }
+        }
+      },
+      "/api/v1/articles/{articleId}/comments/{commentId}": {
+        "put": {
+          "tags": [ "Comment" ],
+          "summary": "This route handles updating of comments.",
+          "description": "Returns a confirmation and the new update made to the comment",
+          "parameters": [{
+            "in": "params",
+            "name": "articleId",
+            "description": "the id of the article whose comment is being updated",
+            "required": true
+          },
+          {
+            "in": "params",
+            "name": "commentId",
+            "description": "the id of the comment being updated",
+            "required": true
+          }],
+          "responses": {
+            "201": {
+              "description": "Returns a 201 status code on success"
+            },
+            "400": {
+              "description": "Returns a 400 if params is not valid, if content is empty or not a string"
+            },
+            "404": {
+              "description": "Returns a 404 if article no longer exists"
+            },
+            "500": {
+              "description": "Returns a 500 in the event of a generic database connection error"
+            }
+          }
+        }
+      },
+      "/api/v1/articles/{articleId}/comments/{commentId}/reply/{replyId}": {
+        "put": {
+          "tags": [ "Comment" ],
+          "summary": "This route handles updating of replies.",
+          "description": "Returns a confirmation and the new update made to the reply",
+          "parameters": [{
+            "in": "params",
+            "name": "articleId",
+            "description": "the id of the article of the comment whose reply is being updated",
+            "required": true
+          },
+          {
+            "in": "params",
+            "name": "commentId",
+            "description": "the id of the comment whose reply is being updated",
+            "required": true
+          },
+          {
+            "in": "params",
+            "name": "replyId",
+            "description": "the id of the reply being updated",
+            "required": true
+          }],
+          "responses": {
+            "201": {
+              "description": "Returns a 201 status code on success"
+            },
+            "400": {
+              "description": "Returns a 400 if params is not valid, if content is empty or not a string"
+            },
+            "404": {
+              "description": "Returns a 404 if article no longer exists"
+            },
+            "500": {
+              "description": "Returns a 500 in the event of a generic database connection error"
+            }
+          }
+        }
+      },
       "/api/v1/articles/:articleId/report": {
         "post": {
           "tags": ["Articles"],
@@ -1177,7 +1309,19 @@
         }
       },
       "json": {
-        "name": "Comment"
+        "name": "content"
+      }
+    },
+    "Reply": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "example": "Great post!"
+        }
+      },
+      "json": {
+        "name": "content"
       }
     },
     "OAuth1": {

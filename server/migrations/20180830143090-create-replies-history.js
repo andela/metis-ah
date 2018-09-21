@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Comments', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('ReplyHistory', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -10,26 +10,13 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false
     },
-    edited: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false
-    },
-    articleId: {
+    replyId: {
       type: Sequelize.INTEGER,
       onDelete: 'CASCADE',
       references: {
-        model: 'Articles',
+        model: 'Replies',
         key: 'id',
-        as: 'articleId'
-      }
-    },
-    userId: {
-      type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
-      references: {
-        model: 'Users',
-        key: 'id',
-        as: 'userId'
+        as: 'replyId'
       }
     },
     createdAt: {
@@ -41,5 +28,5 @@ module.exports = {
       type: Sequelize.DATE
     }
   }, { freezeTableName: true }),
-  down: queryInterface => queryInterface.dropTable('Comments')
+  down: queryInterface => queryInterface.dropTable('ReplyHistory')
 };

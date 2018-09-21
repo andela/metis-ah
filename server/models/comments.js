@@ -3,6 +3,10 @@ const comments = (sequelize, DataTypes) => {
     content: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    edited: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   });
 
@@ -20,6 +24,11 @@ const comments = (sequelize, DataTypes) => {
     Comments.hasMany(models.Replies, {
       foreignKey: 'commentId',
       as: 'replies'
+    });
+
+    Comments.hasMany(models.CommentHistory, {
+      foreignKey: 'commentId',
+      as: 'commentHistory'
     });
   };
 

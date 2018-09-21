@@ -1,4 +1,3 @@
-import helpers from '../helpers/helpers';
 /**
  * @desc An Object literal containing middleware methods for validating inputs from users
  */
@@ -44,15 +43,6 @@ const inputValidator = {
       });
     }
     return next();
-  },
-  validateComments: (req, res, next) => {
-    const { content } = req.body;
-    const { validString } = helpers;
-
-    if (!validString(content)) {
-      return res.status(400).jsend.fail('Comment is empty');
-    }
-    next();
   }
 };
 

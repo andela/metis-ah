@@ -2,6 +2,10 @@ const replies = (sequelize, DataTypes) => {
   const Replies = sequelize.define('Replies', {
     content: {
       type: DataTypes.STRING
+    },
+    edited: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   });
 
@@ -9,6 +13,11 @@ const replies = (sequelize, DataTypes) => {
     Replies.belongsTo(models.Comments, {
       foreignKey: 'commentId',
       onDelete: 'CASCADE'
+    });
+
+    Replies.hasMany(models.ReplyHistory, {
+      foreignKey: 'replyId',
+      as: 'replyHistory'
     });
   };
 
