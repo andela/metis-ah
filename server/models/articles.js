@@ -31,6 +31,10 @@ const articles = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
 
+    Articles.hasMany(models.ReadingStatistics, {
+      foreignKey: 'articleId'
+    });
+
     Articles.belongsTo(models.Categories, {
       foreignKey: 'categoryId',
       as: 'category'

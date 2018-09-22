@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { Op } from 'sequelize';
 import { config } from 'dotenv';
 import models from '../models';
 import generateToken from '../helpers/generateToken';
@@ -10,7 +11,12 @@ config();
 const url = process.env.BASE_URL;
 
 const { verifiedMessage, successSignupMessage, msgForPasswordReset } = msg;
-const { Users, Followings } = models;
+const {
+  Users,
+  Followings,
+  ReadingStatistics,
+  Articles
+} = models;
 
 const userController = {
   /**
@@ -300,7 +306,34 @@ const userController = {
         return res.status(200).jsend.success({ followed, follower });
       })
       .catch(() => res.status(500).jsend.error({ message: 'we could not get you details at this time . Please try again' }));
+  },
+
+  /**
+    * @description This gets a users reading statistics
+    * @param  {object} req The request
+    * @param  {object} res The response
+    * @returns {object} json response
+    */
+  getReadingStats: (req, res) => {
+    const { duration } = req.query;
+    const week = 60 * 60 * 24 * 3 * 1000;
+
+    ReadingStatistics.findAll({
+      where: {
+        userId: req.currentUser.id,
+        // createdAt: { [Op.between]: [new Date(new Date() - week), new Date()] },
+        createdAt: { [Op.between]: [new Date(`${req.query.year}-${req.query.month}-01 00:00:00`), new Date(`${req.query.year}-${req.query.month}-28 00:00:00`)] }
+      },
+      include: [
+        {
+          model: Articles,
+          attributes: ['id', 'userId', 'imageUrl', 'title', 'slug'],
+        }
+      ]
+
+    }).then(statsData => res.status(200).jsend.success(statsData));
   }
+
 };
 
 export default userController;

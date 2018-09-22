@@ -6,6 +6,7 @@ import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
 import tagManager from '../helpers/tagManager';
+import saveStatsData from '../helpers/saveStatsData';
 
 const {
   Cases,
@@ -247,6 +248,9 @@ const articlesController = {
           message: 'Article not found'
         });
       }
+
+      // SAVE STATISTICS DATA
+      saveStatsData(req, article.id);
 
       const likes = article.articleLikes.filter(like => like.like === true).length;
       const dislikes = article.articleLikes.filter(like => like.dislike === true).length;
