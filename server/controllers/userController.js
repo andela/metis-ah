@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import { Op } from 'sequelize';
 import { config } from 'dotenv';
 import models from '../models';
 import generateToken from '../helpers/generateToken';
@@ -315,23 +314,22 @@ const userController = {
     * @returns {object} json response
     */
   getReadingStats: (req, res) => {
-    const { duration } = req.query;
-    const week = 60 * 60 * 24 * 3 * 1000;
-
-    ReadingStatistics.findAll({
-      where: {
-        userId: req.currentUser.id,
-        // createdAt: { [Op.between]: [new Date(new Date() - week), new Date()] },
-        createdAt: { [Op.between]: [new Date(`${req.query.year}-${req.query.month}-01 00:00:00`), new Date(`${req.query.year}-${req.query.month}-28 00:00:00`)] }
-      },
+    ReadingStatistics.findAndCountAll({
+      where: req.statsQuery,
       include: [
         {
           model: Articles,
-          attributes: ['id', 'userId', 'imageUrl', 'title', 'slug'],
+          attributes: ['id', 'userId', 'imageUrl', 'title', 'slug']
         }
-      ]
-
-    }).then(statsData => res.status(200).jsend.success(statsData));
+      ],
+      order: [['createdAt', 'DESC']]
+    }).then((statsData) => {
+      res.status(200).jsend.success({
+        message: 'Operation Successful',
+        statisticsCount: statsData.count,
+        statisticsData: statsData.rows
+      });
+    });
   }
 
 };
