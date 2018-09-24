@@ -11,7 +11,7 @@ chai.use(chaiHttp);
 const { assert, expect, should } = chai;
 should();
 
-const verifiedToken = generateToken(7200, { id: 2, isVerified: true });
+const verifiedToken = generateToken(7200, { id: 2, isVerified: true, roleId: 2 });
 describe('Users end point test', () => {
   // REGISTERS A NEW USER TO AVOID FOREIGN KEY ERROR
   before('Register a new user', (done) => {

@@ -21,8 +21,7 @@ userRoutes.delete('/:userId/unfollow', auth, isUser, userController.unfollow);
 userRoutes.get('/followings', auth, isUser, userController.following);
 userRoutes.post('/auth/reset-password', userController.resetPassword);
 userRoutes.put('/auth/reset-password/:token', auth, validateNewPassword, userController.reset);
-userRoutes.get('/all', auth, userController.allUsers);
-userRoutes.put('/update', auth, userController.updateProfile);
-userRoutes.get('/:userId', auth, userController.getUserProfile);
+userRoutes.put('/update', auth, isUser, userController.updateProfile);
+userRoutes.get('/:userId', auth, isUser, userController.getUserProfile);
 
 export default userRoutes;

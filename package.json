@@ -4,17 +4,18 @@
   "description": "A Social platform for the creative at heart",
   "main": "app.js",
   "scripts": {
-    "pretest": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
+    "pretest": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all && NODE_ENV=test npm run create_admin",
     "test": "NODE_ENV=test nyc mocha test/**.spec.js --require babel-polyfill --require babel-core/register --exit",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all",
     "test:dev": "npm run posttest && npm test",
-    "start": "babel-node server/app.js",
-    "start_dev": "NODE_ENV=development nodemon --exec babel-node server/app.js",
-    "migrate": "sequelize db:migrate; sequelize db:seed --seed 20180920065415-roles",
+    "start": "npm run create_admin && babel-node server/app.js",
+    "start_dev": "NODE_ENV=development npm run create_admin && nodemon --exec babel-node server/app.js",
+    "migrate": "sequelize db:migrate",
     "unmigrate": "sequelize db:migrate:undo:all",
     "seed_data": "NODE_ENV=development sequelize db:seed:all",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "compile": "babel server --out-dir .compiled --source-maps --watch"
+    "compile": "babel server --out-dir .compiled --source-maps --watch",
+    "create_admin": "babel-node server/scripts/admin.js"
   },
   "repository": {
     "type": "git",
