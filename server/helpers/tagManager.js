@@ -15,9 +15,7 @@
             name: tag
           }
         })
-        .spread((createdTag) => {
-          return article.addTags(createdTag);
-        })
+        .spread((createdTag) => article.addTags(createdTag))
         .catch(() => res.status(500).jsend.fail({ message: 'Something, went wrong. please try again' }));
     });
   }

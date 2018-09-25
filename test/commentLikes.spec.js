@@ -6,7 +6,7 @@ chai.use(chaiHttp);
 const { should } = chai;
 should();
 
-let token;
+let newToken;
 
 describe('User can like a comment test', () => {
   describe('like an article', () => {
@@ -19,8 +19,7 @@ describe('User can like a comment test', () => {
           password: 'paSS1234',
         })
         .end((err, res) => {
-          // token = res.body.data.token;
-          ({ token } = res.body.data);
+          newToken = res.body.data.token;
           res.body.should.have.property('data');
           done();
         });
@@ -29,7 +28,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .send({ id: 1, type: 'comment' })
         .end((err, res) => {
           res.should.have.status(201);
@@ -41,7 +40,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .send({ id: 1, type: 'comment' })
         .end((err, res) => {
           res.should.have.status(200);
@@ -53,7 +52,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .send({ id: 1, type: 'reply' })
         .end((err, res) => {
           res.should.have.status(201);
@@ -65,7 +64,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .send({ id: 1, type: 'reply' })
         .end((err, res) => {
           res.should.have.status(200);
@@ -77,7 +76,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .send({ id: 1, type: 'reply' })
         .end((err, res) => {
           res.should.have.status(200);
@@ -89,7 +88,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .end((err, res) => {
           res.should.have.status(400);
           res.body.data.messages.length.should.equal(2);
@@ -100,7 +99,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .send({ id: 'some', type: 'reply' })
         .end((err, res) => {
           res.should.have.status(400);
@@ -112,7 +111,7 @@ describe('User can like a comment test', () => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
-        .set('Authorization', token)
+        .set('Authorization', newToken)
         .send({ id: 1, type: 'some' })
         .end((err, res) => {
           res.should.have.status(400);

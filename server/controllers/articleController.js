@@ -445,10 +445,35 @@ const articlesController = {
             socialShare,
           });
         });
-      }).catch(err => res.status(500).jsend.error({
-        message: 'Request could not be processed',
-        error: err.message
-      }));
+      });
+  },
+  /**
+   * @method deleteBookmark
+   * @description allows users to delete their bookmarks
+   * @param {Object} req the response object
+   * @param {Object} res the response object
+   * @returns {object} json object
+   */
+  deleteBookmark: (req, res) => {
+    const userId = req.currentUser.id;
+    const { bookmarkId } = req.params;
+    Bookmarks.findOne({
+      where: {
+        userId,
+        id: bookmarkId
+      }
+    }).then((bookmark) => {
+      if (!bookmark) {
+        return res.status(401).jsend.fail({
+          message: 'Bookmark not found!'
+        });
+      }
+      bookmark.destroy();
+      return res.status(204).jsend.success({});
+    }).catch(err => res.status(500).jsend.error({
+      message: 'Request could not be processed',
+      error: err.message
+    }));
   }
 };
 

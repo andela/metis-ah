@@ -26,7 +26,8 @@ const {
   getPopularArticlesForTheWeek,
   createBookmark,
   fetchBookmark,
-  shareArticle
+  shareArticle,
+  deleteBookmark
 } = articleController;
 
 const { addComment, updateComment, updateReply } = commentController;
@@ -144,6 +145,7 @@ articleRoutes.get('/popular', getPopularArticlesForTheWeek);
 
 // CREATE BOOKMARK ROUTE
 articleRoutes.post('/bookmarks/add/:articleId', auth, createBookmark);
+articleRoutes.delete('/bookmarks/:bookmarkId', auth, deleteBookmark);
 
 // GET ALL THE BOOKMARKS OF A USER
 articleRoutes.get('/bookmarks/user/all', auth, fetchBookmark);

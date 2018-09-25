@@ -1499,39 +1499,62 @@
           }
         }
       }
+		},
+		"/api/v1/articles/bookmarks": {
+			"parameters": [{
+				"name": "token",
+				"in": "headers",
+				"required": true,
+				"description": "Authorization header",
+				"type": "string"
+			}],
+			"post": {
+				"summary": "Allows users to bookmark an article",
+				"description": "",
+				"schema": {
+					"$ref": "#/definitions/Bookmarks"
+				},
+				"responses": {
+					"200": {
+						"description": "Add articles to bookmark"
+					}
+				}
+			},
+			"get": {
+				"summary": "Allows users view the list of all articles that have been bookmarked",
+				"description": "Allows and authenticated user to view the list of all articles he has bookmarked",
+				"responses": {
+					"200": {
+						"description": "Returns bookmarked all articles"
+					}
+				}
+			}
+	
     },
-    "/api/v1/articles/bookmarks": {
-      "parameters": [
-        {
-          "name": "token",
-          "in": "headers",
-          "required": true,
-          "description": "Authorization header",
-          "type": "string"
-        }
-      ],
-      "post": {
-        "summary": "Allows users to bookmark an article",
-        "description": "",
-        "schema": {
-          "$ref": "#/definitions/Bookmarks"
-        },
-        "responses": {
-          "200": {
-            "description": "Add articles to bookmark"
+    "/api/v1/articles/bookmarks/delete/{bookmarkId}": {
+			"parameters": [{
+				"name": "token",
+				"in": "headers",
+				"required": true,
+				"description": "Authorization header",
+				"type": "string"
+			}],
+			"delete": {
+				"summary": "Removes a bookmark",
+				"description": "Allows an authenticated uesr to delete his bookmark",
+				"schema": {
+					"$ref": "#/definitions/Bookmarks"
+				},
+				"responses": {
+					"200": {
+						"description": "Book mark successfully deleted"
+          },
+          "401": {
+            "description": "Bookmark not found!"
           }
-        }
-      },
-      "get": {
-        "summary": "Allows users view the list of all articles that have been bookmarked",
-        "description": "Allows and authenticated user to view the list of all articles he has bookmarked",
-        "responses": {
-          "200": {
-            "description": "Returns bookmarked all articles"
-          }
-        }
-      }
-    }
+				}
+			}
+		}
   },
   "definitions": {
     "signin": {

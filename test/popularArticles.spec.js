@@ -18,7 +18,7 @@ describe('Tests for Getting popular articles', () => {
       const popularArticles = getPopularArticles(result);
 
       assert.isArray(popularArticles);
-      expect(popularArticles).to.have.lengthOf.above(5);
+      expect(popularArticles).to.have.lengthOf.above(4);
     });
   });
   describe('Integration Tests for popular articles', () => {

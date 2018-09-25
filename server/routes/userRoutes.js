@@ -8,23 +8,31 @@ const {
   validateSignUp, validateLogin, validateNewPassword, validInterest
 } = usersValidations;
 const {
+  signUp, login, verify,
+  allUsers, follow, unfollow,
+  following, resetPassword,
+  reset, addInterests, updateProfile,
+  getUserProfile
+} = userController;
+
+const {
   isUser,
   isAdmin
 } = roleValidator;
 
 const userRoutes = express.Router();
 
-userRoutes.put('/interests', auth, isUser, validInterest, userController.addInterests);
-userRoutes.post('/auth/signup', validateSignUp, userController.signUp);
-userRoutes.post('/auth/login', validateLogin, userController.login);
-userRoutes.put('/verify/:token', auth, userController.verify);
-userRoutes.get('/', auth, isAdmin, userController.allUsers);
-userRoutes.post('/:userId/follow', auth, isUser, userController.follow);
-userRoutes.delete('/:userId/unfollow', auth, isUser, userController.unfollow);
-userRoutes.get('/followings', auth, isUser, userController.following);
-userRoutes.post('/auth/reset-password', userController.resetPassword);
-userRoutes.put('/auth/reset-password/:token', auth, validateNewPassword, userController.reset);
-userRoutes.put('/update', auth, isUser, userController.updateProfile);
-userRoutes.get('/:userId', auth, isUser, userController.getUserProfile);
+userRoutes.put('/interests', auth, isUser, validInterest, addInterests);
+userRoutes.post('/auth/signup', validateSignUp, signUp);
+userRoutes.post('/auth/login', validateLogin, login);
+userRoutes.put('/verify/:token', auth, verify);
+userRoutes.get('/', auth, isAdmin, allUsers);
+userRoutes.post('/:userId/follow', auth, follow);
+userRoutes.delete('/:userId/unfollow', auth, unfollow);
+userRoutes.get('/followings', auth, following);
+userRoutes.post('/auth/reset-password', resetPassword);
+userRoutes.put('/auth/reset-password/:token', auth, validateNewPassword, reset);
+userRoutes.put('/update', auth, isUser, updateProfile);
+userRoutes.get('/:userId', auth, isUser, getUserProfile);
 
 export default userRoutes;
