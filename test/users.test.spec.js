@@ -78,6 +78,27 @@ describe('Update User Endpoint /api/v1/users/update', () => {
         done();
       });
   });
+  it('should return error: please firstname and lastname ', (done) => {
+    chai
+      .request(app)
+      .put('/api/v1/users/update')
+      .set('Authorization', verifiedToken)
+      .send({
+        email: 'joe.test@testmail.com',
+        username: 'joeeasy',
+        bio: 'Hello, here is a brief information about me',
+        interest: 'gaming, movies, music, tech',
+        wordsPerMinute: 600
+      })
+      .end((err, res) => {
+        console.log(res.body.data.messages);
+        expect(res).to.have.status(400);
+        expect(res.body).to.be.an('object');
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.messages).to.be.an('array');
+        done();
+      });
+  });
   it('should return successfully when a users profile is successfully updated', (done) => {
     chai
       .request(app)
@@ -90,6 +111,7 @@ describe('Update User Endpoint /api/v1/users/update', () => {
         username: 'joeeasy',
         bio: 'Hello, here is a brief information about me',
         interest: 'gaming, movies, music, tech',
+        wordsPerMinute: 600
       })
       .end((err, res) => {
         expect(res).to.have.status(200);

@@ -7,6 +7,7 @@ import helpers from '../helpers/helpers';
 import msg from '../helpers/utils/eMsgs';
 import { cloudinaryConfig, uploader } from '../config/cloudinary/cloudinaryConfig';
 import { multerUploads, dataUri } from '../config/multer/multerConfig';
+import usersValidations from '../middleware/usersValidations';
 
 config();
 const url = process.env.BASE_URL;
@@ -14,6 +15,7 @@ const url = process.env.BASE_URL;
 const { verifiedMessage, successSignupMessage, msgForPasswordReset } = msg;
 const { parsedId } = helpers;
 const { Users, Followings } = models;
+const { validateUpdateProfile } = usersValidations;
 
 const userController = {
   /**
@@ -47,8 +49,8 @@ const userController = {
           message: successSignupMessage,
           token
         });
-      }).catch(() => {
-        res.status(500).jsend.fail({ message: 'Signup was not successful. Please try again' });
+      }).catch((error) => {
+        res.status(500).jsend.fail({ message: error.message });
       });
   },
   /**
@@ -313,11 +315,18 @@ const userController = {
    */
   updateProfile: (req, res) => {
     multerUploads(req, res, () => {
+      const valid = validateUpdateProfile(req, res);
+      if (valid) {
+        if (valid.status === 'fail') {
+          return res.status(400)
+            .jsend.fail({ messages: valid.messages });
+        }
+      }
       const { id } = req.currentUser;
       const {
-        firstname, lastname, username, email, bio,
+        firstname, lastname, username, email, bio, wordsPerMinute
       } = req.body;
-      const interest = req.body.interest ? req.body.interest.split(',') : null;
+      const interests = req.body.interests ? req.body.interests.split(',') : null;
       const updateUser = (image) => {
         const updates = {
           firstname,
@@ -326,7 +335,8 @@ const userController = {
           email,
           bio,
           image,
-          interest
+          interests,
+          wordsPerMinute
         };
         if (!req.file) {
           delete updates.image;
@@ -340,6 +350,9 @@ const userController = {
         }).then(user => res.status(200).jsend.success({
           message: 'Your profile has been updated successfully',
           user
+        })).catch(error => res.status(500).jsend.fail({
+          error: error.message,
+          message: 'request could not be processed'
         }));
       };
       if (req.file) {
@@ -375,12 +388,12 @@ const userController = {
     Users.findOne({ where: { id: userId } })
       .then((user) => {
         if (!user || user === undefined) {
-          res.status(404).jsend.fail({
+          return res.status(404).jsend.fail({
             message: 'No user found'
           });
         }
         delete user.password;
-        res.status(200).jsend.success({
+        return res.status(200).jsend.success({
           message: 'User details',
           user
         });

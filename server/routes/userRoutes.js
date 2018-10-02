@@ -3,7 +3,9 @@ import userController from '../controllers/userController';
 import auth from '../middleware/auth';
 import usersValidations from '../middleware/usersValidations';
 
-const { validateSignUp, validateLogin, validateNewPassword } = usersValidations;
+const {
+  validateSignUp, validateLogin, validateNewPassword
+} = usersValidations;
 
 const userRoutes = express.Router();
 

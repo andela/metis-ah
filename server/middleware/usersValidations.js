@@ -142,6 +142,60 @@ const usersValidations = {
         .jsend.fail({ messages });
     }
     return next();
+  },
+  validateUpdateProfile: (req, res) => {
+    let status = 'success';
+    const messages = [];
+
+    // Check the passed body for required properties
+    const {
+      valid, invalidMessages
+    } = checkProps(req.body, 'username', 'email', 'firstname', 'lastname');
+
+    if (!valid) {
+      return {
+        status: 'fail',
+        messages: invalidMessages
+      };
+    }
+
+    if (req.body.wordsPerMinute) {
+      const numberRegex = /^[0-9]+$/;
+      // check articleId if it is passed
+      if (!numberRegex.test(req.body.wordsPerMinute)) {
+        status = 'fail';
+        messages.push('wordsPerMinute must be a number');
+      }
+    }
+
+    // Validate the email address provided
+    if (!validEmail(req.body.email)) {
+      status = 'fail';
+      messages.push('Invalid email provided');
+    }
+
+    // validate the firstName;
+    if (!validString(req.body.username)) {
+      status = 'fail';
+      messages.push('username cannot be an empty string');
+    }
+
+    if (!validString(req.body.firstname)) {
+      status = 'fail';
+      messages.push('firstname cannot be an empty string');
+    }
+
+    if (!validString(req.body.lastname)) {
+      status = 'fail';
+      messages.push('lastname cannot be an empty string');
+    }
+
+    if (status === 'fail') {
+      return {
+        status: 'fail',
+        messages
+      };
+    }
   }
 };
 
