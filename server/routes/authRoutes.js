@@ -16,11 +16,20 @@ router.get('/facebook', passport.authenticate('facebook', {
   scope: ['public_profile', 'email']
 }));
 
+// The twitter authentication route
+router.get('/twitter', passport.authenticate('twitter', {
+  session: true,
+  scope: ['emails']
+}));
+
 // The google authentication failure route
 router.get('/google/failure', authController.returnError);
 
 // the facebook authentication failure route
 router.get('/facebook/failure', authController.returnError);
+
+// the twitter authentication failure route
+router.get('/twitter/failure', authController.returnError);
 
 // The redirect route from google signup
 router.get(
@@ -38,6 +47,16 @@ router.get(
   passport.authenticate(
     'facebook',
     { failureRedirect: '/facebook/failure' }
+  ),
+  authController.returnUser
+);
+
+// The redirect route from twitter signup
+router.get(
+  '/twitter/redirect',
+  passport.authenticate(
+    'twitter',
+    { failureRedirect: '/twitter/failure' }
   ),
   authController.returnUser
 );
