@@ -6,10 +6,11 @@ import chaiHttp from 'chai-http';
 import app from '../server/app';
 import generateToken from '../server/helpers/generateToken';
 import Mailer from '../server/helpers/utils/mailer';
+import helpers from '../server/helpers/helpers';
 import './socialLogin.spec';
 import './rateArticles.spec';
 import './reportArticle.spec';
-import helpers from '../server/helpers/helpers';
+import './roles.spec';
 
 dotenv.config();
 chai.use(chaiHttp);
@@ -19,7 +20,7 @@ should();
 
 const faketoken = cryptr.encrypt('iamfaketokendonttrustme');
 const unVerifiedToken = generateToken(7200, { id: 2, isVerified: false });
-const verifiedToken = generateToken(7200, { id: 2, isVerified: true });
+const verifiedToken = generateToken(7200, { id: 2, isVerified: true, roleId: 1 });
 describe('TEST ALL ENDPOINT', () => {
   describe('Initial testing', () => {
     it('should return welcome to sims', (done) => {

@@ -41,6 +41,11 @@ module.exports = {
     interests: {
       type: Sequelize.ARRAY(Sequelize.TEXT)
     },
+    roleId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 2
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

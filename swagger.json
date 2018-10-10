@@ -29,6 +29,10 @@
     {
       "name": "Cases",
       "description": "Everything about reported articles"
+    },
+    {
+      "name": "Roles",
+      "description": "Everything about access roles"
     }
   ],
   "schemes": [
@@ -415,7 +419,10 @@
 					"200": {
 						"description": "you are now following the user"
 					}
-				}
+        },
+        "401": {
+          "description": "User access required"
+        }
 			}
 		},
 		"/api/v1/articles/{articleId}/{likeType}": {
@@ -533,36 +540,6 @@
         }
       }
     },
-    "/api/v1/users/{userId}/follow": {
-      "post": {
-        "tags": [
-          "User"
-        ],
-        "summary": "Allows user to follow other users",
-        "description": "User will become a follower of another user",
-        "consumes": [
-          "application/json"
-        ],
-        "parameters": [{
-            "in": "header",
-            "name": "authorization",
-            "description": "user token",
-            "required": true
-          },
-          {
-            "in": "path",
-            "name": "userId",
-            "description": "user id to follow",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "you are now following the user"
-          }
-        }
-      }
-    },
     "/api/v1/users/{userId}/unfollow": {
       "delete": {
         "tags": [
@@ -593,6 +570,9 @@
           "200": {
             "description": "you are now longer following the user"
           }
+        },
+        "401": {
+          "description": "User access required"
         }
       }
     },
@@ -618,6 +598,9 @@
         "responses": {
           "200": {
             "description": "you are now following the user"
+          },
+          "401": {
+            "description": "User access required"
           }
         }
       },
@@ -641,6 +624,9 @@
             },
             "400": {
               "description": "Returns a 400 if params is not valid"
+            },
+            "401": {
+              "description": "User access required"
             },
             "500": {
               "description": "Returns a 500 if comment no longer exists"
@@ -678,52 +664,9 @@
             },
             "400": {
               "description": "Several bad request errors may occur with a descriptive error message"
-            }
-          }
-        }
-      },
-      "/api/v1/cases/": {
-        "get": {
-          "tags": ["Articles"],
-          "summary": "Gets all reported cases on the platform",
-          "description": "This endpoint gives access to all reported cases on the platform",
-          "parameters": [{
-              "in": "headers",
-              "name": "authentication",
-              "description": "The authentication token",
-              "required": true
             },
-            {
-              "in": "query",
-              "name": "a",
-              "description": "a list of article ids separated with '+'",
-              "required": true
-            }
-          ],
-          "produces": [
-            "application/json"
-          ],
-          "responses": {
-            "200": {
-              "description": "gets all cases",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "example": "success"
-                },
-                "data": {
-                  "type": "object",
-                  "properties": {
-                    "cases": {
-                      "type": "Array"
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "There are no cases"
-                    }
-                  }
-                }
-              }
+            "401": {
+              "description": "User access required"
             }
           }
         }
@@ -751,6 +694,9 @@
           },
           "400": {
             "description": "Comment is empty"
+          },
+          "401": {
+            "description": "User access required"
           }
         }
       }
@@ -796,6 +742,9 @@
             "schema": {
               "$ref": "#/definitions/ratingRes"
             }
+          },
+          "401": {
+            "description": "User access required"
           }
         }
       }
@@ -835,6 +784,9 @@
             "schema": {
               "$ref": "#/definitions/reportRes1"
             }
+          },
+          "401": {
+            "description": "User access required"
           },
           "409": {
             "description": "article has been reported by authenticated user before",
@@ -877,6 +829,9 @@
             "schema": {
               "$ref": "#/definitions/casesRes2"
             }
+          },
+          "401": {
+            "description": "Admin access required"
           }
         }
       }
@@ -901,8 +856,8 @@
           "400": {
             "description": "bad request; empty query string"
           },
-          "400": {
-            "description": "invalid query; invalid page number"
+          "401": {
+            "description": "Admin access required"
           }
         }
       }
@@ -1012,6 +967,101 @@
           },
           "500": {
             "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/roles": {
+      "get": {
+        "tags": [ "Roles" ],
+        "summary": "Route for getting all the roles",
+        "description": "Returns all the roles of created",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful return all roles"
+          },
+          "401": {
+            "description": "Admin access required"
+          }
+        }
+      },
+      "post": {
+        "tags": [ "Roles" ],
+        "summary": "Route for adding a new role",
+        "description": "Returns the new role added",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object containing the new role and permissions",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roles"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful saved the new role"
+          },
+          "401": {
+            "description": "Admin access required"
+          },
+          "404": {
+            "description": "Invalid permissions"
+          }
+        }
+      },
+      "put": {
+        "tags": [ "Roles" ],
+        "summary": "Route for editing a role",
+        "description": "Returns the edited role",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "object containing the new role and permissions",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/roles1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful saved the new role"
+          },
+          "400": {
+            "description": "Invalid permissions sent"
+          },
+          "401": {
+            "description": "Admin access required"
+          },
+          "404": {
+            "description": "Invalid permissions"
+          },
+          "409": {
+            "description": "Role already exits"
           }
         }
       }
@@ -1444,5 +1494,35 @@
 			"type": "number",
 			"example": 1
 		}
+  },
+  "roles": {
+    "type": "object",
+    "properties": {
+      "role": {
+        "type": "string",
+        "example": "reader"
+      },
+      "permissions": {
+        "type": "array",
+        "example": ["read", "write"]
+      }
+    }
+  },
+  "roles1": {
+    "type": "object",
+    "properties": {
+      "role": {
+        "type": "string",
+        "example": "reader"
+      },
+      "addPermissions": {
+        "type": "array",
+        "example": ["read", "write"]
+      },
+      "removePermissions": {
+        "type": "array",
+        "example": ["view users", "like"]
+      }
+    }
   }
 }

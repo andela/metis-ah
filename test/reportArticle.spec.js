@@ -8,7 +8,7 @@ const { should, expect } = chai;
 should();
 
 describe('REPORT ARTICLES:', () => {
-  const token = generateToken(7200, { id: 5, isVerified: true });
+  const token = generateToken(7200, { id: 5, isVerified: true, roleId: 1 });
 
   it('should return a descriptive message if there are no cases found', (done) => {
     chai
@@ -37,9 +37,9 @@ describe('REPORT ARTICLES:', () => {
         description: 'This article depicts men as ignorant!'
       })
       .end((err, res) => {
+        expect(res.body.data.message).to.equal('This case has been recorded and will be reviewed');
         expect(res.body.status).to.equal('success');
         expect(res.body.data).to.have.property('message');
-        expect(res.body.data.message).to.equal('This case has been recorded and will be reviewed');
         done();
       });
   });
@@ -149,7 +149,7 @@ describe('REPORT ARTICLES:', () => {
 });
 
 describe('RESOLVE REPORTED CASES', () => {
-  const token = generateToken(7200, { id: 5, isVerified: true });
+  const token = generateToken(7200, { id: 5, isVerified: true, roleId: 1 });
 
   it('should return incorrect case id message if the case id is wrong', (done) => {
     chai
