@@ -1,5 +1,3 @@
-
-
 module.exports = {
   up: (queryInterface, Sequelize) => queryInterface.createTable('ArticleLikes', {
     id: {
@@ -26,10 +24,10 @@ module.exports = {
         as: 'articleId'
       }
     },
-    like: {
+    liked: {
       type: Sequelize.BOOLEAN
     },
-    dislike: {
+    disliked: {
       type: Sequelize.BOOLEAN
     },
     createdAt: {

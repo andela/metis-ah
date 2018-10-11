@@ -1199,6 +1199,27 @@
       }
     }
   },
+  "/api/v1/authors/authors-of-the-week": {
+    "get": {
+      "tags": [ "Authors" ],
+      "summary": "Returns atmost four (4) authors for the week.",
+      "description": "Authors are selected based on the number of likes of the articles written for the current week.",
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Operation successfully",
+          "schema": {
+            "$ref": "#/definitions/authors-of-the-week"
+          }
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
   "definitions": {
     "signin": {
       "type": "object",
@@ -1666,6 +1687,54 @@
       "removePermissions": {
         "type": "array",
         "example": ["view users", "like"]
+      }
+    }
+  },
+  "authors-of-the-week": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "example": "success"
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "authors": {
+            "type": "array",
+            "items": {
+              "author": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "example": "1"
+                  },
+                  "likesCount": {
+                    "type": "integer",
+                    "example": "2343"
+                  },
+                  "userId": {
+                    "type": "integer",
+                    "example": "2"
+                  },
+                  "firstname": {
+                    "type": "string",
+                    "example": "John"
+                  },
+                  "lastname": {
+                    "type": "string",
+                    "example": "Doe"
+                  },
+                  "image": {
+                    "type": "string",
+                    "example": "https://someimgurl.com"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

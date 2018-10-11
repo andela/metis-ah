@@ -13,6 +13,7 @@ import authRoutes from './routes/authRoutes';
 import caseRoutes from './routes/caseRoutes';
 import tagRoute from './routes/tagRoutes';
 import roleRoutes from './routes/roleRoutes';
+import authorRoutes from './routes/authorRoutes';
 
 dotenv.config();
 const app = express();
@@ -42,6 +43,7 @@ app.use('/api/v1/articles', articleRoutes);
 app.use('/api/v1/cases', caseRoutes);
 app.use('/api/v1/tags', tagRoute);
 app.use('/api/v1/roles', roleRoutes);
+app.use('/api/v1/authors', authorRoutes);
 
 app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'
