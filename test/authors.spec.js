@@ -22,23 +22,23 @@ describe('Tests for Getting authors of the week', () => {
       assert.isArray(result);
       expect(result).to.have.lengthOf(4);
     });
-    it('getAuthors should return an array with length of 2', async () => {
+    it('getAuthors should return an array with length of 3', async () => {
       const result = await getArticlesAndLikesCountForTheWeek();
       const authors = getAuthors(result);
 
       assert.isArray(authors);
-      expect(authors).to.have.lengthOf(2);
+      expect(authors).to.have.lengthOf(3);
     });
   });
   describe('Integration Tests for authors of the week', () => {
-    it('should return an array of length equal to 2', (done) => {
+    it('should return an array of length equal to 3', (done) => {
       chai
         .request(app)
         .get('/api/v1/authors/authors-of-the-week')
         .end((err, res) => {
           res.body.status.should.equal('success');
           res.body.data.authors.should.be.an('array');
-          res.body.data.authors.should.have.lengthOf(2);
+          res.body.data.authors.should.have.lengthOf(3);
           done();
         });
     });

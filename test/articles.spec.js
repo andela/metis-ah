@@ -212,3 +212,190 @@ describe('Articles likes test', () => {
       });
   });
 });
+
+
+// TESTS FOR GET ALL ARTICLES
+describe('GET ARTICLES WITH PAGINATION', () => {
+  it('should return articles successfully for an authenticated user', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.body.status.should.equal('success');
+        res.status.should.equal(200);
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles.length.should.be.greaterThan(0);
+        done();
+      });
+  });
+
+  it('should return articles successfully with current page = 1 when page number is undefined', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ page: undefined, limit: 1 })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.body.status.should.equal('success');
+        res.status.should.equal(200);
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles.length.should.be.greaterThan(0);
+        res.body.data.metadata.currentPage.should.equal(1);
+        done();
+      });
+  });
+
+  it('should return articles successfully with current page = 1 when page number is not a number', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ page: 'kjhs3w', limit: 1 })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.body.status.should.equal('success');
+        res.status.should.equal(200);
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles.length.should.be.greaterThan(0);
+        res.body.data.metadata.currentPage.should.equal(1);
+        done();
+      });
+  });
+
+  it('should return articles successfully with current page = 1, when page number is less than 1', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ page: -4, limit: 1 })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.body.status.should.equal('success');
+        res.status.should.equal(200);
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles.length.should.be.greaterThan(0);
+        res.body.data.metadata.currentPage.should.equal(1);
+        done();
+      });
+  });
+
+  it('should return default 10 articles article successfully when limit is less than 1', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ limit: -2, page: 1 })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.body.status.should.equal('success');
+        res.status.should.equal(200);
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles.length.should.equal(10);
+        done();
+      });
+  });
+
+  it('should return successfully with a default of 10 articles when limit is not a number', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ limit: '', page: [] })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.body.status.should.equal('success');
+        res.status.should.equal(200);
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles.length.should.equal(10);
+        done();
+      });
+  });
+
+  it('should return 12 article successfully when limit equals 12', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ limit: 12, page: 1 })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.body.status.should.equal('success');
+        res.status.should.equal(200);
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles.length.should.equal(12);
+        done();
+      });
+  });
+
+  it('should fail when token is undefined', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ limit: 12, page: 1 })
+      .end((err, res) => {
+        res.status.should.equal(401);
+        res.body.status.should.equal('fail');
+        res.body.data.message.should.equal('No token provided');
+        done();
+      });
+  });
+
+  it('should return first item first', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ limit: 5, page: 1 })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.status.should.equal('success');
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.articles[0].id.should.equal(1);
+        done();
+      });
+  });
+
+  it('should return successfully with required metadata', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles')
+      .query({ limit: 5, page: 1 })
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.status.should.equal('success');
+        res.body.data.articles.should.be.an('Array');
+        res.body.data.should.have.property('metadata');
+        res.body.data.metadata.should.have.property('limit');
+        res.body.data.metadata.should.have.property('currentPage');
+        res.body.data.metadata.should.have.property('totalPages');
+        done();
+      });
+  });
+});
+
+describe('GET FEATURED ARTICLES TESTS', () => {
+  it('should return five (5) articles successfully when less than 5 has been created and rated', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/featured')
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.status.should.equal('success');
+        res.body.data.featuredArticles.should.be.an('Array');
+        res.body.data.featuredArticles.length.should.be.greaterThan(4);
+        res.body.data.featuredArticles[0].slug.should.be.contain('');
+        done();
+      });
+  });
+
+  it('should return specified number of articles successfully when limit is specified', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/featured')
+      .query({ limit: 3 })
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.status.should.equal('success');
+        res.body.data.featuredArticles.should.be.an('Array');
+        res.body.data.featuredArticles.length.should.eql(3);
+        done();
+      });
+  });
+});

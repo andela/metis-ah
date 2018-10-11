@@ -1,4 +1,4 @@
-
+import { Op } from 'sequelize';
 import slug from 'slug';
 import uuid from 'uuid-random';
 import ratingHelpers from '../helpers/ratingHelpers';
@@ -6,13 +6,17 @@ import models from '../models';
 import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
 import tagManager from '../helpers/tagManager';
+import getBeginningOfWeek from '../helpers/getBeginningOfWeek';
+
+const { gte } = Op;
 
 const {
   Cases,
   Articles,
   Ratings,
   ArticleLikes,
-  Tags
+  Tags,
+  Categories
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -194,6 +198,53 @@ const articlesController = {
           totalPages
         }
       });
+    });
+  },
+  /**
+  * @desc get Featured Articles
+  * @param  {object} req Http Request object
+  * @param  {object} res Http Response object
+  * @returns {object} httpResponse object
+  */
+  getFeaturedArticles: (req, res) => {
+    const { limit } = req.query;
+    const pageLimit = /^[0-9]+$/.test(limit) ? limit : 5;
+    const includeOption = [{
+      model: Categories,
+      as: 'category',
+      attributes: ['id', 'name']
+    }];
+
+    Articles.findAll({
+      include: includeOption,
+      where: {
+        createdAt: {
+          [gte]: getBeginningOfWeek(new Date())
+        }
+      },
+      order: [
+        ['rating', 'DESC']
+      ],
+      limit: pageLimit
+    }).then((result) => {
+      if (result.length < 5) {
+        Articles.findAll({
+          include: includeOption,
+          order: [
+            ['rating', 'DESC'],
+            ['createdAt', 'DESC']
+          ],
+          limit: pageLimit
+        }).then(articles => res.status(200).jsend.success({
+          messages: 'Operation successful',
+          featuredArticles: articles
+        }));
+      } else {
+        return res.status(200).jsend.success({
+          messages: 'Operation successful',
+          featuredArticles: result
+        });
+      }
     });
   }
 };
