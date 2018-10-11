@@ -385,7 +385,7 @@ describe('GET FEATURED ARTICLES TESTS', () => {
       });
   });
 
-  it('should return 10 articles successfully when limit is specified', (done) => {
+  it('should return specified number of articles successfully when limit is specified', (done) => {
     chai
       .request(app)
       .get('/api/v1/articles/featured')

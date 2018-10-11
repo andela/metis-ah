@@ -10,7 +10,8 @@
   },
   "host": "metis-ah-staging.herokuapp.com",
   "basePath": "/",
-  "tags": [{
+  "tags": [
+    {
       "name": "User",
       "description": "Everything about all Users"
     },
@@ -64,15 +65,17 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "User's object that need to be parsed",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/Signup"
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User's object that need to be parsed",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Signup"
+            }
           }
-        }],
+        ],
         "responses": {
           "201": {
             "description": "User is signed up successfully"
@@ -96,15 +99,17 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "User's object that need to be parsed",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/Login"
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User's object that need to be parsed",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "User is signed in successfully"
@@ -193,13 +198,15 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "name": "token",
-          "in": "path",
-          "description": "Token generated for user",
-          "required": true,
-          "type": "string"
-        }],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "description": "Token generated for user",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Your account is verified successfully"
@@ -220,12 +227,14 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "header",
-          "name": "authorization",
-          "required": true,
-          "type": "string"
-        }],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success!"
@@ -237,7 +246,9 @@
       },
       "/api/v1/articles/{articleId}/{likeType}": {
         "post": {
-          "tags": ["Like"],
+          "tags": [
+            "Like"
+          ],
           "summary": "Allows user to like, dislike and unlike article",
           "description": "Article like, dislike and unlike endpoint",
           "consumes": [
@@ -246,7 +257,8 @@
           "produces": [
             "application/json"
           ],
-          "parameters": [{
+          "parameters": [
+            {
               "in": "path",
               "name": "articleId",
               "description": "The id of the article to be liked",
@@ -276,7 +288,9 @@
       },
       "/api/v1/tags": {
         "get": {
-          "tags": ["Tags"],
+          "tags": [
+            "Tags"
+          ],
           "summary": "Allows user view all tags",
           "description": "User views all tags in database",
           "consumes": [
@@ -285,13 +299,15 @@
           "produces": [
             "application/json"
           ],
-          "parameters": [{
-            "in": "header",
-            "name": "authorization",
-            "description": "user token",
-            "required": true,
-            "type": "string"
-          }],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "description": "user token",
+              "required": true,
+              "type": "string"
+            }
+          ],
           "responses": {
             "200": {
               "description": "array of tags"
@@ -301,7 +317,9 @@
       },
       "/api/v1/tags/{tagName}": {
         "get": {
-          "tags": ["Tags"],
+          "tags": [
+            "Tags"
+          ],
           "summary": "Allows user view a tag",
           "description": "User views a tag in database with all is associated articles",
           "consumes": [
@@ -310,7 +328,8 @@
           "produces": [
             "application/json"
           ],
-          "parameters": [{
+          "parameters": [
+            {
               "in": "header",
               "name": "authorization",
               "description": "user token",
@@ -335,136 +354,147 @@
           }
         }
       }
-		},
-		"/api/v1/user/update": {
-			"parameters": [{
-				"name": "token",
-				"in": "headers",
-				"required": true,
-				"description": "Authorization header",
-				"type": "string"
-			}],
-			"put": {
-				"tags": [ "User" ],
-				"summary": "Allows user to update their profile",
-				"description": "Authenticated user will be able edit their profile",
-				"parameters": [
-					{
-						"in": "body",
-						"name": "body",
-						"description": "Your profile has been updated successfully",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/Update"
-						}
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Your profile has been updated successfully"
-					}
-				}
-			}
-		},
-		"/api/v1/user/:userId": {
-			"parameters": [{
-				"name": "token",
-				"in": "headers",
-				"required": true,
-				"description": "Authorization header",
-				"type": "string"
-			}, {
-				"name": "userId",
-				"in": "path",
-				"required": true,
-				"description": "ID of the user",
-				"type": "string"
-			}],
-			"get": {
-				"summary": "Return the user's details",
-				"description": "",
-				"schema": {
-					"$ref": "#/definitions/userId"
-				},
-				"responses": {
-					"200": {
-						"description": "User profile"
-					}
-				}
-			}
-		},
-		"/api/v1/users/{userId}/follow": {
-			"post": {
-				"tags": [ "User" ],
-				"summary": "Allows user to follow other users",
-				"description": "User will become a follower of another user",
-				"consumes": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"in": "header",
-						"name": "authorization",
-						"description": "user token",
-						"required": true
-					},
-					{
-						"in": "path",
-						"name": "userId",
-						"description": "user id to follow",
-						"required": true
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "you are now following the user"
-					}
+    },
+    "/api/v1/user/update": {
+      "parameters": [
+        {
+          "name": "token",
+          "in": "headers",
+          "required": true,
+          "description": "Authorization header",
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to update their profile",
+        "description": "Authenticated user will be able edit their profile",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Your profile has been updated successfully",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Update"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your profile has been updated successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/user/:userId": {
+      "parameters": [
+        {
+          "name": "token",
+          "in": "headers",
+          "required": true,
+          "description": "Authorization header",
+          "type": "string"
+        },
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "summary": "Return the user's details",
+        "description": "",
+        "schema": {
+          "$ref": "#/definitions/userId"
+        },
+        "responses": {
+          "200": {
+            "description": "User profile"
+          }
+        }
+      }
+    },
+    "/api/v1/users/{userId}/follow": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to follow other users",
+        "description": "User will become a follower of another user",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          },
+          {
+            "in": "path",
+            "name": "userId",
+            "description": "user id to follow",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "you are now following the user"
+          }
         },
         "401": {
           "description": "User access required"
         }
-			}
-		},
-		"/api/v1/articles/{articleId}/{likeType}": {
-			"post": {
-				"tags": [ "Like" ],
-				"summary": "Allows user to like, dislike and unlike article",
-				"description": "Article like, dislike and unlike endpoint",
-				"consumes": [
-					"application/json"
-				],
-				"produces": [
-					"application/xml"
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "articleId",
-						"description": "The id of the article to be liked",
-						"required": true,
-						"type": "number"
-					},
-					{
-						"in": "path",
-						"name": "likeType",
-						"description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
-						"required": true,
-						"type": "string"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Password reset successful"
-					},
-					"401": {
-						"description": "Verification link not valid"
-					},
-					"500": {
-						"description": "Request could not be completed. Please try again"
-					}
-				}
-			}
-		},
+      }
+    },
+    "/api/v1/articles/{articleId}/{likeType}": {
+      "post": {
+        "tags": [
+          "Like"
+        ],
+        "summary": "Allows user to like, dislike and unlike article",
+        "description": "Article like, dislike and unlike endpoint",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "articleId",
+            "description": "The id of the article to be liked",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "in": "path",
+            "name": "likeType",
+            "description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Password reset successful"
+          },
+          "401": {
+            "description": "Verification link not valid"
+          },
+          "500": {
+            "description": "Request could not be completed. Please try again"
+          }
+        }
+      }
+    },
     "/api/v1/users/auth/reset-password": {
       "post": {
         "tags": [
@@ -478,15 +508,17 @@
         "produces": [
           "application/xml"
         ],
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "User's object that need to be parsed",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/reset-password-email"
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User's object that need to be parsed",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reset-password-email"
+            }
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "Password reset link has been sent to your email"
@@ -510,7 +542,8 @@
         "produces": [
           "application/xml"
         ],
-        "parameters": [{
+        "parameters": [
+          {
             "in": "path",
             "name": "token",
             "description": "Token sent to the user's email for password reset",
@@ -553,7 +586,8 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
+        "parameters": [
+          {
             "in": "header",
             "name": "authorization",
             "description": "user token",
@@ -589,12 +623,14 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "in": "header",
-          "name": "authorization",
-          "required": true,
-          "type": "string"
-        }],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "you are now following the user"
@@ -606,15 +642,19 @@
       },
       "/api/v1/articles/:articleId/comments/like": {
         "post": {
-          "tags": [ "Like" ],
+          "tags": [
+            "Like"
+          ],
           "summary": "Route for authenticated users to like or unlike a comments on an article",
           "description": "Returns a confirmation is like or unlike is successful",
-          "parameters": [{
-            "in": "params",
-            "name": "commentId",
-            "description": "the id of the comment to be liked",
-            "required": true
-          }],
+          "parameters": [
+            {
+              "in": "params",
+              "name": "commentId",
+              "description": "the id of the comment to be liked",
+              "required": true
+            }
+          ],
           "responses": {
             "201": {
               "description": "Returns a 201 status code on the first like"
@@ -636,15 +676,19 @@
       },
       "/api/v1/articles/{articleId}/comments": {
         "post": {
-          "tags": [ "Comment" ],
+          "tags": [
+            "Comment"
+          ],
           "summary": "This route handles posting of comments",
           "description": "Returns the comment posted and the details of the user that created the comment",
-          "parameters": [{
-            "in": "params",
-            "name": "articleId",
-            "description": "the id of the article to be commented on",
-            "required": true
-          }],
+          "parameters": [
+            {
+              "in": "params",
+              "name": "articleId",
+              "description": "the id of the article to be commented on",
+              "required": true
+            }
+          ],
           "responses": {
             "201": {
               "description": "Returns a 201 status code on on success"
@@ -663,21 +707,25 @@
       },
       "/api/v1/articles/{articleId}/comments/{commentId}/reply": {
         "post": {
-          "tags": [ "Comment" ],
+          "tags": [
+            "Comment"
+          ],
           "summary": "This route handles posting of replies. The articleId makes no difference but it is required to make a complete url.",
           "description": "Returns the reply posted and the details of the user that created the reply",
-          "parameters": [{
-            "in": "params",
-            "name": "articleId",
-            "description": "the id of the article whose comment is being replied to",
-            "required": true
-          },
-          {
-            "in": "params",
-            "name": "commentId",
-            "description": "the id of the comment being replied to",
-            "required": true
-          }],
+          "parameters": [
+            {
+              "in": "params",
+              "name": "articleId",
+              "description": "the id of the article whose comment is being replied to",
+              "required": true
+            },
+            {
+              "in": "params",
+              "name": "commentId",
+              "description": "the id of the comment being replied to",
+              "required": true
+            }
+          ],
           "responses": {
             "201": {
               "description": "Returns a 201 status code on success"
@@ -696,21 +744,25 @@
       },
       "/api/v1/articles/{articleId}/comments/{commentId}": {
         "put": {
-          "tags": [ "Comment" ],
+          "tags": [
+            "Comment"
+          ],
           "summary": "This route handles updating of comments.",
           "description": "Returns a confirmation and the new update made to the comment",
-          "parameters": [{
-            "in": "params",
-            "name": "articleId",
-            "description": "the id of the article whose comment is being updated",
-            "required": true
-          },
-          {
-            "in": "params",
-            "name": "commentId",
-            "description": "the id of the comment being updated",
-            "required": true
-          }],
+          "parameters": [
+            {
+              "in": "params",
+              "name": "articleId",
+              "description": "the id of the article whose comment is being updated",
+              "required": true
+            },
+            {
+              "in": "params",
+              "name": "commentId",
+              "description": "the id of the comment being updated",
+              "required": true
+            }
+          ],
           "responses": {
             "201": {
               "description": "Returns a 201 status code on success"
@@ -729,27 +781,31 @@
       },
       "/api/v1/articles/{articleId}/comments/{commentId}/reply/{replyId}": {
         "put": {
-          "tags": [ "Comment" ],
+          "tags": [
+            "Comment"
+          ],
           "summary": "This route handles updating of replies.",
           "description": "Returns a confirmation and the new update made to the reply",
-          "parameters": [{
-            "in": "params",
-            "name": "articleId",
-            "description": "the id of the article of the comment whose reply is being updated",
-            "required": true
-          },
-          {
-            "in": "params",
-            "name": "commentId",
-            "description": "the id of the comment whose reply is being updated",
-            "required": true
-          },
-          {
-            "in": "params",
-            "name": "replyId",
-            "description": "the id of the reply being updated",
-            "required": true
-          }],
+          "parameters": [
+            {
+              "in": "params",
+              "name": "articleId",
+              "description": "the id of the article of the comment whose reply is being updated",
+              "required": true
+            },
+            {
+              "in": "params",
+              "name": "commentId",
+              "description": "the id of the comment whose reply is being updated",
+              "required": true
+            },
+            {
+              "in": "params",
+              "name": "replyId",
+              "description": "the id of the reply being updated",
+              "required": true
+            }
+          ],
           "responses": {
             "201": {
               "description": "Returns a 201 status code on success"
@@ -768,10 +824,13 @@
       },
       "/api/v1/articles/:articleId/report": {
         "post": {
-          "tags": ["Articles"],
+          "tags": [
+            "Articles"
+          ],
           "summary": "Report an article that violates our policies",
           "description": "This endpoint enables users report violating articles by specifying what violation was made.",
-          "parameters": [{
+          "parameters": [
+            {
               "in": "headers",
               "name": "authentication",
               "description": "The authentication token",
@@ -811,15 +870,17 @@
         ],
         "summary": "Route for authenticated users to post comments on an article",
         "description": "Returns the user and the user's comment",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "comment object to be returned when a user makes a post request",
-          "required": true,
-          "schema": {
-            "$ref": "#/definitions/Comment"
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "comment object to be returned when a user makes a post request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Comment"
+            }
           }
-        }],
+        ],
         "responses": {
           "201": {
             "description": "Comment posted successfully"
@@ -840,7 +901,8 @@
         ],
         "summary": "Route for authenticated users to rate articles",
         "description": "Returns the new average rating of the article",
-        "parameters": [{
+        "parameters": [
+          {
             "in": "body",
             "name": "body",
             "description": "object containing the rating given to this article",
@@ -888,7 +950,8 @@
         ],
         "summary": "Route for authenticated users to report articles",
         "description": "Returns a message on the status of the case",
-        "parameters": [{
+        "parameters": [
+          {
             "in": "body",
             "name": "body",
             "description": "object containing the violation details of the article",
@@ -936,7 +999,8 @@
         ],
         "summary": "Route for authenticated users to get reported cases",
         "description": "Returns a list of cases for specified or all articles",
-        "parameters": [{
+        "parameters": [
+          {
             "in": "query",
             "name": "a",
             "description": "The ids of the article cases to be searched",
@@ -970,7 +1034,9 @@
     },
     "/api/v1/articles/search?{query}": {
       "post": {
-        "tags": [ "Articles" ],
+        "tags": [
+          "Articles"
+        ],
         "summary": "Route for authenticated users to post comments on an article",
         "description": "Returns the user and the user's comment",
         "parameters": [
@@ -996,7 +1062,9 @@
     },
     "/api/v1/articles": {
       "post": {
-        "tags": [ "Articles" ],
+        "tags": [
+          "Articles"
+        ],
         "summary": "Allows user to create and publish articles",
         "description": "This gives user the ability to create and publish articles with support for images",
         "consumes": [
@@ -1058,7 +1126,9 @@
         }
       },
       "get": {
-        "tags": [ "Articles" ],
+        "tags": [
+          "Articles"
+        ],
         "summary": "Pagination support for getting articles",
         "description": "Allows users to specify the number of articles they want to view within a specified limit",
         "consumes": [
@@ -1105,7 +1175,9 @@
     },
     "/api/v1/roles": {
       "get": {
-        "tags": [ "Roles" ],
+        "tags": [
+          "Roles"
+        ],
         "summary": "Route for getting all the roles",
         "description": "Returns all the roles of created",
         "parameters": [
@@ -1126,7 +1198,9 @@
         }
       },
       "post": {
-        "tags": [ "Roles" ],
+        "tags": [
+          "Roles"
+        ],
         "summary": "Route for adding a new role",
         "description": "Returns the new role added",
         "parameters": [
@@ -1159,7 +1233,9 @@
         }
       },
       "put": {
-        "tags": [ "Roles" ],
+        "tags": [
+          "Roles"
+        ],
         "summary": "Route for editing a role",
         "description": "Returns the edited role",
         "parameters": [
@@ -1194,6 +1270,31 @@
           },
           "409": {
             "description": "Role already exits"
+          }
+        }
+      }
+    },
+    "/api/v1/articles/featured": {
+      "get": {
+        "tags": [
+          "Articles"
+        ],
+        "summary": "Returns featured articles for the week",
+        "description": "This endpoint returns top most rated articles for a week",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "The number of featured articles you want to have access to",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Articles returned successfully",
+            "schema": {
+              "$ref": "#/definitions/ArticlesResponseBody"
+            }
           }
         }
       }
@@ -1498,16 +1599,18 @@
           "properties": {
             "cases": {
               "type": "array",
-              "example": [{
-                "id": 1,
-                "userId": 5,
-                "articleId": 1,
-                "violation": "Sexual Content",
-                "description": "It is very erotic",
-                "resolved": false,
-                "createdAt": "2018-09-15T19:32:36.164Z",
-                "updatedAt": "2018-09-15T19:32:36.164Z"
-              }]
+              "example": [
+                {
+                  "id": 1,
+                  "userId": 5,
+                  "articleId": 1,
+                  "violation": "Sexual Content",
+                  "description": "It is very erotic",
+                  "resolved": false,
+                  "createdAt": "2018-09-15T19:32:36.164Z",
+                  "updatedAt": "2018-09-15T19:32:36.164Z"
+                }
+              ]
             }
           }
         }
@@ -1535,130 +1638,133 @@
         }
       }
     },
-		"ArticleRequestBody": {
-			"type": "object",
-			"properties": {
-				"title": {
-					"type": "string",
-					"example": "How the Metis ruled the world"
-				},
-				"slug": {
-					"type": "string",
-					"example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
-				},
-				"description": {
-					"type": "string",
-					"example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
-				},
-				"body": {
-					"type": "string",
-					"example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
-				},
-				"image": {
-					"type": "string",
-					"example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
-				}
-			}
-		},
-		"ArticleResponseBody": {
-			"type": "object",
-			"properties": {
-				"title": {
-					"type": "string",
-					"example": "How the Metis ruled the world"
-				},
-				"slug": {
-					"type": "string",
-					"example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
-				},
-				"description": {
-					"type": "string",
-					"example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
-				},
-				"body": {
-					"type": "string",
-					"example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
-				},
-				"image": {
-					"type": "string",
-					"example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
-				},
-				"createdAt": {
-					"type": "string",
-					"format": "datetime",
-					"example": "2018-09-05T00:00:00.000Z"
-				},
-				"updatedAt": {
-					"type": "string",
-					"format": "datetime",
-					"example": "2018-09-05T00:00:00.000Z"
-				}
-			}
-		},
-		"ArticlesResponseBody": {
-			"type": "object",
-			"properties": {
-				"status": {
-					"type": "string",
-					"example": "success"
-				},
-				"data": {
-					"type": "object",
-					"properties": {
-						"articles": {
-							"type": "array",
-							"items": {
-								"$ref" : "#/definitions/ArticleResponseBody"
-							}
-						},
-						"currentPage": {
-							"type": "integer",
-							"example": 1
-						}
-					}
-				}
-			}
-			},
-		"Update": {
-			"type": "object",
-			"properties": {
-				"firstname": {
-					"type": "string",
-					"example": "joe"
-				},
-				"lastname": {
-					"type": "string",
-					"example": "easy"
-				},
-				"username": {
-					"type": "string",
-					"example": "metis"
-				},
-				"email": {
-					"type": "string",
-					"example": "metis@gmail.com"
-				},
-				"password": {
-					"type": "string",
-					"example": "password"
-				},
-				"bio": {
-					"type": "string",
-					"example": "Here is a brief information about me"
-				},
-				"interest": {
-					"type": "array",
-					"example": ["gaming", "entreprenuership"]
-				}
-			},
-			"json": {
-				"name": "User"
-			}
-		},
-		"userId": {
-			"type": "number",
-			"example": 1
-		}
+    "ArticleRequestBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "How the Metis ruled the world"
+        },
+        "slug": {
+          "type": "string",
+          "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+        },
+        "description": {
+          "type": "string",
+          "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+        },
+        "body": {
+          "type": "string",
+          "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+        },
+        "image": {
+          "type": "string",
+          "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+        }
+      }
+    },
+    "ArticleResponseBody": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "How the Metis ruled the world"
+        },
+        "slug": {
+          "type": "string",
+          "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+        },
+        "description": {
+          "type": "string",
+          "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+        },
+        "body": {
+          "type": "string",
+          "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+        },
+        "image": {
+          "type": "string",
+          "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "datetime",
+          "example": "2018-09-05T00:00:00.000Z"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "datetime",
+          "example": "2018-09-05T00:00:00.000Z"
+        }
+      }
+    },
+    "ArticlesResponseBody": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "articles": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ArticleResponseBody"
+              }
+            },
+            "currentPage": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        }
+      }
+    },
+    "Update": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string",
+          "example": "joe"
+        },
+        "lastname": {
+          "type": "string",
+          "example": "easy"
+        },
+        "username": {
+          "type": "string",
+          "example": "metis"
+        },
+        "email": {
+          "type": "string",
+          "example": "metis@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password"
+        },
+        "bio": {
+          "type": "string",
+          "example": "Here is a brief information about me"
+        },
+        "interest": {
+          "type": "array",
+          "example": [
+            "gaming",
+            "entreprenuership"
+          ]
+        }
+      },
+      "json": {
+        "name": "User"
+      }
+    },
+    "userId": {
+      "type": "number",
+      "example": 1
+    }
   },
   "roles": {
     "type": "object",
@@ -1669,7 +1775,10 @@
       },
       "permissions": {
         "type": "array",
-        "example": ["read", "write"]
+        "example": [
+          "read",
+          "write"
+        ]
       }
     }
   },
@@ -1682,11 +1791,17 @@
       },
       "addPermissions": {
         "type": "array",
-        "example": ["read", "write"]
+        "example": [
+          "read",
+          "write"
+        ]
       },
       "removePermissions": {
         "type": "array",
-        "example": ["view users", "like"]
+        "example": [
+          "view users",
+          "like"
+        ]
       }
     }
   },

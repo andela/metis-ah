@@ -8,7 +8,7 @@ import auth from '../middleware/auth';
 import ratingValidation from '../middleware/ratingValidation';
 import inputValidator from '../middleware/inputValidator';
 import reportValidation from '../middleware/reportValidation';
-import usersValidations from '../middleware/usersValidations';
+
 import roleValidator from '../middleware/roleValidator';
 import checkParams from '../middleware/checkParams';
 import { multerUploads } from '../config/multer/multerConfig';
