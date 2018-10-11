@@ -4,18 +4,25 @@ import models from '../models';
 const { Articles, Users, ArticleLikes } = models;
 
 const GetAuthorsOfTheWeekHelpers = {
-  getThisWeekSunday: (date) => {
-    const today = new Date(date);
+  getThisWeekSunday: () => {
+    const today = new Date();
     const todaysDay = today.getDay();
     const todaysDate = today.getDate();
-    return new Date(today.setDate(todaysDate - todaysDay)).getTime();
+    return new Date(today.setDate(todaysDate - todaysDay)).toLocaleDateString();
   },
-  getArticlesAndLikesCountForTheWeek: () => {
+  getArticlesAndLikesCountForTheWeek: (popular) => {
     const { getThisWeekSunday } = GetAuthorsOfTheWeekHelpers;
-    const today = new Date();
+    const where = popular ? {} : { createdAt: { [Op.gte]: getThisWeekSunday() } };
 
     return Articles.findAll({
-      attributes: ['id', 'userId', [fn('count', col('articleLikes.liked')), 'likesCount']],
+      attributes: [
+        'id',
+        'title',
+        'imageUrl',
+        'createdAt',
+        'userId',
+        [fn('count', col('articleLikes.liked')), 'likesCount']
+      ],
       include: [
         {
           model: ArticleLikes,
@@ -27,7 +34,7 @@ const GetAuthorsOfTheWeekHelpers = {
           attributes: ['firstname', 'lastname', 'image']
         },
       ],
-      where: { createdAt: { [Op.gte]: getThisWeekSunday(today) } },
+      where,
       group: ['Articles.id', 'User.id'],
       order: [[col('likesCount'), 'DESC']]
     });
@@ -61,6 +68,28 @@ const GetAuthorsOfTheWeekHelpers = {
     // Extract first 4 details and push to new array
     result.every(selectAuthors);
     return authors;
+  },
+  getPopularArticles: (result) => {
+    const popularArticles = [];
+
+    const selectArticles = (article) => {
+      if (popularArticles.length === 10) return false;
+
+      const {
+        id, title, imageUrl, createdAt, likesCount, userId, User: { firstname, lastname, image }
+      } = article.dataValues;
+
+      const newResultObject = {
+        id, title, imageUrl, createdAt, likesCount, userId, firstname, lastname, image
+      };
+
+      popularArticles.push(newResultObject);
+      return true;
+    };
+
+    // Extract first 4 details and push to new array
+    result.every(selectArticles);
+    return popularArticles;
   }
 };
 

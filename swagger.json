@@ -1321,6 +1321,27 @@
       }
     }
   },
+  "/api/v1/articles/popular": {
+    "get": {
+      "tags": [ "Articles" ],
+      "summary": "Returns atmost five (5) most popular artilces for the week.",
+      "description": "Articles created in the current week but, without likes, may be returned if liked articles are not up to five.",
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Operation successfully",
+          "schema": {
+            "$ref": "#/definitions/authors-of-the-week"
+          }
+        },
+        "500": {
+          "description": "Internal server error"
+        }
+      }
+    }
+  },
   "definitions": {
     "signin": {
       "type": "object",
@@ -1638,67 +1659,161 @@
         }
       }
     },
-    "ArticleRequestBody": {
+		"ArticleRequestBody": {
+			"type": "object",
+			"properties": {
+				"title": {
+					"type": "string",
+					"example": "How the Metis ruled the world"
+				},
+				"slug": {
+					"type": "string",
+					"example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+				},
+				"description": {
+					"type": "string",
+					"example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+				},
+				"body": {
+					"type": "string",
+					"example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+				},
+				"image": {
+					"type": "string",
+					"example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+				}
+			}
+		},
+		"ArticleResponseBody": {
+			"type": "object",
+			"properties": {
+				"title": {
+					"type": "string",
+					"example": "How the Metis ruled the world"
+				},
+				"slug": {
+					"type": "string",
+					"example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+				},
+				"description": {
+					"type": "string",
+					"example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
+				},
+				"body": {
+					"type": "string",
+					"example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
+				},
+				"image": {
+					"type": "string",
+					"example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+				},
+				"createdAt": {
+					"type": "string",
+					"format": "datetime",
+					"example": "2018-09-05T00:00:00.000Z"
+				},
+				"updatedAt": {
+					"type": "string",
+					"format": "datetime",
+					"example": "2018-09-05T00:00:00.000Z"
+				}
+			}
+		},
+		"ArticlesResponseBody": {
+			"type": "object",
+			"properties": {
+				"status": {
+					"type": "string",
+					"example": "success"
+				},
+				"data": {
+					"type": "object",
+					"properties": {
+						"articles": {
+							"type": "array",
+							"items": {
+								"$ref" : "#/definitions/ArticleResponseBody"
+							}
+						},
+						"currentPage": {
+							"type": "integer",
+							"example": 1
+						}
+					}
+				}
+			}
+		},
+		"Update": {
+			"type": "object",
+			"properties": {
+				"firstname": {
+					"type": "string",
+					"example": "joe"
+				},
+				"lastname": {
+					"type": "string",
+					"example": "easy"
+				},
+				"username": {
+					"type": "string",
+					"example": "metis"
+				},
+				"email": {
+					"type": "string",
+					"example": "metis@gmail.com"
+				},
+				"password": {
+					"type": "string",
+					"example": "password"
+				},
+				"bio": {
+					"type": "string",
+					"example": "Here is a brief information about me"
+				},
+				"interest": {
+					"type": "array",
+					"example": ["gaming", "entreprenuership"]
+				}
+			},
+			"json": {
+				"name": "User"
+			}
+		},
+		"userId": {
+			"type": "number",
+			"example": 1
+		},
+    "roles": {
       "type": "object",
       "properties": {
-        "title": {
+        "role": {
           "type": "string",
-          "example": "How the Metis ruled the world"
+          "example": "reader"
         },
-        "slug": {
-          "type": "string",
-          "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
-        },
-        "description": {
-          "type": "string",
-          "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
-        },
-        "body": {
-          "type": "string",
-          "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
-        },
-        "image": {
-          "type": "string",
-          "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
+        "permissions": {
+          "type": "array",
+          "example": ["read", "write"]
         }
       }
     },
-    "ArticleResponseBody": {
+    "roles1": {
       "type": "object",
       "properties": {
-        "title": {
+        "role": {
           "type": "string",
-          "example": "How the Metis ruled the world"
+          "example": "reader"
         },
-        "slug": {
-          "type": "string",
-          "example": "How-the-Metis-ruled-the-world-89043hjk54b325bj42j234093hh3e"
+        "addPermissions": {
+          "type": "array",
+          "example": ["read", "write"]
         },
-        "description": {
-          "type": "string",
-          "example": "How the metis ruled the world is an article that will open your mind and show you the might power of team work. Enjoy"
-        },
-        "body": {
-          "type": "string",
-          "example": "Quisque accumsan ngue sed, scelerisque ut turpis. Mauris ut ornare erat. Duis hendrerit massa urna, ut pretium ante porttitor eget. Sed quam urna, euismod vel massa at, tempor consequat leo. Quisque nec felis ac ante luctus tincidunt. Sed rutrum orci sit amet orci ultrices"
-        },
-        "image": {
-          "type": "string",
-          "example": "http://res.cloudinary.com/demo/image/upload/v1473596672/eneivicys42bq5f2jpn2.jpg"
-        },
-        "createdAt": {
-          "type": "string",
-          "format": "datetime",
-          "example": "2018-09-05T00:00:00.000Z"
-        },
-        "updatedAt": {
-          "type": "string",
-          "format": "datetime",
-          "example": "2018-09-05T00:00:00.000Z"
+        "removePermissions": {
+          "type": "array",
+          "example": ["view users", "like"]
         }
       }
     },
-    "ArticlesResponseBody": {
+    "authors-of-the-week": {
       "type": "object",
       "properties": {
         "status": {
@@ -1708,142 +1823,36 @@
         "data": {
           "type": "object",
           "properties": {
-            "articles": {
+            "authors": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/ArticleResponseBody"
-              }
-            },
-            "currentPage": {
-              "type": "integer",
-              "example": 1
-            }
-          }
-        }
-      }
-    },
-    "Update": {
-      "type": "object",
-      "properties": {
-        "firstname": {
-          "type": "string",
-          "example": "joe"
-        },
-        "lastname": {
-          "type": "string",
-          "example": "easy"
-        },
-        "username": {
-          "type": "string",
-          "example": "metis"
-        },
-        "email": {
-          "type": "string",
-          "example": "metis@gmail.com"
-        },
-        "password": {
-          "type": "string",
-          "example": "password"
-        },
-        "bio": {
-          "type": "string",
-          "example": "Here is a brief information about me"
-        },
-        "interest": {
-          "type": "array",
-          "example": [
-            "gaming",
-            "entreprenuership"
-          ]
-        }
-      },
-      "json": {
-        "name": "User"
-      }
-    },
-    "userId": {
-      "type": "number",
-      "example": 1
-    }
-  },
-  "roles": {
-    "type": "object",
-    "properties": {
-      "role": {
-        "type": "string",
-        "example": "reader"
-      },
-      "permissions": {
-        "type": "array",
-        "example": [
-          "read",
-          "write"
-        ]
-      }
-    }
-  },
-  "roles1": {
-    "type": "object",
-    "properties": {
-      "role": {
-        "type": "string",
-        "example": "reader"
-      },
-      "addPermissions": {
-        "type": "array",
-        "example": [
-          "read",
-          "write"
-        ]
-      },
-      "removePermissions": {
-        "type": "array",
-        "example": [
-          "view users",
-          "like"
-        ]
-      }
-    }
-  },
-  "authors-of-the-week": {
-    "type": "object",
-    "properties": {
-      "status": {
-        "type": "string",
-        "example": "success"
-      },
-      "data": {
-        "type": "object",
-        "properties": {
-          "authors": {
-            "type": "array",
-            "items": {
-              "author": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "integer",
-                    "example": "1"
-                  },
-                  "likesCount": {
-                    "type": "integer",
-                    "example": "2343"
-                  },
-                  "userId": {
-                    "type": "integer",
-                    "example": "2"
-                  },
-                  "firstname": {
-                    "type": "string",
-                    "example": "John"
-                  },
-                  "lastname": {
-                    "type": "string",
-                    "example": "Doe"
-                  },
-                  "image": {
-                    "type": "string",
-                    "example": "https://someimgurl.com"
+                "author": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "example": "1"
+                    },
+                    "likesCount": {
+                      "type": "integer",
+                      "example": "2343"
+                    },
+                    "userId": {
+                      "type": "integer",
+                      "example": "2"
+                    },
+                    "firstname": {
+                      "type": "string",
+                      "example": "John"
+                    },
+                    "lastname": {
+                      "type": "string",
+                      "example": "Doe"
+                    },
+                    "image": {
+                      "type": "string",
+                      "example": "https://someimgurl.com"
+                    }
                   }
                 }
               }

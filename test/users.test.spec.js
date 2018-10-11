@@ -135,7 +135,7 @@ describe('Checks the validity of the user', () => {
         expect(res).to.have.status(200);
         expect(res.body.data.message).to.equal('User details');
         expect(res.body.data.user.firstname).to.equal('John');
-        expect(res.body.data.user.lastname).to.equal('Doe');
+        expect(res.body.data.user.lastname).to.equal('Obi');
         expect(res.body.data.user.bio).to.equal('I like to eat');
         assert.isObject(res.body, 'is an object containing the user details');
         done();
