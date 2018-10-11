@@ -8,11 +8,11 @@ const articleLikes = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    like: {
+    liked: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    dislike: {
+    disliked: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     }

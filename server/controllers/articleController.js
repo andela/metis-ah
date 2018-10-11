@@ -70,10 +70,10 @@ const articlesController = {
    */
   like: (req, res) => {
     // Check the params passed by user to determine what function to be performed
-    const like = req.params.likeType === 'like';
-    const dislike = req.params.likeType === 'dislike';
+    const liked = req.params.likeType === 'like';
+    const disliked = req.params.likeType === 'dislike';
     // message to be sent to user depending on function performed
-    const message = like || dislike ? `you ${req.params.likeType}d the article`
+    const message = liked || disliked ? `you ${req.params.likeType}d the article`
       : 'you unliked the article';
     ArticleLikes
       .findOrCreate({
@@ -82,14 +82,14 @@ const articlesController = {
           articleId: Number(req.params.articleId)
         },
         defaults: {
-          like,
-          dislike
+          liked,
+          disliked
         }
       })
       .spread((data, created) => {
         if (!created) {
-          data.like = like;
-          data.dislike = dislike;
+          data.like = liked;
+          data.dislike = disliked;
           data.save().catch(err => res.status(500).jsend.error({
             message: 'Request could not be processed',
             error: err.message
