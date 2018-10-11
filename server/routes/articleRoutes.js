@@ -21,7 +21,8 @@ const {
   rateArticle,
   create,
   like,
-  getArticles
+  getArticles,
+  getFeaturedArticles
 } = articleController;
 const { addComment, updateComment, updateReply } = commentController;
 const {
@@ -114,8 +115,7 @@ articleRoutes.post(
   reportArticle
 );
 
-
-
 articleRoutes.get('/search', searchController);
+articleRoutes.get('/featured', getFeaturedArticles);
 
 export default articleRoutes;
