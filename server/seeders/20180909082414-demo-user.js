@@ -6,6 +6,7 @@ module.exports = {
     email: 'john.doe@ah.com',
     password: bcrypt.hashSync('johnDSoe', 8),
     isVerified: true,
+    roleId: 1,
     interests: ['Dancing', 'Java'],
     createdAt: '2018-09-09',
     updatedAt: '2018-09-09'
@@ -14,6 +15,7 @@ module.exports = {
     email: 'john.stone@ah.com',
     password: bcrypt.hashSync('johnSSoe', 8),
     isVerified: true,
+    roleId: 1,
     interests: ['Dancing', 'Java'],
     createdAt: '2018-09-09',
     updatedAt: '2018-09-09'
@@ -22,6 +24,7 @@ module.exports = {
     email: 'john.james@ah.com',
     password: bcrypt.hashSync('johnJJoe', 8),
     isVerified: true,
+    roleId: 1,
     interests: ['Dancing', 'Java'],
     createdAt: '2018-09-09',
     updatedAt: '2018-09-09'

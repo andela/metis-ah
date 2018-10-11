@@ -39,6 +39,7 @@ node_modules
 
 # packages
 package-lock.json
+yarn.lock
 
 # environmental variables
 .env

@@ -1,4 +1,4 @@
-
+import { Op } from 'sequelize';
 import slug from 'slug';
 import uuid from 'uuid-random';
 import ratingHelpers from '../helpers/ratingHelpers';
@@ -12,7 +12,8 @@ const {
   Articles,
   Ratings,
   ArticleLikes,
-  Tags
+  Tags,
+  Categories
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -179,10 +180,28 @@ const articlesController = {
     // CALCULATE OFFSET
     const offset = ((queryParams.page - 1) * queryParams.limit);
     Articles.findAndCountAll({
+      include: [
+        {
+          model: Categories,
+          as: 'category',
+          attributes: ['id', 'name'],
+          where: {
+            name: {
+              [Op.iLike]: `${req.query.category}`
+            }
+          }
+        }
+      ],
       offset,
       limit: queryParams.limit
     }).then((result) => {
       const totalPages = Math.ceil(result.count / queryParams.limit);
+
+      if (req.query.category && result.rows.length < 1) {
+        return res.status(404).jsend.fail({
+          message: `${req.query.category} has no articles`
+        });
+      }
 
       return res.status(200).jsend.success({
         message: 'Operation Successful',
@@ -194,7 +213,10 @@ const articlesController = {
           totalPages
         }
       });
-    });
+    }).catch(err => res.status(500).jsend.fail({
+      message: 'Something, went wrong. please try again',
+      error: err.message
+    }));
   }
 };
 

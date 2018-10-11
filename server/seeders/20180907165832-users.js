@@ -4,6 +4,7 @@ module.exports = {
     email: 'postman@gmail.com',
     password: '$2b$08$Oei0G0AOs5ZflnVQorfW3evz2a.L3IHKWQVaNd0OP0mTUPS2NEfPq',
     isVerified: true,
+    roleId: 1,
     createdAt: '2018-09-08',
     updatedAt: '2018-09-08'
   },
@@ -12,6 +13,7 @@ module.exports = {
     email: 'postman2@gmail.com',
     password: '$2b$08$Oei0G0AOs5ZflnVQorfW3evz2a.L3IHKWQVaNd0OP0mTUPS2NEfPq',
     isVerified: false,
+    roleId: 1,
     createdAt: '2018-09-08',
     updatedAt: '2018-09-08'
   },
@@ -25,6 +27,7 @@ module.exports = {
     image: 'someimgurl',
     premium: true,
     isVerified: true,
+    roleId: 1,
     interests: ['Entertainment', 'Science'],
     createdAt: '2018-09-05',
     updatedAt: '2018-09-05'

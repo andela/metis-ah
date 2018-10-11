@@ -211,4 +211,30 @@ describe('Articles likes test', () => {
         done();
       });
   });
+
+  it('should return articles in a category', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?category=Fashion')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.articles[0].category.name).to.equal('Fashion');
+        done();
+      });
+  });
+
+  it('should return category does not have articles', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles?category=HISTORY')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data.message).to.equal('HISTORY has no articles');
+        done();
+      });
+  });
 });

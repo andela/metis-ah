@@ -956,6 +956,13 @@
             "description": "this indicates the current page number for viewing articles",
             "required": false,
             "type": "number"
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "description": "This is the category of the articles being queried for",
+            "required": false,
+            "type": "string"
           }
         ],
         "responses": {
