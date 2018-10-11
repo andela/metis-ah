@@ -7,8 +7,9 @@ const { should } = chai;
 should();
 
 let token;
+const content = 56743;
 
-describe('Tests for Comments', () => {
+describe('Tests for Comments and Replies', () => {
   describe('Create comment tests', () => {
     before((done) => {
       chai
@@ -28,7 +29,7 @@ describe('Tests for Comments', () => {
     it('User should not be able to comment if not authenticated', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .send({
           content: 'Your post was not inspiring.'
         })
@@ -42,7 +43,7 @@ describe('Tests for Comments', () => {
     it('User should receive an error if authentication fails', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .set('Authorization', '8beccb8ef75986c7096888907ddf4165889255315b67be782a3333eeeeee')
         .send({
           content: 'Your post was not inspiring.'
@@ -57,14 +58,28 @@ describe('Tests for Comments', () => {
     it('It should fail if comment is empty', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .set('Authorization', token)
         .send({
           content: ''
         })
         .end((err, res) => {
           res.body.status.should.equal('fail');
-          res.body.data.should.equal('Comment is empty');
+          res.body.data.messages[0].should.equal('Please provide content');
+          done();
+        });
+    });
+    it('It should fail if comment is not a string', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles/1/comments')
+        .set('Authorization', token)
+        .send({
+          content
+        })
+        .end((err, res) => {
+          res.body.status.should.equal('fail');
+          res.body.data.should.equal('Comment must be a string');
           done();
         });
     });
@@ -72,7 +87,7 @@ describe('Tests for Comments', () => {
     it('It should return an object containing a user and a comment object', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/1')
+        .post('/api/v1/articles/1/comments')
         .set('Authorization', token)
         .send({
           content: 'Your post was not inspiring.'
@@ -84,10 +99,10 @@ describe('Tests for Comments', () => {
         });
     });
 
-    it('It should fail is article does not exist', (done) => {
+    it('It should fail if article does not exist', (done) => {
       chai
         .request(app)
-        .post('/api/v1/articles/13431')
+        .post('/api/v1/articles/13431/comments')
         .set('Authorization', token)
         .send({
           content: 'Your post was not inspiring.'
@@ -95,6 +110,22 @@ describe('Tests for Comments', () => {
         .end((err, res) => {
           res.body.status.should.equal('fail');
           res.body.data.message.should.equal('Article not found');
+          done();
+        });
+    });
+  });
+  describe('Create reply tests', () => {
+    it('It should return an object containing a user and a comment object', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles/1/comments/1/reply')
+        .set('Authorization', token)
+        .send({
+          content: 'Just let the comment be, please.'
+        })
+        .end((err, res) => {
+          res.body.data.should.have.property('user');
+          res.body.data.comment.content.should.equal('Just let the comment be, please.');
           done();
         });
     });

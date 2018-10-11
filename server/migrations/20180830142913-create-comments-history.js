@@ -1,5 +1,5 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('Replies', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('CommentHistory', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -7,12 +7,8 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     content: {
-      type: Sequelize.TEXT,
+      type: Sequelize.STRING,
       allowNull: false
-    },
-    edited: {
-      type: Sequelize.BOOLEAN,
-      defaultValue: false
     },
     commentId: {
       type: Sequelize.INTEGER,
@@ -21,15 +17,6 @@ module.exports = {
         model: 'Comments',
         key: 'id',
         as: 'commentId'
-      }
-    },
-    userId: {
-      type: Sequelize.INTEGER,
-      onDelete: 'CASCADE',
-      references: {
-        model: 'Users',
-        key: 'id',
-        as: 'userId'
       }
     },
     createdAt: {
@@ -41,5 +28,5 @@ module.exports = {
       type: Sequelize.DATE
     }
   }, { freezeTableName: true }),
-  down: queryInterface => queryInterface.dropTable('Replies')
+  down: queryInterface => queryInterface.dropTable('CommentHistory')
 };

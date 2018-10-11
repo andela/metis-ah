@@ -150,7 +150,7 @@ describe('Articles likes test', () => {
   it('should return Invalid likeType', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/adam')
+      .post('/api/v1/articles/1/like/adam')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -163,7 +163,7 @@ describe('Articles likes test', () => {
   it('should return Invalid likeType', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/a/like')
+      .post('/api/v1/articles/a/like/like')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -176,7 +176,7 @@ describe('Articles likes test', () => {
   it('should return you liked the article', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/like')
+      .post('/api/v1/articles/1/like/like')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -189,7 +189,7 @@ describe('Articles likes test', () => {
   it('should return you unliked the article', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/unlike')
+      .post('/api/v1/articles/1/like/unlike')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
@@ -202,7 +202,7 @@ describe('Articles likes test', () => {
   it('should return you article not found', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/100/unlike')
+      .post('/api/v1/articles/100/like/unlike')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {

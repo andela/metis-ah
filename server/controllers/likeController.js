@@ -1,7 +1,8 @@
 import models from '../models/index';
-import liker from '../helpers/liker';
+import commentHelpers from '../helpers/commentHelpers';
 
 const { CommentLikes, ReplyLikes } = models;
+const { liker } = commentHelpers;
 
 const likeController = (req, res) => {
   const { id, type } = req.body;
