@@ -245,7 +245,8 @@ module.exports = {
     imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446190/environment.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 30)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
-  }], {}),
+  }
+  ], {}),
 
   down: queryInterface => queryInterface.bulkDelete('Articles')
 };

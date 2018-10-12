@@ -7,7 +7,16 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     name: {
-      type: Sequelize.STRING
+      type: Sequelize.STRING,
+      unique: true
+    },
+    poster: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    description: {
+      type: Sequelize.TEXT,
+      allowNull: false
     },
     poster: {
       type: Sequelize.STRING,

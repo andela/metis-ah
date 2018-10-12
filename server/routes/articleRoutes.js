@@ -83,6 +83,9 @@ articleRoutes.put(
   updateReply
 );
 // Like comment
+// POST ARTICLE ROUTE
+articleRoutes.get('/', paginationParamsValidations, getArticles);
+articleRoutes.post('/:articleId', validArticleId, validateComments, addComment);
 articleRoutes.post(
   '/:articleId/comments/like',
   auth,
@@ -103,8 +106,9 @@ articleRoutes.post(
   rateArticle
 );
 
-articleRoutes.post('/', auth, multerUploads, validateArticle, create);
-articleRoutes.post('/:articleId/like/:likeType', auth, checkParams.id, checkParams.likeType, like);
+articleRoutes.post('/', auth, multerUploads, validateArticle, isUser, create);
+articleRoutes.post('/:articleId/like/:likeType', auth, checkParams.id, checkParams.likeType, isUser, like);
+
 articleRoutes.post(
   '/:articleId/report/cases',
   auth,

@@ -51,6 +51,5 @@ module.exports = {
     createdAt: '2018-09-05',
     updatedAt: '2018-09-05'
   }]),
-
   down: queryInterface => queryInterface.bulkDelete('Users')
 };

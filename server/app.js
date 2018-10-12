@@ -14,10 +14,13 @@ import caseRoutes from './routes/caseRoutes';
 import tagRoute from './routes/tagRoutes';
 import roleRoutes from './routes/roleRoutes';
 import authorRoutes from './routes/authorRoutes';
+import categoryRoute from './routes/categoryRoutes';
 
 dotenv.config();
 const app = express();
-const urlencoded = bodyParser.urlencoded({ extended: false });
+const urlencoded = bodyParser.urlencoded({
+  extended: false
+});
 const json = bodyParser.json();
 const port = parseInt(process.env.PORT, 10) || 8000;
 
@@ -32,7 +35,9 @@ app.use(urlencoded);
 app.use(json);
 app.use(jsend.middleware);
 
-app.use(expressSession({ secret: process.env.SECRET }));
+app.use(expressSession({
+  secret: process.env.SECRET
+}));
 app.use(passportSetup.initialize());
 app.use(passportSetup.session());
 
@@ -44,6 +49,7 @@ app.use('/api/v1/cases', caseRoutes);
 app.use('/api/v1/tags', tagRoute);
 app.use('/api/v1/roles', roleRoutes);
 app.use('/api/v1/authors', authorRoutes);
+app.use('/api/v1/categories', categoryRoute);
 
 app.get('/', (req, res) => res.status(200).jsend.success({
   message: 'Welcome to the sims program'

@@ -186,23 +186,24 @@ const articlesController = {
     const queryParams = req.paginationQueryParams;
     // CALCULATE OFFSET
     const offset = ((queryParams.page - 1) * queryParams.limit);
-    Articles.findAndCountAll({
-      offset,
-      limit: queryParams.limit
-    }).then((result) => {
-      const totalPages = Math.ceil(result.count / queryParams.limit);
+    Articles
+      .findAndCountAll({
+        offset,
+        limit: queryParams.limit
+      }).then((result) => {
+        const totalPages = Math.ceil(result.count / queryParams.limit);
 
-      return res.status(200).jsend.success({
-        message: 'Operation Successful',
-        articles: result.rows,
-        metadata: {
-          totalArticles: result.count,
-          currentPage: queryParams.page,
-          limit: queryParams.limit,
-          totalPages
-        }
+        return res.status(200).jsend.success({
+          message: 'Operation Successful',
+          articles: result.rows,
+          metadata: {
+            totalArticles: result.count,
+            currentPage: queryParams.page,
+            limit: queryParams.limit,
+            totalPages
+          }
+        });
       });
-    });
   },
   /**
   * @desc get Featured Articles
