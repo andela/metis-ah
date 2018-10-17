@@ -17,31 +17,34 @@ const verifiedToken = generateToken(7200, { id: 2, isVerified: true, roleId: 2 }
 describe('Tests for Getting authors of the week', () => {
   describe('Unit Tests for GetAuthorsOfTheWeekHelpers functions', () => {
     it('getThisWeekSunday should return an integer greater than 1.5 trillion', () => {
-      expect(getThisWeekSunday(new Date())).to.be.above(1500000000000);
+      const today = new Date().getTime();
+      const weekStartDate = new Date(getThisWeekSunday()).getTime();
+      const diff = (today - weekStartDate) / 86400000;
+      expect(diff).to.be.below(7);
     });
     it('getArticlesAndLikesCountForTheWeek should return an array with length of 4', async () => {
       const result = await getArticlesAndLikesCountForTheWeek();
 
       assert.isArray(result);
-      expect(result).to.have.lengthOf(3);
+      expect(result).to.have.lengthOf.above(3);
     });
-    it('getAuthors should return an array with length of 3', async () => {
+    it('getAuthors should return an array with length of 4', async () => {
       const result = await getArticlesAndLikesCountForTheWeek();
       const authors = getAuthors(result);
 
       assert.isArray(authors);
-      expect(authors).to.have.lengthOf(2);
+      expect(authors).to.have.lengthOf(4);
     });
   });
   describe('Integration Tests for authors of the week', () => {
-    it('should return an array of length equal to 3', (done) => {
+    it('should return an array of length equal to 4', (done) => {
       chai
         .request(app)
         .get('/api/v1/authors/authors-of-the-week')
         .end((err, res) => {
           res.body.status.should.equal('success');
           res.body.data.authors.should.be.an('array');
-          res.body.data.authors.should.have.lengthOf(2);
+          res.body.data.authors.should.have.lengthOf(4);
           done();
         });
     });

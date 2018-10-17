@@ -23,6 +23,7 @@ const {
   like,
   getArticles,
   getFeaturedArticles,
+  getPopularArticlesForTheWeek
 } = articleController;
 const { addComment, updateComment, updateReply } = commentController;
 const {
@@ -101,8 +102,7 @@ articleRoutes.post(
   isUser,
   rateArticle
 );
-articleRoutes.post('/', auth, multerUploads, validateArticle, isUser, create);
-articleRoutes.post('/:articleId/:likeType', auth, checkParams.id, checkParams.likeType, isUser, like);
+
 articleRoutes.post('/', auth, multerUploads, validateArticle, create);
 articleRoutes.post('/:articleId/like/:likeType', auth, checkParams.id, checkParams.likeType, like);
 articleRoutes.post(
@@ -117,5 +117,6 @@ articleRoutes.post(
 
 articleRoutes.get('/search', searchController);
 articleRoutes.get('/featured', getFeaturedArticles);
+articleRoutes.get('/popular', getPopularArticlesForTheWeek);
 
 export default articleRoutes;

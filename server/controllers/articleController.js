@@ -7,9 +7,9 @@ import { dataUri } from '../config/multer/multerConfig';
 import imageUpload from '../helpers/imageUpload';
 import tagManager from '../helpers/tagManager';
 import getBeginningOfWeek from '../helpers/getBeginningOfWeek';
+import GetAuthorsOfTheWeekHelpers from '../helpers/GetAuthorsOfTheWeekHelpers';
 
 const { gte } = Op;
-
 const {
   Cases,
   Articles,
@@ -19,6 +19,10 @@ const {
   Categories
 } = models;
 const { analyseRatings } = ratingHelpers;
+
+const {
+  getArticlesAndLikesCountForTheWeek, getPopularArticles
+} = GetAuthorsOfTheWeekHelpers;
 
 /**
  * @desc This a controller object literal that handles
@@ -247,7 +251,19 @@ const articlesController = {
       }
     });
   },
+  getPopularArticlesForTheWeek: async (req, res) => {
+    try {
+      // Get results from the database
+      const result = await getArticlesAndLikesCountForTheWeek('popular');
+      const articles = getPopularArticles(result); // Get atmost 5 articles
 
+      return res.status(200).jsend.success({ articles });
+    } catch (error) {
+      return res.status(500).jsend.error(
+        'There was an error processing your request'
+      );
+    }
+  }
 };
 
 export default articlesController;

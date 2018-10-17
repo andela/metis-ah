@@ -1,5 +1,9 @@
 const now = new Date();
-
+const today = new Date(now);
+const weekStartDate = new Date(today.setDate(today.getDate() - today.getDay()));
+const weekstart = new Date(
+  weekStartDate.getFullYear(), weekStartDate.getMonth(), weekStartDate.getDate(), 1
+); // Add 1 hour
 
 module.exports = {
   up: queryInterface => queryInterface.bulkInsert('Articles', [{
@@ -13,6 +17,7 @@ module.exports = {
     Fusce hendrerit, nisi non pretium accumsan, velit ipsum tempus turpis, in ullamcorper nisi tortor sit amet nibh. Praesent id tortor erat. Praesent odio massa, congue eu commodo eu, fermentum eget nibh. Nulla eu tellus lectus. Nam sed pellentesque metus. Vestibulum odio nisl, efficitur blandit ipsum a, imperdiet vestibulum tortor. Nullam commodo nisi elit, eleifend pellentesque sem sagittis ut. Sed sit amet convallis lectus. Suspendisse a massa vitae sem iaculis finibus ut vel mauris. Praesent et viverra ex, non molestie lorem.`,
     userId: 4,
     categoryId: 1,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446192/pollution.jpg',
     rating: 1,
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 30)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
@@ -29,6 +34,7 @@ module.exports = {
     userId: 2,
     categoryId: 2,
     rating: 3,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/brain.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 30)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
   },
@@ -44,6 +50,7 @@ module.exports = {
     userId: 1,
     categoryId: 2,
     rating: 4,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446193/tech.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 30)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
   },
@@ -59,6 +66,7 @@ module.exports = {
     userId: 4,
     categoryId: 1,
     rating: 5,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/hero.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 20)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 20))
   },
@@ -74,8 +82,9 @@ module.exports = {
     userId: 2,
     categoryId: 2,
     rating: 2,
-    createdAt: new Date(now - (1000 * 60 * 60 * 24 * 3)),
-    updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 3))
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/making-money.jpg',
+    createdAt: weekstart,
+    updatedAt: weekstart
   },
   {
     slug: 'just-a-sample-article6',
@@ -89,8 +98,9 @@ module.exports = {
     userId: 1,
     categoryId: 2,
     rating: 5,
-    createdAt: new Date(now - (1000 * 60 * 60 * 24 * 4)),
-    updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 4))
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/learning.png',
+    createdAt: weekstart,
+    updatedAt: weekstart
   },
   {
     slug: 'just-a-sample-article7',
@@ -104,8 +114,9 @@ module.exports = {
     userId: 3,
     categoryId: 2,
     rating: 4,
-    createdAt: new Date(now - (1000 * 60 * 60 * 24)),
-    updatedAt: new Date(now - (1000 * 60 * 60 * 24))
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/family.jpg',
+    createdAt: weekstart,
+    updatedAt: weekstart
   },
   {
     slug: 'just-a-sample-article8',
@@ -119,8 +130,9 @@ module.exports = {
     userId: 4,
     categoryId: 1,
     rating: 1,
-    createdAt: new Date(now - (1000 * 60 * 60 * 24 * 8)),
-    updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 8))
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446190/environment.jpg',
+    createdAt: weekstart,
+    updatedAt: weekstart
   },
   {
     slug: 'just-a-sample-article9',
@@ -134,6 +146,7 @@ module.exports = {
     userId: 3,
     categoryId: 2,
     rating: 0,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/brain.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 10)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 10))
   },
@@ -149,6 +162,7 @@ module.exports = {
     userId: 4,
     categoryId: 2,
     rating: 4,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446190/environment.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 5)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 5))
   },
@@ -164,6 +178,7 @@ module.exports = {
     userId: 3,
     categoryId: 2,
     rating: 4,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446190/environment.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 10)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 10))
   },
@@ -179,6 +194,7 @@ module.exports = {
     userId: 4,
     categoryId: 2,
     rating: 5,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446193/tech.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 6)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 6))
   },
@@ -194,6 +210,7 @@ module.exports = {
     userId: 2,
     categoryId: 4,
     rating: 4,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446192/pollution.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 9)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 9))
   },
@@ -209,6 +226,7 @@ module.exports = {
     userId: 5,
     categoryId: 2,
     rating: 1,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446190/environment.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 8)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 8))
   },
@@ -224,6 +242,7 @@ module.exports = {
     userId: 1,
     categoryId: 2,
     rating: 5,
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446190/environment.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 30)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
   }], {}),
