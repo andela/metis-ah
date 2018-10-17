@@ -22,7 +22,7 @@ const {
   create,
   like,
   getArticles,
-  getFeaturedArticles
+  getFeaturedArticles,
 } = articleController;
 const { addComment, updateComment, updateReply } = commentController;
 const {
