@@ -246,7 +246,8 @@ const articlesController = {
         });
       }
     });
-  }
+  },
+
 };
 
 export default articlesController;

@@ -1,4 +1,9 @@
 import GetAuthorsOfTheWeekHelpers from '../helpers/GetAuthorsOfTheWeekHelpers';
+import models from '../models';
+import helpers from '../helpers/helpers';
+
+const { parsedId } = helpers;
+const { Articles } = models;
 
 const {
   getArticlesAndLikesCountForTheWeek, getAuthors
@@ -19,3 +24,36 @@ const authorController = async (req, res) => {
 };
 
 export default authorController;
+
+/**
+ * @method getArticlesByAuthorsId
+ * @description fetch all users's articles
+ * @param {*} req
+ * @param {*} res
+ * @returns {Object} the a list of articles that the user has created
+ */
+export const getArticlesByAuthorsId = (req, res) => {
+  const authorId = parsedId(req.params.authorId);
+  if (!(Number.isInteger(authorId))) {
+    return res.status(400).jsend.error({
+      message: 'Invalid user details'
+    });
+  }
+  Articles.findAll({
+    where: {
+      userId: authorId
+    }
+  })
+    .then(articles => ((articles.length > 0)
+      ? res.status(200).jsend.success({
+        message: 'All articles',
+        articles
+      })
+      : res.status(200).jsend.success({
+        message: 'You do not have any article',
+        articles: []
+      })))
+    .catch(err => res.status(500).jsend.error({
+      message: err
+    }));
+};

@@ -325,7 +325,7 @@ const userController = {
       const {
         firstname, lastname, username, email, bio,
       } = req.body;
-      const interest = req.body.interest ? req.body.interest.split(',') : null;
+      const interests = req.body.interests ? req.body.interests.split(',') : null;
       const updateUser = (image) => {
         const updates = {
           firstname,
@@ -334,7 +334,7 @@ const userController = {
           email,
           bio,
           image,
-          interest
+          interests
         };
         if (!req.file) {
           delete updates.image;
@@ -383,12 +383,12 @@ const userController = {
     Users.findOne({ where: { id: userId } })
       .then((user) => {
         if (!user || user === undefined) {
-          res.status(404).jsend.fail({
+          return res.status(404).jsend.fail({
             message: 'No user found'
           });
         }
         delete user.password;
-        res.status(200).jsend.success({
+        return res.status(200).jsend.success({
           message: 'User details',
           user
         });
