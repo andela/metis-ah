@@ -29,8 +29,7 @@ module.exports = {
       type: Sequelize.STRING
     },
     image: {
-      type: Sequelize.STRING,
-      defaultValue: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1536757459/dummy-profile.png'
+      type: Sequelize.STRING
     },
     premium: {
       type: Sequelize.BOOLEAN
