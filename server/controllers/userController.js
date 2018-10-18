@@ -14,10 +14,10 @@ const url = process.env.BASE_URL;
 
 const { verifiedMessage, successSignupMessage, msgForPasswordReset } = msg;
 const { parsedId } = helpers;
-const {
-  Users, Followings, Interests, Categories
-} = models;
 const { refine, concatUnique } = refineAndConcat;
+const {
+  Users, Followings, Interests, Categories, Articles, Bookmarks, Ratings
+} = models;
 
 const userController = {
   /**
@@ -384,7 +384,15 @@ const userController = {
         message: 'Invalid user details'
       });
     }
-    Users.findOne({ where: { id: userId } })
+    Users.findById(userId, {
+      include: [
+        { model: Articles, as: 'articles' },
+        { model: Ratings, as: 'ratings' },
+        { model: Bookmarks, as: 'bookmarks' },
+        'followed',
+        'follower'
+      ]
+    })
       .then((user) => {
         if (!user || user === undefined) {
           return res.status(404).jsend.fail({

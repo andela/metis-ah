@@ -85,6 +85,10 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'userId',
       as: 'articleLikes'
     });
+    Users.hasMany(models.Bookmarks, {
+      foreignKey: 'userId',
+      as: 'bookmarks'
+    });
     Users.belongsTo(models.Roles, {
       foreignKey: 'roleId',
       as: 'role'

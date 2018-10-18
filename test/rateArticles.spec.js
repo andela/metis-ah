@@ -124,7 +124,7 @@ describe('ARTICLES RATING TESTS', () => {
         expect(res.body.status).to.equal('success');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('averageRating');
-        expect(res.body.data.averageRating).to.equal(3);
+        expect(res.body.data.averageRating).to.equal(2);
         done();
       });
   });
@@ -141,7 +141,7 @@ describe('ARTICLES RATING TESTS', () => {
         expect(res.body.status).to.equal('success');
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('averageRating');
-        expect(res.body.data.averageRating).to.equal(4);
+        expect(res.body.data.averageRating).to.equal(3);
         done();
       });
   });

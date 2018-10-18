@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import app from '../server/app';
 
 chai.use(chaiHttp);
-const { assert, expect } = chai;
+const { expect } = chai;
 let userToken1;
 
 describe('TEST ADD INTERESTS/CATEGORY', () => {
@@ -72,7 +72,7 @@ describe('TEST ADD INTERESTS/CATEGORY', () => {
     chai
       .request(app)
       .put('/api/v1/users/interests')
-      .set('authorization', userToken1)
+      .set('Authorization', userToken1)
       .send({ category: '13ab' })
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
