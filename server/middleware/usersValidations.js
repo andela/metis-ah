@@ -4,7 +4,8 @@ const {
   checkProps,
   validEmail,
   validPassword,
-  validString
+  validString,
+  validUsername
 } = helpers;
 
 const usersValidations = {
@@ -47,6 +48,11 @@ const usersValidations = {
     if (!validString(req.body.username)) {
       status = 'fail';
       messages.push('username cannot be an empty string');
+    }
+
+    if (validUsername(req.body.username)) {
+      status = 'fail';
+      messages.push('username cannot contain spaces');
     }
 
     if (status === 'fail') {

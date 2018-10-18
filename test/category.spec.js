@@ -148,17 +148,17 @@ describe('TEST ALL CATEGORY ENDPOINT', () => {
         done(err);
       });
   });
-  it('should not update a category with similar name', (done) => {
+  it('should successfully update category', (done) => {
     chai
       .request(app)
       .put('/api/v1/categories/3')
       .set('authorization', userToken)
       .send({
-        name: 'Fashion',
+        name: 'MATHEMATICS',
         description: 'new description'
       })
       .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
+        expect(res.body.status).to.equal('success');
         expect(res.body.data.message);
         done(err);
       });

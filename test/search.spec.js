@@ -11,10 +11,10 @@ describe('Search Functionality tests', () => {
     it('should return results when a keyword is passed', (done) => {
       chai
         .request(app)
-        .get('/api/v1/articles/search?keyword=sample')
+        .get('/api/v1/articles/search?keyword=Online')
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.data.searchResult.count.should.equal(3);
+          res.body.data.searchResult.count.should.equal(5);
           done();
         });
     });

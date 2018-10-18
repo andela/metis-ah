@@ -33,6 +33,15 @@ const helpers = {
   },
 
   /**
+   * @description This method checks if the username passed is a valid contains spaces
+   * @param  {string} username The username to be validated
+   * @returns {boolean} A boolean representing if the username is valid or not
+   */
+  validUsername: (username) => {
+    const regex = /\s/g;
+    return regex.test(username);
+  },
+  /**
    * @description This method checks if the string passed is a valid email.
    * @param  {string} email The email address to be validated
    * @returns {boolean} A boolean representing if the email is valid or not

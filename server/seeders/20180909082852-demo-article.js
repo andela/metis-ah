@@ -7,8 +7,8 @@ const weekstart = new Date(
 
 module.exports = {
   up: queryInterface => queryInterface.bulkInsert('Articles', [{
-    slug: 'just-a-sample-article1',
-    title: 'Just a Sample Article',
+    slug: 'How-to-Have-a-Healthier-and-More-Productive-Home-Office',
+    title: 'How to Have a Healthier and More Productive Home Office',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -23,8 +23,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
   },
   {
-    slug: 'just-a-sample-article2',
-    title: 'Another Sample Article',
+    slug: '10-Step-To-Successfully-Outsourcing-Your-Online-Business',
+    title: '10 Step To Successfully Outsourcing Your Online Business',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -39,8 +39,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
   },
   {
-    slug: 'just-a-sample-article3',
-    title: 'Some other Sample Article',
+    slug: '6-Instant-Confidence-Boosters',
+    title: '6 Instant Confidence Boosters',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -55,8 +55,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 30))
   },
   {
-    slug: 'just-a-sample-article4',
-    title: 'Just a  Article',
+    slug: '21-Things-You-Should-Know',
+    title: '21 Things You Should Know',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -66,13 +66,13 @@ module.exports = {
     userId: 4,
     categoryId: 1,
     rating: 5,
-    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/hero.jpg',
+    imageUrl: 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1539446191/brain.jpg',
     createdAt: new Date(now - (1000 * 60 * 60 * 24 * 20)),
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 20))
   },
   {
-    slug: 'just-a-sample-article5',
-    title: 'Another  Article',
+    slug: 'How-I-Doubled-My-Money-With-Facebook-Ads',
+    title: 'How I Doubled My Money With Facebook Ads',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -87,8 +87,8 @@ module.exports = {
     updatedAt: weekstart
   },
   {
-    slug: 'just-a-sample-article6',
-    title: 'Some other  Article',
+    slug: '24-Rules-I-Follow-When-Creating-Successful-Websites',
+    title: '24 Rules I Follow When Creating Successful Websites',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -103,8 +103,8 @@ module.exports = {
     updatedAt: weekstart
   },
   {
-    slug: 'just-a-sample-article7',
-    title: 'Some other  Article',
+    slug: 'Top-10-Facebook-Advertising-Mistakes-To-Avoid',
+    title: 'Top 10 Facebook Advertising Mistakes To Avoid',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -119,8 +119,8 @@ module.exports = {
     updatedAt: weekstart
   },
   {
-    slug: 'just-a-sample-article8',
-    title: 'Just a  Article',
+    slug: 'The-Ultimate-Guide-to-Making-Money-Online',
+    title: 'The Ultimate Guide to Making Money Online',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -135,8 +135,8 @@ module.exports = {
     updatedAt: weekstart
   },
   {
-    slug: 'just-a-sample-article9',
-    title: 'Another  Article',
+    slug: 'This-Blog-Post-Will-Make-You-More-Money-Guaranteed',
+    title: 'This Blog Post Will Make you More Money Guarenteed',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -151,8 +151,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 10))
   },
   {
-    slug: 'just-a-sample-article10',
-    title: 'Some other  Article',
+    slug: 'self-driving-cars-are-the-future',
+    title: 'Self Drving Cars are the future',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -167,8 +167,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 5))
   },
   {
-    slug: 'just-a-sample-article11',
-    title: 'Another  Article',
+    slug: 'How-Apple-is-dominating-the-market',
+    title: 'How Apple is dominating the market',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -183,8 +183,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 10))
   },
   {
-    slug: 'just-a-sample-article12',
-    title: 'Some other  Article',
+    slug: 'Social-Meida-is-taking-your-life',
+    title: 'Social Media is taking your life',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -199,8 +199,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 6))
   },
   {
-    slug: 'just-a-sample-article13',
-    title: 'Some other  Article',
+    slug: 'The-Ultimate-Guide-to-Making-Money-Online',
+    title: 'The Ultimate Guide to Making Money Online',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -215,8 +215,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 9))
   },
   {
-    slug: 'just-a-sample-article14',
-    title: 'Some other  Article',
+    slug: 'The-Ultimate-Guide-to-Making-Money-Online',
+    title: 'The Ultimate Guide to Making Money Online',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 
@@ -231,8 +231,8 @@ module.exports = {
     updatedAt: new Date(now - (1000 * 60 * 60 * 24 * 8))
   },
   {
-    slug: 'just-a-sample-article15',
-    title: 'Some other  Article',
+    slug: 'The-Ultimate-Guide-to-Making-Money-Online',
+    title: 'The Ultimate Guide to Making Money Online',
     description: 'This is a seed article used for testing purposes',
     body: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dui eros, tristique nec mollis et, dapibus eu nisl. Phasellus ultricies semper lorem sit amet tempor. Donec sed eros quis ante lobortis dapibus. Vestibulum eu sem lacus. Cras sagittis non velit at molestie. Aliquam volutpat rutrum neque vulputate accumsan. Donec eu purus nisi. Nam varius sodales quam, in aliquet tortor rutrum sed. Nullam suscipit, magna at rutrum porta, risus justo varius eros, et lacinia justo libero id quam. Curabitur fringilla porttitor ultrices. Ut a luctus risus. Etiam eget bibendum justo. Curabitur dolor nisi, porttitor eu scelerisque ac, consequat et odio. Duis dui enim, dignissim rutrum vestibulum et, lacinia vitae ex. Proin ut sem euismod, vestibulum sapien a, porta nibh.
 

@@ -105,7 +105,10 @@ describe('TEST ALL ENDPOINT', () => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
           res.body.data.should.have.property('messages');
-          res.body.data.messages.should.eql(['username cannot be an empty string']);
+          res.body.data.messages.should.eql([
+            'username cannot be an empty string',
+            'username cannot contain spaces'
+          ]);
           done();
         });
     });
@@ -240,6 +243,22 @@ describe('TEST ALL ENDPOINT', () => {
         .end((err, res) => {
           expect(res.body).to.be.an('object');
           expect(res.body.data.message).to.equal('User is signed up, an email is sent to your mail account, please verify your mail account to complete registration');
+          done();
+        });
+    });
+    it('should return username already exist', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/users/auth/signup')
+        .send({
+          username: 'IyiKuyoro',
+          email: 'test.tester22@email.com',
+          password: 'jdwndsiIUBDIijbikb'
+        })
+        .end((err, res) => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.equal('fail');
+          expect(res.body.data.message).to.equal('username already exist!');
           done();
         });
     });
