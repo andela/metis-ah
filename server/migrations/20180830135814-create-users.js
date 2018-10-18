@@ -8,7 +8,8 @@ module.exports = {
     },
     username: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     firstname: {
       type: Sequelize.STRING
@@ -54,6 +55,8 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE
     }
-  }, { freezeTableName: true }),
+  }, {
+    freezeTableName: true
+  }),
   down: queryInterface => queryInterface.dropTable('Users')
 };

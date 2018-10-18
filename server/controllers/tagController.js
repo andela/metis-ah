@@ -1,3 +1,6 @@
+import {
+  Op
+} from 'sequelize';
 import models from '../models';
 
 const { Articles, Tags } = models;
@@ -13,7 +16,7 @@ const tagController = {
   single: (req, res) => {
     Tags
       .findOne({
-        where: { name: req.params.tagName },
+        where: { name: { [Op.iLike]: `${req.params.tagName}` } },
         include: [{
           model: Articles,
           as: 'articles',
@@ -31,6 +34,5 @@ const tagController = {
       })
       .catch(() => res.status(500).jsend.error({ message: 'Your request cannot be completed at the moment. please try again.' }));
   }
-
 };
 export default tagController;

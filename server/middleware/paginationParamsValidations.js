@@ -1,5 +1,3 @@
-
-
 const paginationParamsValidations = (req, res, next) => {
   // VALIDATE PAGE NUMBER
   let page = parseInt(req.query.page, 10);
@@ -12,7 +10,10 @@ const paginationParamsValidations = (req, res, next) => {
     limit = 10;
   }
 
-  req.paginationQueryParams = { page, limit };
+  req.paginationQueryParams = {
+    page,
+    limit
+  };
   next();
 };
 

@@ -323,19 +323,6 @@ describe('GET ARTICLES WITH PAGINATION', () => {
       });
   });
 
-  it('should fail when token is undefined', (done) => {
-    chai
-      .request(app)
-      .get('/api/v1/articles')
-      .query({ limit: 12, page: 1 })
-      .end((err, res) => {
-        res.status.should.equal(401);
-        res.body.status.should.equal('fail');
-        res.body.data.message.should.equal('No token provided');
-        done();
-      });
-  });
-
   it('should return first item first', (done) => {
     chai
       .request(app)

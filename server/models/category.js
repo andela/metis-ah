@@ -2,6 +2,15 @@ const categories = (sequelize, DataTypes) => {
   const Categories = sequelize.define('Categories', {
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    poster: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    description: {
+      type: DataTypes.STRING,
       allowNull: false
     },
     poster: {
@@ -17,7 +26,11 @@ const categories = (sequelize, DataTypes) => {
   Categories.associate = (models) => {
     Categories.hasMany(models.Articles, {
       foreignKey: 'categoryId',
-      as: 'category'
+      as: 'articles'
+    });
+    Categories.hasMany(models.Articles, {
+      foreignKey: 'categoryId',
+      as: 'count'
     });
   };
 

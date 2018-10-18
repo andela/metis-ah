@@ -90,7 +90,7 @@ const users = (sequelize, DataTypes) => {
       as: 'role'
     });
   };
-  Users.beforeCreate((user) => {
+  Users.beforeValidate((user) => {
     user.password = user.password ? bcrypt.hashSync(user.password, 8) : null;
   });
   Users.checkPassword = (password, user) => bcrypt.compareSync(password, user);
