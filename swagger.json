@@ -397,6 +397,42 @@
         }
       }
     },
+    "/api/v1/users/interests": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Allows user to add categories to his interests",
+        "description": "Allows user to add categories to his interests",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [{
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "category to add to list of interests",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/interests"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "you are now following the user"
+          }
+        },
+        "401": {
+          "description": "User access required"
+        }
+      }
+    },
     "/api/v1/articles/{articleId}/like/{likeType}": {
       "post": {
         "tags": [
@@ -1435,7 +1471,7 @@
 					}
 				}
 			}
-	
+
 		}
   },
   "definitions": {
@@ -1932,6 +1968,15 @@
             "example": 1
           }
         }
+      }
+    }
+  },
+  "interests": {
+    "type": "object",
+    "properties": {
+      "category": {
+        "type": "integer",
+        "example": "1"
       }
     }
   }

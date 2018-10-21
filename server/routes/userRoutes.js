@@ -4,7 +4,9 @@ import auth from '../middleware/auth';
 import roleValidator from '../middleware/roleValidator';
 import usersValidations from '../middleware/usersValidations';
 
-const { validateSignUp, validateLogin, validateNewPassword } = usersValidations;
+const {
+  validateSignUp, validateLogin, validateNewPassword, validInterest
+} = usersValidations;
 const {
   isUser,
   isAdmin
@@ -12,6 +14,7 @@ const {
 
 const userRoutes = express.Router();
 
+userRoutes.put('/interests', auth, isUser, validInterest, userController.addInterests);
 userRoutes.post('/auth/signup', validateSignUp, userController.signUp);
 userRoutes.post('/auth/login', validateLogin, userController.login);
 userRoutes.put('/verify/:token', auth, userController.verify);

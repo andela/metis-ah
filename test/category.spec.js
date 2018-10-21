@@ -60,21 +60,6 @@ describe('TEST ALL CATEGORY ENDPOINT', () => {
         done(err);
       });
   });
-  it('should not create a category without image', (done) => {
-    chai
-      .request(app)
-      .post('/api/v1/categories')
-      .set('authorization', userToken)
-      .send({
-        name: 'NewCategory',
-        description: 'new description'
-      })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message);
-        done(err);
-      });
-  });
   it('should not create a category without description', (done) => {
     chai
       .request(app)

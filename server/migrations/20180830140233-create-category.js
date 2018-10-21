@@ -18,14 +18,6 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: false
     },
-    poster: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    description: {
-      type: Sequelize.TEXT,
-      allowNull: false
-    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

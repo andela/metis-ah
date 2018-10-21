@@ -63,8 +63,7 @@ const categoryController = {
           attributes: ['id'],
           model: Articles,
           as: 'count'
-        }
-        ]
+        }]
       })
       .then((category) => {
         if (!category) {

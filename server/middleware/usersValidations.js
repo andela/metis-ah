@@ -1,4 +1,7 @@
 import helpers from '../helpers/helpers';
+import models from '../models';
+
+const { Categories } = models;
 
 const {
   checkProps,
@@ -101,6 +104,31 @@ const usersValidations = {
         .jsend.fail({
           messages
         });
+    }
+    return next();
+  },
+  /**
+   * @description This method helps validate body of an add interest request
+   * @param  {object} req The request object
+   * @param  {object} res The response object
+   * @param  {object} next the next middleware
+   * @returns {object} undefined
+   */
+  validInterest: async (req, res, next) => {
+    // Check that body contains category property
+    const { valid, invalidMessages } = checkProps(req.body, 'category');
+
+    if (!valid) {
+      return res.status(400).jsend.fail({
+        messages: invalidMessages
+      });
+    }
+
+    // Check that value of category is an integer
+    if (!(/^[0-9]+$/.test(req.body.category))) {
+      return res.status(400).jsend.fail({
+        message: 'Category value must be an integer'
+      });
     }
     return next();
   }

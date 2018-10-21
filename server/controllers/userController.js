@@ -7,13 +7,17 @@ import helpers from '../helpers/helpers';
 import msg from '../helpers/utils/eMsgs';
 import { cloudinaryConfig, uploader } from '../config/cloudinary/cloudinaryConfig';
 import { multerUploads, dataUri } from '../config/multer/multerConfig';
+import refineAndConcat from '../helpers/refineAndConcat';
 
 config();
 const url = process.env.BASE_URL;
 
 const { verifiedMessage, successSignupMessage, msgForPasswordReset } = msg;
 const { parsedId } = helpers;
-const { Users, Followings } = models;
+const {
+  Users, Followings, Interests, Categories
+} = models;
+const { refine, concatUnique } = refineAndConcat;
 
 const userController = {
   /**
@@ -393,6 +397,87 @@ const userController = {
           user
         });
       });
+  },
+  /**
+   * @method usersInterests
+   * @description fetches users' interests when logged in
+   * @param {Object} req The request object
+   * @param {Object} res The the response object
+   * @param {Object} next object to call the next middleware
+   * @returns {Object} The modified profile details
+   */
+  usersInterests: async (req, res, next) => {
+    const { isAuthenticated, currentUser } = req;
+    // skip operation if page or limit is defined or if user is not logged in
+    if (req.query.page || req.query.limit || !isAuthenticated) {
+      return next();
+    }
+
+    try {
+      const result = await Users.findById(currentUser.id, {
+        include: ['categoryInterests'],
+        limit: 10
+      });
+
+      // create a new array of object with required properties
+      const {
+        uniqueCategories, userInterests
+      } = refine(result.dataValues.categoryInterests);
+
+      if (userInterests.length === 10) {
+        return res.status(200).jsend.success({
+          categories: userInterests
+        });
+      }
+
+      const moreResults = await Categories.findAll({ limit: 10 });
+
+      // add more categories to users interest
+      const moreCategories = concatUnique(uniqueCategories, userInterests, moreResults);
+
+      return res.status(200).jsend.success({
+        categories: moreCategories
+      });
+    } catch (error) {
+      return next();
+    }
+  },
+  /**
+   * @method addInterests
+   * @description Allows users to add interests based on available categories
+   * @param {Object} req The request object
+   * @param {Object} res The the response object
+   * @returns {Object} The modified profile details
+   */
+  addInterests: async (req, res) => {
+    const payload = {
+      userId: req.currentUser.id,
+      categoryId: req.body.category
+    };
+
+    try {
+      const [interest, created] = await Interests.findOrCreate({ where: payload });
+      // if user already added and interest, send error message
+      if (!created) {
+        return res.status(409).jsend.fail({
+          interest,
+          message: 'Interest already exists'
+        });
+      }
+      return res.status(200).jsend.success({
+        interest,
+        message: 'Interest added'
+      });
+    } catch (error) {
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        return res.status(400).jsend.fail({
+          message: 'Unable to add interest; a corresponding category does not exist'
+        });
+      }
+      return res.status(500).jsend.error({
+        message: 'There was a problem adding your interest'
+      });
+    }
   }
 };
 
