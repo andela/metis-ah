@@ -145,7 +145,7 @@ const userController = {
         return res.status(401).jsend.error({ message: 'Verification link not valid' });
       }
       Users.update({
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: req.body.password
       }, {
         where: { id: req.currentUser.id }
       }).then(() => res.status(200).jsend.success({
