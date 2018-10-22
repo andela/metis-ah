@@ -31,7 +31,7 @@ passport.use(new FaceBookStrategy({
   clientID: process.env.FACEBOOK_CLIENT_ID,
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
   callbackURL: process.env.FACEBOOK_CLIENT_CALLBACK_URI,
-  profileFields: ['email']
+  profileFields: ['email', 'picture.type(large)']
 }, helpers.facebookCallback));
 
 passport.use(new TwitterStrategy({

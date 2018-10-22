@@ -97,6 +97,7 @@ const helpers = {
         lastname: profile.name.familyName,
         email: profile.emails[0].value,
         username: profile.emails[0].value,
+        image: profile.photos[0].value,
         isVerified: true
       }
     }).spread((user, created) => {
@@ -104,14 +105,18 @@ const helpers = {
         id,
         firstname,
         lastname,
-        email
+        email,
+        roleId,
+        image
       } = user.dataValues;
       return done(null, {
         id,
         firstname,
         lastname,
         email,
-        created
+        created,
+        roleId,
+        image
       });
     });
   },
@@ -134,6 +139,7 @@ const helpers = {
         lastname: profile.name.familyName,
         email: profile.emails[0].value,
         username: profile.emails[0].value,
+        image: profile.photos[0].value,
         isVerified: true
       }
     }).spread((user, created) => {
@@ -141,14 +147,18 @@ const helpers = {
         id,
         firstname,
         lastname,
-        email
+        email,
+        roleId,
+        image
       } = user.dataValues;
       return done(null, {
         id,
         firstname,
         lastname,
         email,
-        created
+        created,
+        roleId,
+        image
       });
     });
   },
@@ -187,21 +197,28 @@ const helpers = {
       },
       defaults: {
         email: profile.emails[0].value,
-        username: profile.username
+        firstname: profile.displayName.split(' ')[0] || '',
+        lastname: profile.displayName.split(' ')[1] || '',
+        username: profile.username,
+        image: profile.photos[0].value
       }
     }).spread((user, created) => {
       const {
         id,
         firstname,
         lastname,
-        email
+        email,
+        roleId,
+        image
       } = user.dataValues;
       return done(null, {
         id,
         firstname,
         lastname,
         email,
-        created
+        created,
+        roleId,
+        image
       });
     });
   }
