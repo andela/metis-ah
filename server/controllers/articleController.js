@@ -60,7 +60,9 @@ const articlesController = {
       // checks if tags exist
       const tags = !fields.tags || fields.tags === ''
         ? []
-        : fields.tags.replace(/\s+/g, '').split(',');
+        : typeof fields.tags === 'string'
+          ? fields.tags.replace(/\s+/g, '').split(',')
+          : fields.tags;
 
       tagManager.createTag(res, tags, Tags, createdArticle);
       return res.status(201).jsend.success({

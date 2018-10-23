@@ -134,6 +134,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .attach('image', fs.readFileSync(`${__dirname}/images/test.png`), 'test.png')
         .field('title', 'How I Learnt React in Andela')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
+        .field('tags', 'javascript,business,commerce,joji, jojis,latest')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .type('form')
         .end((err, res) => {
