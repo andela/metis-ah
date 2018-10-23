@@ -137,6 +137,13 @@ describe('Checks the validity of the user', () => {
         expect(res.body.data.user.firstname).to.equal('John');
         expect(res.body.data.user.lastname).to.equal('Obi');
         expect(res.body.data.user.bio).to.equal('I like to eat');
+        expect(res.body.data.user.articles).to.be.an('array');
+        expect(res.body.data.user.articles[0].title).to.equal('Some other  Article');
+        expect(res.body.data.user.articles[0].slug).to.equal('just-a-sample-article7');
+        expect(res.body.data.user.bookmarks).to.be.an('array');
+        expect(res.body.data.user.ratings).to.be.an('array');
+        expect(res.body.data.user.follower).to.be.an('array');
+        expect(res.body.data.user.followed).to.be.an('array');
         assert.isObject(res.body, 'is an object containing the user details');
         done();
       });
