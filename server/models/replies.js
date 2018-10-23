@@ -15,6 +15,11 @@ const replies = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
 
+    Replies.hasMany(models.ReplyLikes, {
+      foreignKey: 'replyId',
+      as: 'likes'
+    });
+
     Replies.hasMany(models.ReplyHistory, {
       foreignKey: 'replyId',
       as: 'replyHistory'

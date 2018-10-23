@@ -12,14 +12,6 @@ const categories = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    poster: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false
     }
   });
 
@@ -31,6 +23,15 @@ const categories = (sequelize, DataTypes) => {
     Categories.hasMany(models.Articles, {
       foreignKey: 'categoryId',
       as: 'count'
+    });
+    Categories.belongsToMany(models.Users, {
+      through: models.Interests,
+      foreignKey: 'categoryId',
+      as: 'interests'
+    });
+    Categories.hasMany(models.Interests, {
+      foreignKey: 'categoryId',
+      as: 'userInterests'
     });
   };
 

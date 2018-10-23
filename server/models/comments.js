@@ -26,6 +26,11 @@ const comments = (sequelize, DataTypes) => {
       as: 'replies'
     });
 
+    Comments.hasMany(models.CommentLikes, {
+      foreignKey: 'commentId',
+      as: 'likes'
+    });
+
     Comments.hasMany(models.CommentHistory, {
       foreignKey: 'commentId',
       as: 'commentHistory'

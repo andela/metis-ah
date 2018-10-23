@@ -89,6 +89,15 @@ const users = (sequelize, DataTypes) => {
       foreignKey: 'roleId',
       as: 'role'
     });
+    Users.belongsToMany(models.Categories, {
+      through: models.Interests,
+      foreignKey: 'userId',
+      as: 'categoryInterests'
+    });
+    Users.hasMany(models.Interests, {
+      foreignKey: 'userId',
+      as: 'userInterests'
+    });
   };
   Users.beforeValidate((user) => {
     user.password = user.password ? bcrypt.hashSync(user.password, 8) : null;

@@ -18,6 +18,7 @@ const GetAuthorsOfTheWeekHelpers = {
       attributes: [
         'id',
         'title',
+        'description',
         'imageUrl',
         'createdAt',
         'userId',

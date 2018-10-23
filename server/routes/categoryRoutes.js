@@ -4,6 +4,8 @@ import { multerUploads } from '../config/multer/multerConfig';
 import paginationParamsValidations from '../middleware/paginationParamsValidations';
 import auth from '../middleware/auth';
 import roleValidator from '../middleware/roleValidator';
+import authCheckForCategory from '../middleware/authCheckForCategory';
+import userController from '../controllers/userController';
 
 const {
   isAdmin
@@ -18,9 +20,16 @@ const {
   updateCategory,
   deleteCategory
 } = categoryController;
+const { usersInterests } = userController;
 
 // GET CATEGORY ROUTE
-route.get('/', paginationParamsValidations, allCategory);
+route.get(
+  '/',
+  authCheckForCategory,
+  usersInterests,
+  paginationParamsValidations,
+  allCategory
+);
 route.post('/', auth, isAdmin, multerUploads, createCategory);
 route.get('/:categoryId', paginationParamsValidations, singleCategory);
 route.put('/:categoryId', auth, isAdmin, multerUploads, updateCategory);
