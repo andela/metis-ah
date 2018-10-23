@@ -18,7 +18,8 @@ const {
   ArticleLikes,
   Tags,
   Categories,
-  Bookmarks
+  Bookmarks,
+  SocialShares
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -326,6 +327,36 @@ const articlesController = {
           bookmarks
         })));
   },
+  /**
+  * @desc share article method
+  * @param  {object} req Http Request object
+  * @param  {object} res Http Response object
+  * @returns {object} httpResponse object
+  */
+  shareArticle: (req, res) => {
+    Articles.findById(Number(req.params.articleId))
+      .then((article) => {
+        if (!article) {
+          return res.status(404).jsend.fail({
+            message: 'Article not found',
+          });
+        }
+        SocialShares.create({
+          userId: Number(req.currentUser.id),
+          articleId: Number(req.params.articleId),
+          authorId: article.userId,
+          sharedPlatform: req.body.sharedPlatform,
+        }).then((socialShare) => {
+          res.status(200).jsend.success({
+            message: 'Article has been shared',
+            socialShare,
+          });
+        });
+      }).catch(err => res.status(500).jsend.error({
+        message: 'Request could not be processed',
+        error: err.message
+      }));
+  }
 };
 
 export default articlesController;
