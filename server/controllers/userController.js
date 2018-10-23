@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { config } from 'dotenv';
+import { Op } from 'sequelize';
 import models from '../models';
 import generateToken from '../helpers/generateToken';
 import mailer from '../helpers/utils/mailer';
@@ -29,7 +30,10 @@ const userController = {
   signUp: (req, res) => {
     Users.findOrCreate({
       where: {
-        email: req.body.email,
+        [Op.or]: [
+          { email: req.body.email },
+          { username: req.body.username }
+        ]
       },
       defaults: {
         username: req.body.username,
@@ -38,8 +42,12 @@ const userController = {
       }
     })
       .spread((user, created) => {
+        // checks if email or username already exists
         if (!created) {
-          return res.status(400).jsend.fail({ message: 'email already exist!' });
+          const duplicateValue = user.email === req.body.email ? 'email' : 'username';
+          return res
+            .status(400)
+            .jsend.fail({ message: `${duplicateValue} already exist!` });
         }
         const token = generateToken(7200, {
           id: user.id,
@@ -49,14 +57,21 @@ const userController = {
 
         // THIS FUNCTION SEND AN EMAIL TO USER FOR VERIFICATION OF ACCOUNT
         mailer.onUserRegistration(user.username, user.email, token);
-        return res.status(201).jsend.success({
-          userId: user.id,
-          username: user.username,
-          message: successSignupMessage,
-          token
-        });
-      }).catch(() => {
-        res.status(500).jsend.fail({ message: 'Signup was not successful. Please try again' });
+        return res
+          .status(201)
+          .jsend.success({
+            userId: user.id,
+            username: user.username,
+            message: successSignupMessage,
+            token
+          });
+      })
+      .catch(() => {
+        res
+          .status(500)
+          .jsend.fail({
+            message: 'Signup was not successful. Please try again'
+          });
       });
   },
   /**
