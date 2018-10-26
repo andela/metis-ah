@@ -5,7 +5,10 @@ import roleValidator from '../middleware/roleValidator';
 import usersValidations from '../middleware/usersValidations';
 
 const {
-  validateSignUp, validateLogin, validateNewPassword, validInterest
+  validateSignUp,
+  validateLogin,
+  validateNewPassword,
+  validInterest,
 } = usersValidations;
 const {
   isUser,

@@ -40,13 +40,14 @@ const Mailer = {
    * @memberof Mailer
    * @param {string} username
    * @param {string} email user's email
+   * @param {string} verifyURL the frontend url to use in verification
    * @param {string} token user's token
    * @returns {function} sender
    */
-  onUserRegistration: (username, email, token) => Mailer.sender({
+  onUserRegistration: (username, email, verifyURL, token) => Mailer.sender({
     to: email,
     subject: 'Verify user\'s account',
-    message: msgOnRegistration(username, url, token)
+    message: msgOnRegistration(username, verifyURL || url, token)
   }),
   /**
    * Email Sender helper function
