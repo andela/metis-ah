@@ -7,6 +7,9 @@ const interests = (sequelize, DataTypes) => {
     categoryId: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    status: {
+      type: DataTypes.STRING
     }
   });
 

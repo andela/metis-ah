@@ -8,7 +8,7 @@ const {
   validateSignUp,
   validateLogin,
   validateNewPassword,
-  validInterest,
+  validInterest
 } = usersValidations;
 const {
   isUser,
@@ -17,7 +17,8 @@ const {
 
 const userRoutes = express.Router();
 
-userRoutes.put('/interests', auth, isUser, validInterest, userController.addInterests);
+userRoutes.put('/interests', auth, validInterest, userController.addInterests);
+userRoutes.delete('/interests', auth, isUser, validInterest, userController.removeInterests);
 userRoutes.post('/auth/signup', validateSignUp, userController.signUp);
 userRoutes.post('/auth/login', validateLogin, userController.login);
 userRoutes.put('/verify/:token', auth, userController.verify);
