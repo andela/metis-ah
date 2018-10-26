@@ -12,8 +12,8 @@ const inputValidator = {
     // REQUIRED FIELDS
     const inputData = {
       title: req.body.title,
-      description: req.body.description,
-      body: req.body.body
+      body: req.body.body,
+      categoryId: req.body.categoryId
     };
 
     const fieldErrors = {};
@@ -22,15 +22,17 @@ const inputValidator = {
     Object.entries(inputData).forEach((field) => {
       const [fieldName, fieldData] = field;
       // CHECKS WHETHER THE REQUIRE FIELDS ARE STRING AND ARE NOT EMPTY
-      if (typeof fieldData === 'string') {
-        if (fieldData.trim() === '') {
-          fieldErrors[fieldName] = `${fieldName} is required`;
+      if (fieldName === 'categoryId') {
+        const integerRegEx = /^\d+$/;
+        if (!integerRegEx.test(fieldData)) {
+          fieldErrors[fieldName] = `${fieldName} is not an integer`;
           isValidData = false;
-        } else {
-          return true;
         }
-      } else {
+      } else if (typeof fieldData === 'string' && fieldData.trim() === '') {
         fieldErrors[fieldName] = `${fieldName} is required`;
+        isValidData = false;
+      } else if (typeof fieldData !== 'string') {
+        fieldErrors[fieldName] = `${fieldName} contains invalid data`;
         isValidData = false;
       }
     });

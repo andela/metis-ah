@@ -1,4 +1,3 @@
-import bcrypt from 'bcrypt';
 import { config } from 'dotenv';
 import { Op } from 'sequelize';
 import models from '../models';
@@ -125,6 +124,7 @@ const userController = {
    * @returns {object} json response
    */
   resetPassword: (req, res) => {
+    const callbackUrl = req.body.callbackUrl || req.query.callbackUrl || url;
     Users
       .findOne({
         where: { email: req.body.email }
@@ -141,7 +141,7 @@ const userController = {
         mailer.sender({
           to: user.email,
           subject: 'Password reset',
-          message: msgForPasswordReset(user.username, url, token)
+          message: msgForPasswordReset(user.username, callbackUrl, token)
         });
         return res.status(200).jsend.success({
           message: 'Password reset link has been sent to your email',

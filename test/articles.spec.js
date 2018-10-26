@@ -12,6 +12,7 @@ const { expect, should } = chai;
 should();
 
 let hashedToken;
+let token2;
 
 describe('ARTICLE ENDPOINT TESTS', () => {
   // REGISTERS A NEW USER TO AVOID FOREIGN KEY ERROR
@@ -26,6 +27,17 @@ describe('ARTICLE ENDPOINT TESTS', () => {
       .end((err, res) => {
         expect(res.body).to.be.an('object');
         hashedToken = res.body.data.token;
+      });
+
+    chai
+      .request(app)
+      .post('/api/v1/users/auth/login')
+      .send({
+        email: 'john.james@ah.com',
+        password: 'johnJJoe'
+      })
+      .end((err, res) => {
+        token2 = res.body.data.token;
         done();
       });
   });
@@ -72,6 +84,25 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .end((err, res) => {
           res.status.should.equal(401);
           res.body.data.message.should.equal('No token provided');
+          done();
+        });
+    });
+
+    it('should fail when categoryId is not a number', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles')
+        .set('authorization', hashedToken)
+        .set('Content-Type', 'multipart/form-data')
+        .attach('image', fs.readFileSync(`${__dirname}/images/test.png`), 'test.png')
+        .field('title', 'How I Learnt React in Andela')
+        .field('categoryId', [])
+        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
+        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .type('form')
+        .end((err, res) => {
+          res.status.should.equal(400);
+          res.body.data.error.categoryId.should.equal('categoryId is not an integer');
           done();
         });
     });
@@ -148,6 +179,25 @@ describe('ARTICLE ENDPOINT TESTS', () => {
           res.status.should.equal(201);
           res.body.data.article.imageUrl.should.be.a('string');
           res.body.data.article.imageUrl.length.should.be.greaterThan(0);
+          done();
+        });
+    });
+
+    it('should fail when a user is yet to update his Firstname and Lastname', (done) => {
+      chai
+        .request(app)
+        .post('/api/v1/articles')
+        .set('Content-Type', 'multipart/form-data')
+        .set('authorization', token2)
+        .field('title', 'How I Learnt React in Andela')
+        .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
+        .field('tags', 'javascript,business,commerce,joji, jojis,latest')
+        .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
+        .field('categoryId', 1)
+        .type('form')
+        .end((err, res) => {
+          res.status.should.equal(403);
+          res.body.data.message.should.eql('Hi there, We are so sorry to get in your way this time. As much as we appreciate your willingness to share your ideas on our platform, we equally care about how you are identified here. Therefore, we would like you to update your Firstname and Lastname before publishing an article');
           done();
         });
     });

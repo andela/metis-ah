@@ -30,9 +30,9 @@ export default {
         <p>You requested for a Password reset on your account. You can use the following link to reset your password:
         <br />
             <br /> <br />
-            <a href="${url}/api/v1/users/api/auth/reset-password/${token}">${url}/api/v1/users/api/auth/reset-password/${token}</a>
+            <a href="${url}/auth/reset-password/${token}">${url}/auth/reset-password/${token}</a>
         </p>
-        <p>If you don’t use this link within 10 minutes, it will expire. To get a new password reset link, visit <a href="${url}/api/v1/users/api/auth/reset-password/">${url}/api/v1/users/api/auth/reset-password/</a></p>
+        <p>If you don’t use this link within 10 minutes, it will expire. To get a new password reset link, visit <a href="${url}/auth/reset-password/">${url}/auth/reset-password/</a></p>
   </div>`;
   }
 };
