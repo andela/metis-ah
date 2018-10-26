@@ -44,6 +44,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .set('authorization', hashedToken)
         .set('Content-Type', 'multipart/form-data')
         .field('title', 'How I Learnt React in Andela')
+        .field('categoryId', 1)
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .field('categoryId', 2)
@@ -65,6 +66,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .set('Content-Type', 'multipart/form-data')
         .attach('image', fs.readFileSync(`${__dirname}/images/test.png`), 'test.png')
         .field('title', 'How I Learnt React in Andela')
+        .field('categoryId', 1)
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .type('form')
@@ -83,6 +85,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .set('authorization', 'some43tinvalidtoken324')
         .attach('image', fs.readFileSync(`${__dirname}/images/test.png`), 'test.png')
         .field('title', 'How I Learnt React in Andela')
+        .field('categoryId', 1)
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .end((err, res) => {
@@ -101,6 +104,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('title', '')
         .field('description', '')
         .field('body', '')
+        .field('categoryId', 1)
         .end((err, res) => {
           res.status.should.equal(400);
           res.body.data.should.have.property('error');
@@ -117,6 +121,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .set('authorization', hashedToken)
         .set('Content-Type', 'multipart/form-data')
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
+        .field('categoryId', 1)
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
         .end((err, res) => {
           res.status.should.equal(400);
@@ -641,6 +646,39 @@ describe('FETCH ALL BOOKMARK', () => {
         expect(res).to.have.status(404);
         expect(res.body).to.be.an('object');
         expect(res.body.data.message).to.equal('You have not bookmarked any article');
+        done();
+      });
+  });
+});
+
+describe('GET SINGLE ARTICLE TEST', () => {
+  it('should fail when article is not found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/1008790')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.status).to.equal(404);
+        expect(res.body.data.message).to.equal('Article not found');
+        done();
+      });
+  });
+
+  it('should return successfully when article is found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/2')
+      .set('authorization', hashedToken)
+      .end((err, res) => {
+        res.status.should.equal(200);
+        res.body.status.should.equal('success');
+        res.body.data.should.have.property('articleData');
+        res.body.data.should.have.property('metadata');
+        res.body.data.should.have.property('message');
+        res.body.data.articleData.should.have.property('body');
+        res.body.data.articleData.id.should.equal(2);
         done();
       });
   });
