@@ -473,30 +473,91 @@ const userController = {
    * @returns {Object} The modified profile details
    */
   addInterests: async (req, res) => {
-    const payload = {
-      userId: req.currentUser.id,
-      categoryId: req.body.category
-    };
+    const { category } = req.body;
+    const userId = req.currentUser.id;
 
     try {
-      const [interest, created] = await Interests.findOrCreate({ where: payload });
-      // if user already added and interest, send error message
-      if (!created) {
-        return res.status(409).jsend.fail({
-          interest,
-          message: 'Interest already exists'
+      const categoryIds = await Categories.findAll({ where: { id: category } });
+
+      // retrieve ids and structure for persisting to the database
+      const promises = categoryIds.map(async (item) => {
+        const [updated] = await Interests.update(
+          { status: 'active' },
+          { where: { userId, categoryId: item.dataValues.id, status: 'deleted' } }
+        );
+        if (updated) {
+          return {
+            interest: item,
+            created: true
+          };
+        }
+        const [userInterest, created] = await Interests.findOrCreate({
+          where: { userId, categoryId: item.dataValues.id },
+          defaults: { status: 'active' }
         });
-      }
+
+        return {
+          interest: item,
+          created
+        };
+      });
+
+      const result = await Promise.all(promises);
+
+      // distinguish between newly added and existing interests
+      const { added, existing } = result.reduce((acc, item) => {
+        if (!item.created) {
+          acc.existing.push(item);
+        } else {
+          acc.added.push(item);
+        }
+        return acc;
+      }, { added: [], existing: [] });
+
       return res.status(200).jsend.success({
-        interest,
-        message: 'Interest added'
+        message: `${added.length} interests were added; ${existing.length} interests already existed`,
+        added,
+        existing
       });
     } catch (error) {
-      if (error.name === 'SequelizeForeignKeyConstraintError') {
-        return res.status(400).jsend.fail({
-          message: 'Unable to add interest; a corresponding category does not exist'
-        });
-      }
+      return res.status(500).jsend.error({
+        message: 'There was a problem adding your interest'
+      });
+    }
+  },
+  removeInterests: async (req, res) => {
+    const { category } = req.body;
+    const userId = req.currentUser.id;
+
+    try {
+      const promises = category.map(async (item) => {
+        const [result] = await Interests.update(
+          { status: 'deleted' },
+          { where: { userId, categoryId: item, status: 'active' } }
+        );
+        return { categoryId: item, status: result };
+      });
+
+      const result = await Promise.all(promises);
+
+      // distinguish between removed and interests relationship that do not exist
+      const { removed, failed } = result.reduce((acc, item) => {
+        if (item.status) {
+          item.status = 'removed';
+          acc.removed.push(item);
+        } else {
+          item.status = 'failed';
+          acc.failed.push(item);
+        }
+        return acc;
+      }, { removed: [], failed: [] });
+
+      return res.status(200).jsend.success({
+        message: `${removed.length} interests were removed; ${failed.length} of the interests were not associated with you`,
+        removed,
+        failed
+      });
+    } catch (error) {
       return res.status(500).jsend.error({
         message: 'There was a problem adding your interest'
       });

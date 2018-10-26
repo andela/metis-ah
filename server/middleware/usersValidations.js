@@ -1,7 +1,4 @@
 import helpers from '../helpers/helpers';
-import models from '../models';
-
-const { Categories } = models;
 
 const {
   checkProps,
@@ -120,7 +117,7 @@ const usersValidations = {
    * @param  {object} next the next middleware
    * @returns {object} undefined
    */
-  validInterest: async (req, res, next) => {
+  validInterest: (req, res, next) => {
     // Check that body contains category property
     const { valid, invalidMessages } = checkProps(req.body, 'category');
 
@@ -130,12 +127,31 @@ const usersValidations = {
       });
     }
 
-    // Check that value of category is an integer
-    if (!(/^[0-9]+$/.test(req.body.category))) {
+    const { category } = req.body;
+
+    // Check if category is an array
+    if (category.constructor.name !== 'Array') {
       return res.status(400).jsend.fail({
-        message: 'Category value must be an integer'
+        messages: 'Interests must be an array of category ids'
       });
     }
+
+    // Check if category array is empty
+    if (category.length === 0) {
+      return res.status(400).jsend.fail({
+        messages: 'Category ids array is empty'
+      });
+    }
+
+    // Check that category array contains only integers
+    const isValid = category.every(id => /^[0-9]+$/.test(id));
+
+    if (!isValid) {
+      return res.status(400).jsend.fail({
+        messages: 'Interests array elements must be integers'
+      });
+    }
+
     return next();
   }
 };

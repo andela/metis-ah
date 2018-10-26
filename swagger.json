@@ -416,12 +416,12 @@
       }
     },
     "/api/v1/users/interests": {
-      "post": {
+      "put": {
         "tags": [
           "User"
         ],
         "summary": "Allows user to add categories to his interests",
-        "description": "Allows user to add categories to his interests",
+        "description": "User can add multiple interests at a time",
         "consumes": [
           "application/json"
         ],
@@ -435,7 +435,44 @@
           {
             "in": "body",
             "name": "body",
-            "description": "category to add to list of interests",
+            "description": "category ids to add as interests",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/interests"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "you are now following the user"
+          }
+        },
+        "401": {
+          "description": "User access required"
+        }
+      }
+    },
+    "/api/v1/users/interests": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Enables a user to remove categories to his interests",
+        "description": "User can remove multiple interests at a time",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "description": "user token",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "category ids to add as interests",
             "required": true,
             "schema": {
               "$ref": "#/definitions/interests"
@@ -2036,8 +2073,13 @@
     "type": "object",
     "properties": {
       "category": {
-        "type": "integer",
-        "example": "1"
+        "type": "Array",
+        "items": {
+          "id": {
+            "type": "integer",
+            "example": "1"
+          }
+        }
       }
     }
   }
