@@ -45,6 +45,19 @@ const articlesController = {
   create: async (req, res) => {
     const fields = req.body;
     let imageUrl = 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1540379606/article-default-image.jpg';
+    const user = await Users.findOne({
+      where: {
+        id: req.currentUser.id
+      },
+      attributes: ['id', 'firstname', 'lastname', 'username']
+    });
+
+    if (!(user.firstname && user.lastname)) {
+      return res.status(403).jsend.fail({
+        message: 'Hi there, We are so sorry to get in your way this time. As much as we appreciate your willingness to share your ideas on our platform, we equally care about how you are identified here. Therefore, we would like you to update your Firstname and Lastname before publishing an article'
+      });
+    }
+
     // check for image exists in the request body
     if (req.file) {
       const file = dataUri(req);
