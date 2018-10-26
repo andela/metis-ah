@@ -56,6 +56,7 @@ describe('TEST ALL ENDPOINT', () => {
         .request(app)
         .post('/api/v1/users/auth/signup')
         .send({
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -69,7 +70,9 @@ describe('TEST ALL ENDPOINT', () => {
       chai
         .request(app)
         .post('/api/v1/users/auth/login')
-        .send({})
+        .send({
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
+        })
         .end((err, res) => {
           res.body.should.be.an('object');
           res.body.should.have.property('status');
@@ -83,6 +86,7 @@ describe('TEST ALL ENDPOINT', () => {
         .request(app)
         .post('/api/v1/users/auth/login')
         .send({
+          verifyURL: 'https://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -99,7 +103,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: '     ',
           email: 'test.tester@email.com',
-          password: 'jdwndsiIUBDIijbikb'
+          password: 'jdwndsiIUBDIijbikb',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -119,7 +124,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: 'IyiKuyoro',
           email: 'test.testeremail.com',
-          password: 'PasswordDD'
+          password: 'PasswordDD',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -170,7 +176,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: 'IyiKuyoro',
           email: 'test.tester@email.com',
-          password: 'asswordlksndv'
+          password: 'asswordlksndv',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -219,7 +226,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: 'IyiKuyoro',
           email: 'test.tester@email.com',
-          password: 'asDndv'
+          password: 'asDndv',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           res.body.should.be.an('object');
@@ -238,7 +246,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: 'IyiKuyoro',
           email: 'test.tester@email.com',
-          password: 'jdwndsiIUBDIijbikb'
+          password: 'jdwndsiIUBDIijbikb',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           expect(res.body).to.be.an('object');
@@ -253,7 +262,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: 'IyiKuyoro',
           email: 'test.tester22@email.com',
-          password: 'jdwndsiIUBDIijbikb'
+          password: 'jdwndsiIUBDIijbikb',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           expect(res.body).to.be.an('object');
@@ -307,7 +317,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: 'JojitoonName',
           email: 'user@gmail.com',
-          password: 'Password'
+          password: 'Password',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           expect(res.body.status).to.equal('success');
@@ -324,7 +335,8 @@ describe('TEST ALL ENDPOINT', () => {
         .send({
           username: 'JojitoonName',
           email: 'user@gmail.com',
-          password: 'Password'
+          password: 'Password',
+          verifyURL: 'http://metis-ah-frontend-stagin.herokuapp.com',
         })
         .end((err, res) => {
           expect(res.body.data.message).to.equal('email already exist!');

@@ -56,7 +56,7 @@ const userController = {
         });
 
         // THIS FUNCTION SEND AN EMAIL TO USER FOR VERIFICATION OF ACCOUNT
-        mailer.onUserRegistration(user.username, user.email, token);
+        mailer.onUserRegistration(user.username, user.email, req.body.verifyURL, token);
         return res
           .status(201)
           .jsend.success({
@@ -184,9 +184,6 @@ const userController = {
 	 * @returns {object} json response
 	 */
   verify: (req, res) => {
-    // CREATE A TOKEN
-    const token = generateToken(7200, { id: req.currentUser.id, isVerified: true });
-
     let userEmail;
     Users
       .findById(req.currentUser.id)
@@ -210,8 +207,16 @@ const userController = {
 
             // SENDS EMAIL TO USER ON SUCCESSFUL CONFIRMATION
             mailer.emailHelperfunc(verifiedMsg);
+            const token = generateToken('365d', { id: req.currentUser.id, isVerified: true, roleId: user.roleId });
             return res.status(200).jsend.success({
               message: 'Your account is verified successfully',
+              id: user.id,
+              username: user.username,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              email: user.email,
+              roleId: user.roleId,
+              image: user.image,
               token
             });
           })

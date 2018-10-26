@@ -10,6 +10,7 @@ import tagManager from '../helpers/tagManager';
 import getBeginningOfWeek from '../helpers/getBeginningOfWeek';
 import GetAuthorsOfTheWeekHelpers from '../helpers/GetAuthorsOfTheWeekHelpers';
 
+
 const { gte } = Op;
 const {
   Cases,
@@ -19,7 +20,9 @@ const {
   Tags,
   Categories,
   Bookmarks,
-  SocialShares
+  SocialShares,
+  Users,
+  Comments
 } = models;
 const { analyseRatings } = ratingHelpers;
 
@@ -41,7 +44,7 @@ const articlesController = {
    */
   create: async (req, res) => {
     const fields = req.body;
-    let imageUrl = null;
+    let imageUrl = 'https://res.cloudinary.com/dbsxxymfz/image/upload/v1540379606/article-default-image.jpg';
     // check for image exists in the request body
     if (req.file) {
       const file = dataUri(req);
@@ -56,6 +59,7 @@ const articlesController = {
       slug: `${slug(fields.title)}-${uuid()}`,
       description: fields.description,
       body: fields.body,
+      categoryId: parseInt(fields.categoryId, 10),
       imageUrl
     }).then((createdArticle) => {
       // checks if tags exist
@@ -258,6 +262,95 @@ const articlesController = {
       }
     });
   },
+  /**
+   * @description Rate an article and adjust records
+   * @param  {object} req The HTTP request object
+   * @param  {object} res The HTTP response object
+   * @returns {object} Undefined
+   */
+  getSingleArticle: async (req, res) => {
+    const articleId = Number(req.params.articleId);
+
+    try {
+      const article = await Articles.findOne({
+        where: {
+          id: articleId
+        },
+        include: [{
+          model: Users,
+          attributes: ['id', 'image', 'username'],
+        }, {
+          model: Tags,
+          as: 'tags',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: []
+          }
+        },
+        {
+          model: ArticleLikes,
+          as: 'articleLikes',
+          attributes: ['id', 'liked', 'disliked']
+        },
+        {
+          model: Categories,
+          as: 'category',
+          attributes: ['name']
+        },
+        {
+          model: Comments,
+          as: 'comments',
+          attributes: ['id']
+        }]
+      });
+
+      if (!article) {
+        return res.status(404).jsend.fail({
+          message: 'Article not found'
+        });
+      }
+
+      const likes = article.articleLikes.filter(like => like.liked === true).length;
+      const dislikes = article.articleLikes.filter(like => like.disliked === true).length;
+
+      const articleData = {
+        id: article.id,
+        slug: article.slug,
+        title: article.title,
+        body: article.body,
+        imageUrl: article.imageUrl,
+        rating: article.rating,
+        createdDate: article.createdAt,
+        updatedDate: article.updatedAt
+      };
+
+      const metadata = {
+        author: {
+          id: article.User.id,
+          username: article.User.username,
+          imageUrl: article.User.image
+        },
+        tags: article.tags,
+        likes,
+        dislikes,
+        commentCounts: article.comments.length,
+        category: article.category
+      };
+
+
+      return res.status(200).jsend.success({
+        message: 'Operation successful',
+        articleData,
+        metadata
+      });
+    } catch (error) {
+      res.status(500).jsend.fail({
+        message: 'Oop!, Something went wrong. Please try again',
+        error: error.message
+      });
+    }
+  },
+
   getPopularArticlesForTheWeek: async (req, res) => {
     try {
       // Get results from the database
