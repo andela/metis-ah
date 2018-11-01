@@ -48,7 +48,7 @@ const userController = {
             .status(400)
             .jsend.fail({ message: `${duplicateValue} already exist!` });
         }
-        const token = generateToken(7200, {
+        const token = generateToken('365d', {
           id: user.id,
           isVerified: user.isVerified,
           roleId: user.roleId
@@ -95,7 +95,7 @@ const userController = {
             message: 'Invalid credentials supplied',
           });
         }
-        const token = generateToken(7200, {
+        const token = generateToken('365d', {
           id: user.id,
           isVerified: user.isVerified,
           roleId: user.roleId
@@ -107,12 +107,20 @@ const userController = {
           });
         }
 
-        return res.status(200).jsend.success({
-          userId: user.id,
-          username: user.username,
-          message: 'user is signed in successfully',
-          token
-        });
+        return res
+          .status(200)
+          .jsend.success({
+            id: user.id,
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            roleId: user.roleId,
+            image: user.image,
+            bio: user.bio,
+            token,
+            message: 'user is signed in successfully'
+          });
       }).catch(() => {
         res.status(500).jsend.fail({ message: 'Login was not successful. Please try again' });
       });
@@ -217,6 +225,7 @@ const userController = {
               email: user.email,
               roleId: user.roleId,
               image: user.image,
+              bio: user.bio,
               token
             });
           })

@@ -116,7 +116,8 @@ const helpers = {
         lastname,
         email,
         roleId,
-        image
+        image,
+        bio
       } = user.dataValues;
       return done(null, {
         id,
@@ -125,7 +126,8 @@ const helpers = {
         email,
         created,
         roleId,
-        image
+        image,
+        bio
       });
     });
   },
@@ -158,7 +160,8 @@ const helpers = {
         lastname,
         email,
         roleId,
-        image
+        image,
+        bio
       } = user.dataValues;
       return done(null, {
         id,
@@ -167,7 +170,8 @@ const helpers = {
         email,
         created,
         roleId,
-        image
+        image,
+        bio
       });
     });
   },
