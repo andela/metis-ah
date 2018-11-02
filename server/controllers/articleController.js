@@ -331,6 +331,7 @@ const articlesController = {
         slug: article.slug,
         title: article.title,
         body: article.body,
+        description: article.description,
         imageUrl: article.imageUrl,
         rating: article.rating,
         createdDate: article.createdAt,

@@ -93,7 +93,7 @@ articleRoutes.put(
 // Like comment
 // POST ARTICLE ROUTE
 articleRoutes.get('/', paginationParamsValidations, getArticles);
-articleRoutes.get('/:articleId', auth, checkParams.id, getSingleArticle);
+articleRoutes.get('/:articleId', checkParams.id, getSingleArticle);
 articleRoutes.post('/:articleId', auth, validArticleId, validateComments, addComment);
 
 articleRoutes.post(
