@@ -375,13 +375,24 @@ const userController = {
         Users.update(updates, {
           where: {
             id
-          },
-          returning: true,
-          plain: true
-        }).then(user => res.status(200).jsend.success({
-          message: 'Your profile has been updated successfully',
-          user
-        }));
+          }
+        }).then(() => {
+          Users.findById(id, {
+            include: [
+              { model: Articles, as: 'articles' },
+              { model: Ratings, as: 'ratings' },
+              { model: Bookmarks, as: 'bookmarks' },
+              'followed',
+              'follower'
+            ]
+          }).then((user) => {
+            delete user.password;
+            return res.status(200).jsend.success({
+              message: 'Your profile has been updated successfully',
+              user
+            });
+          });
+        });
       };
       if (req.file) {
         const file = dataUri(req);

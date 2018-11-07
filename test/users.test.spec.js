@@ -94,9 +94,9 @@ describe('Update User Endpoint /api/v1/users/update', () => {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.be.an('object');
-        expect(res.body.data.user[1].firstname).to.equal('joe');
-        expect(res.body.data.user[1].lastname).to.equal('easy');
-        expect(res.body.data.user[1].bio).to.equal('Hello, here is a brief information about me');
+        expect(res.body.data.user.firstname).to.equal('joe');
+        expect(res.body.data.user.lastname).to.equal('easy');
+        expect(res.body.data.user.bio).to.equal('Hello, here is a brief information about me');
         expect(res.body.data.message).to.equal('Your profile has been updated successfully');
         done();
       });
@@ -117,9 +117,9 @@ describe('Update User Endpoint /api/v1/users/update', () => {
       .type('form')
       .end((err, res) => {
         expect(res).to.have.status(200);
-        expect(res.body.data.user[1].firstname).to.equal('jehonadab');
-        expect(res.body.data.user[1].lastname).to.equal('hehehehehe');
-        expect(res.body.data.user[1].bio).to.equal('Here is a brief information about me');
+        expect(res.body.data.user.firstname).to.equal('jehonadab');
+        expect(res.body.data.user.lastname).to.equal('hehehehehe');
+        expect(res.body.data.user.bio).to.equal('Here is a brief information about me');
         expect(res.body.data.message).to.equal('Your profile has been updated successfully');
         done();
       });
