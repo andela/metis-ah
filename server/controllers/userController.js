@@ -127,7 +127,7 @@ const userController = {
             token,
             message: 'user is signed in successfully'
           });
-      }).catch((err) => {
+      }).catch(() => {
         res.status(500).jsend.fail({ message: 'Login was not successful. Please try again' });
       });
   },

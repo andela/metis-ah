@@ -51,33 +51,60 @@ const notificationController = {
       })
       .then((notify) => {
         if (!notify) {
-          return res.redirect('/api/v1/notifications');
+          return res.status(404).json({
+            status: 'error',
+            error: 'Notification does not exist'
+          });
         }
         notify.isRead = true;
         notify.save()
           .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
-        const route = {
-          article: `/api/v1/articles/${notify.notifiableId}`,
-          user: `/api/v1/users/${notify.notifiableId}`,
-        };
-        return res.redirect(route[notify.notifiable]);
+        return res.status(200).json({
+          status: 'success',
+          notify
+        });
       })
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   markAsRead: (req, res) => {
+    const { readStatus } = req.body;
+
     Notifications
-      .findById(req.params.notifyId)
+      .scope(null)
+      .findByPk(req.params.notifyId)
       .then((notify) => {
         if (!notify) {
-          return res.redirect('/api/v1/notifications');
+          return res.status(404).json({
+            status: 'error',
+            error: 'Notification does not exist'
+          });
+        }
+
+        if (!readStatus || readStatus !== 'setAsRead') {
+          return res.status(400).json({
+            status: 'error',
+            error: 'You need to set this notification as read'
+          });
+        }
+
+        if (notify.isRead) {
+          return res.status(406).json({
+            status: 'error',
+            error: 'Notification has all ready been marked as read',
+            notify
+          });
         }
 
         notify.isRead = true;
         notify.save()
-          .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
-        return res.redirect('/api/v1/notifications');
+          .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
+        return res.status(200).json({
+          status: 'success',
+          message: 'Notification successfully marked as read',
+          notify
+        });
       })
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   markAllAsRead: (req, res) => {
     Notifications
@@ -91,45 +118,69 @@ const notificationController = {
           },
         }
       )
-      .then(() => res.redirect('/api/v1/notifications'))
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      .then(() => res.status(200).json({
+        status: 'success',
+        message: 'All notifications have been marked as read'
+      }))
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   clearHistory: (req, res) => {
-    Notifications
-      .destroy(
-        {
-          where: {
-            receiverId: req.currentUser.id
-          }
+    Notifications.scope(null)
+      .destroy({
+        where: {
+          receiverId: req.currentUser.id
         }
-      )
-      .then(() => res.redirect('/api/v1/notifications'))
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      })
+      .then((notifications) => {
+        if (!notifications) {
+          return res.status(404).json({
+            status: 'error',
+            error: 'No notifications found'
+          });
+        }
+        res.status(200).json({
+          status: 'success',
+          message: 'All Notifications have been deleted'
+        });
+      })
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   clearOne: (req, res) => {
-    Notifications
-      .destroy(
-        {
-          where: {
-            receiverId: req.currentUser.id,
-            id: req.params.notifyId
-          }
+    const id = req.params.notifyId;
+    const receiverId = req.currentUser.id;
+
+    return Notifications.scope(null)
+      .destroy({
+        where: {
+          id, receiverId
         }
-      )
-      .then(() => res.redirect('/api/v1/notifications'))
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      })
+      .then((notifications) => {
+        if (!notifications) {
+          return res.status(404).json({
+            status: 'error',
+            error: 'No notifications found'
+          });
+        }
+        return res.status(200).json({
+          status: 'success',
+          message: 'Notification deleted successfully'
+        });
+      })
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   clearRead: (req, res) => {
     Notifications.scope('read')
-      .destroy(
-        {
-          where: {
-            receiverId: req.currentUser.id
-          }
+      .destroy({
+        where: {
+          receiverId: req.currentUser.id
         }
-      )
-      .then(() => res.redirect('/api/v1/notifications'))
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      })
+      .then(() => res.status(200).json({
+        status: 'success',
+        message: 'All read notifications have been deleted'
+      }))
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   }
 };
 export default notificationController;
