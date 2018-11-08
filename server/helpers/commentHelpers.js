@@ -1,4 +1,5 @@
 import models from '../models';
+import notify from './notify';
 
 const { Users } = models;
 
@@ -25,7 +26,7 @@ const commentHelpers = {
       })
       .catch(error => response.status(500).jsend.error(error));
   },
-  commenter: async (response, model, historyModel, userComment, type) => {
+  commenter: async (response, model, historyModel, userComment, type, request, articleId) => {
     const historyOptions = { content: userComment.content };
 
     try {
@@ -36,16 +37,17 @@ const commentHelpers = {
       } else {
         historyOptions.commentId = comment.dataValues.id;
       }
-      notify.multiEventNotifications(
-        res,
-        req,
-        articleId,
-        'articleLikes', 'commented on the article:'
-      );
+
       await historyModel.create(historyOptions);
       const user = await Users.findById(userComment.userId, {
         attributes: ['id', 'username', 'firstname', 'lastname', 'createdAt', 'updatedAt']
       });
+      notify.multiEventNotifications(
+        response,
+        request,
+        articleId,
+        'articleLikes', 'commented on the article:'
+      );
       return response.status(201).jsend.success({ comment, user });
     } catch (error) {
       return response.status(500).jsend.error({

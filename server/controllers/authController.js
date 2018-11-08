@@ -8,7 +8,12 @@ const authController = {
    * @returns {object} The response object
    */
   returnUser: (req, res) => {
-    const token = generateToken(7200, { id: req.user.id, isVerified: true, roleId: 2 });
+    const token = generateToken(7200, {
+      id: req.user.id,
+      isVerified: true,
+      roleId: 2,
+      username: req.user.username
+    });
     req.user.token = token;
 
     if (req.user.created) {

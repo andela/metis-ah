@@ -102,7 +102,8 @@ const userController = {
         const token = generateToken('365d', {
           id: user.id,
           isVerified: user.isVerified,
-          roleId: user.roleId
+          roleId: user.roleId,
+          username: user.username
 
         });
         if (!user.isVerified) {
@@ -126,7 +127,7 @@ const userController = {
             token,
             message: 'user is signed in successfully'
           });
-      }).catch((err) => {
+      }).catch(() => {
         res.status(500).jsend.fail({ message: 'Login was not successful. Please try again' });
       });
   },
@@ -221,7 +222,12 @@ const userController = {
 
             // SENDS EMAIL TO USER ON SUCCESSFUL CONFIRMATION
             mailer.emailHelperfunc(verifiedMsg);
-            const token = generateToken('365d', { id: req.currentUser.id, isVerified: true, roleId: user.roleId });
+            const token = generateToken('365d', {
+              id: req.currentUser.id,
+              isVerified: true,
+              roleId: user.roleId,
+              username: user.username
+            });
             return res.status(200).jsend.success({
               message: 'Your account is verified successfully',
               id: user.id,

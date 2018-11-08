@@ -53,7 +53,8 @@ const notify = {
             notifiable: 'article',
             notifiableId: notifiable.id
           });
-          notify.push(`notify-${followed.dataValues.id}`,
+          notify.push(
+            `notify-${followed.dataValues.id}`,
             `channel-${followed.dataValues.id}`,
             { message: `${user.dataValues.username} created an article titled: ${notifiable.title}` });
         });
@@ -112,9 +113,11 @@ const notify = {
           notifiable: 'article',
           notifiableId: article.id
         });
-        notify.push(`notify-${article.userId}`,
+        notify.push(
+          `notify-${article.userId}`,
           `channel-${article.userId}`,
-          { message: `${req.currentUser.username} ${excerpt} ${article.title}` });
+          { message: `${req.currentUser.username} ${excerpt} ${article.title}` }
+        );
         if (bulkData.length !== 0) {
           notify.createNotifications(res, bulkData);
         }
@@ -142,7 +145,8 @@ const notify = {
         }]);
         notify.push(`notify-${userId}`,
           `channel-${userId}`,
-          { message: `${user.username} is now following you` });
+          { message: `${user.username} is now following you` }
+        );
       })
       .catch(() => res.status(500).jsend.error({ message: 'we could not get you details at this time . Please try again' }));
   },

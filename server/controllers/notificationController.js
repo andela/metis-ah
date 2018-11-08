@@ -23,7 +23,7 @@ const notificationController = {
           notifications
         });
       })
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   getAll: (req, res) => {
     Notifications.scope(null)
@@ -39,7 +39,7 @@ const notificationController = {
           notifications
         });
       })
-      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+      .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   getOne: (req, res) => {
     Notifications.scope(null)
@@ -55,7 +55,7 @@ const notificationController = {
         }
         notify.isRead = true;
         notify.save()
-          .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
+          .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
         const route = {
           article: `/api/v1/articles/${notify.notifiableId}`,
           user: `/api/v1/users/${notify.notifiableId}`,
@@ -96,38 +96,32 @@ const notificationController = {
   },
   clearHistory: (req, res) => {
     Notifications
-      .destroy(
-        {
-          where: {
-            receiverId: req.currentUser.id
-          }
+      .destroy({
+        where: {
+          receiverId: req.currentUser.id
         }
-      )
+      })
       .then(() => res.redirect('/api/v1/notifications'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
   },
   clearOne: (req, res) => {
     Notifications
-      .destroy(
-        {
-          where: {
-            receiverId: req.currentUser.id,
-            id: req.params.notifyId
-          }
+      .destroy({
+        where: {
+          receiverId: req.currentUser.id,
+          id: req.params.notifyId
         }
-      )
+      })
       .then(() => res.redirect('/api/v1/notifications'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
   },
   clearRead: (req, res) => {
     Notifications.scope('read')
-      .destroy(
-        {
-          where: {
-            receiverId: req.currentUser.id
-          }
+      .destroy({
+        where: {
+          receiverId: req.currentUser.id
         }
-      )
+      })
       .then(() => res.redirect('/api/v1/notifications'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the serve'));
   }

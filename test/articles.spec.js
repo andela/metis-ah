@@ -59,7 +59,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
         .field('categoryId', 1)
         .field('description', 'How I Learnt React in Andela, a very descriptive way to introduce an article')
         .field('body', 'How I Learnt React in Andela. Now tell us everthing you know about how you learnt reactjs in andela')
-        .field('tags','TIA,besties')
+        .field('tags', 'TIA, besties')
         .type('form')
         .end((err, res) => {
           res.status.should.equal(201);

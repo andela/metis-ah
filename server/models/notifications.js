@@ -1,44 +1,47 @@
 module.exports = (sequelize, DataTypes) => {
-  const Notifications = sequelize.define('Notifications', {
-    receiverId: {
-      type: DataTypes.INTEGER
-    },
-    actorId: {
-      type: DataTypes.INTEGER
-    },
-    action: {
-      type: DataTypes.STRING
-    },
-    notifiable: {
-      type: DataTypes.STRING
-    },
-    notifiableId: {
-      type: DataTypes.INTEGER
-    },
-    isRead: {
-      type: DataTypes.BOOLEAN,
-      default: false
-    }
-  },
-  {
-    defaultScope: {
-      where: {
-        isRead: false
+  const Notifications = sequelize.define(
+
+    'Notifications', {
+      receiverId: {
+        type: DataTypes.INTEGER
+      },
+      actorId: {
+        type: DataTypes.INTEGER
+      },
+      action: {
+        type: DataTypes.STRING
+      },
+      notifiable: {
+        type: DataTypes.STRING
+      },
+      notifiableId: {
+        type: DataTypes.INTEGER
+      },
+      isRead: {
+        type: DataTypes.BOOLEAN,
+        default: false
       }
     },
-    scopes: {
-      read: {
-        where: {
-          isRead: true
-        }
-      },
-      unread: {
+    {
+      defaultScope: {
         where: {
           isRead: false
         }
+      },
+      scopes: {
+        read: {
+          where: {
+            isRead: true
+          }
+        },
+        unread: {
+          where: {
+            isRead: false
+          }
+        }
       }
     }
-  });
+  );
 
   Notifications.associate = (models) => {
     Notifications.belongsTo(models.Users, {
