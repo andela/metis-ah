@@ -20,6 +20,7 @@ const articleLikes = (sequelize, DataTypes) => {
   ArticleLikes.associate = (models) => {
     ArticleLikes.belongsTo(models.Users, {
       foreignKey: 'userId',
+      as: 'userLikes',
       onDelete: 'CASCADE'
     });
 

@@ -95,7 +95,7 @@ describe('Tests for Comments and Replies', () => {
         .end((err, res) => {
           res.body.data.should.have.property('user');
           res.body.data.comment.content.should.equal('Your post was not inspiring.');
-          done();
+          done(err);
         });
     });
 
@@ -110,22 +110,6 @@ describe('Tests for Comments and Replies', () => {
         .end((err, res) => {
           res.body.status.should.equal('fail');
           res.body.data.message.should.equal('Article not found');
-          done();
-        });
-    });
-  });
-  describe('Create reply tests', () => {
-    it('It should return an object containing a user and a comment object', (done) => {
-      chai
-        .request(app)
-        .post('/api/v1/articles/1/comments/1/reply')
-        .set('Authorization', token)
-        .send({
-          content: 'Just let the comment be, please.'
-        })
-        .end((err, res) => {
-          res.body.data.should.have.property('user');
-          res.body.data.comment.content.should.equal('Just let the comment be, please.');
           done();
         });
     });

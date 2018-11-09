@@ -17,9 +17,6 @@ import paginationParamsValidations from '../middleware/paginationParamsValidatio
 const articleRoutes = express.Router();
 
 const {
-  reportArticle,
-  rateArticle,
-  create,
   like,
   getArticles,
   getFeaturedArticles,
@@ -27,7 +24,10 @@ const {
   createBookmark,
   fetchBookmark,
   shareArticle,
-  getSingleArticle
+  getSingleArticle,
+  create,
+  rateArticle,
+  reportArticle
 } = articleController;
 
 const { addComment, updateComment, updateReply } = commentController;

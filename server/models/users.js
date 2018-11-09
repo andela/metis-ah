@@ -83,7 +83,14 @@ const users = (sequelize, DataTypes) => {
     });
     Users.hasMany(models.ArticleLikes, {
       foreignKey: 'userId',
-      as: 'articleLikes'
+      as: 'userLikes'
+    });
+    Users.hasMany(models.Notifications, {
+      foreignKey: 'receiverId',
+      as: 'notifications'
+    });
+    Users.hasMany(models.Notifications, {
+      foreignKey: 'actorId'
     });
     Users.hasMany(models.Bookmarks, {
       foreignKey: 'userId',

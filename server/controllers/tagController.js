@@ -6,6 +6,12 @@ import models from '../models';
 const { Articles, Tags } = models;
 
 const tagController = {
+  /**
+  * @description Gets all the tags
+  * @param  {object} req The HTTP request object
+  * @param  {object} res The HTTP response object
+  * @returns {object} The HTTP response object
+  */
   all: (req, res) => {
     Tags
       .findAll()

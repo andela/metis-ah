@@ -21,7 +21,7 @@ const commentsController = {
 
     if (commentId) {
       userComment.commentId = escape(commentId);
-      return commenter(res, Replies, ReplyHistory, userComment, 'Reply');
+      return commenter(res, Replies, ReplyHistory, userComment, 'Reply', req, articleId);
     }
 
     userComment.articleId = escape(articleId);
