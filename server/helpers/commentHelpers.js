@@ -40,15 +40,17 @@ const commentHelpers = {
 
       await historyModel.create(historyOptions);
       const user = await Users.findById(userComment.userId, {
-        attributes: ['id', 'username', 'firstname', 'lastname', 'createdAt', 'updatedAt']
+        attributes: ['id', 'username', 'firstname', 'lastname', 'image']
       });
+      comment.dataValues.user = user;
+
       notify.multiEventNotifications(
         response,
         request,
         articleId,
-        'articleLikes', 'commented on the article:'
+        'commented on the article:'
       );
-      return response.status(201).jsend.success({ comment, user });
+      return response.status(201).jsend.success({ comment });
     } catch (error) {
       return response.status(500).jsend.error({
         message: 'There was a problem',
