@@ -4,11 +4,48 @@ import commentHelpers from '../helpers/commentHelpers';
 
 const { escape } = validator;
 const {
-  Comments, Replies, CommentHistory, ReplyHistory
+  Comments, Replies, CommentHistory, ReplyHistory, Users
 } = models;
 const { commenter, updater } = commentHelpers;
 
 const commentsController = {
+  getComments: (req, res) => {
+    const { articleId } = req.params;
+    const queryParams = req.paginationQueryParams;
+    // CALCULATE OFFSET
+    const offset = ((queryParams.page - 1) * queryParams.limit);
+    Comments
+      .findAndCountAll({
+        where: {
+          articleId
+        },
+        include: [
+          {
+            model: Users,
+            as: 'user',
+            attributes: ['id', 'username', 'firstname', 'lastname', 'image'],
+          }
+        ],
+        offset,
+        limit: queryParams.limit
+      }).then((result) => {
+        const totalPages = Math.ceil(result.count / queryParams.limit);
+
+        return res.status(200).jsend.success({
+          message: 'Operation Successful',
+          comments: result.rows,
+          metadata: {
+            totalComments: result.count,
+            currentPage: queryParams.page,
+            limit: queryParams.limit,
+            totalPages
+          }
+        });
+      }).catch(error => res.status(500).jsend.fail({
+        message: 'Something went wrong, unable to process request',
+        error: error.message
+      }));
+  },
   addComment: (req, res) => {
     const { articleId, commentId } = req.params;
     const { content } = req.body;
@@ -25,7 +62,7 @@ const commentsController = {
     }
 
     userComment.articleId = escape(articleId);
-    return commenter(res, Comments, CommentHistory, userComment, 'Comment');
+    return commenter(res, Comments, CommentHistory, userComment, 'Comment', req, articleId);
   },
   updateComment: (req, res) => {
     const reqData = {

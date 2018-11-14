@@ -30,7 +30,9 @@ const {
   reportArticle
 } = articleController;
 
-const { addComment, updateComment, updateReply } = commentController;
+const {
+  addComment, updateComment, updateReply, getComments
+} = commentController;
 const {
   validateComments,
   validateLikeObject,
@@ -56,6 +58,7 @@ articleRoutes.get('/featured', getFeaturedArticles);
 
 // Comment routes
 // Add comment
+articleRoutes.get('/:articleId/comments', checkParams.id, paginationParamsValidations, getComments);
 articleRoutes.post(
   '/:articleId/comments',
   auth,

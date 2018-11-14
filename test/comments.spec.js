@@ -10,6 +10,30 @@ let token;
 const content = 56743;
 
 describe('Tests for Comments and Replies', () => {
+  describe('Get comments tests', () => {
+    it('should return comments successfully', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/articles/1/comments')
+        .end((err, res) => {
+          res.status.should.equal(200);
+          res.body.status.should.equal('success');
+          done();
+        });
+    });
+    it('should fail when ID is out of range', (done) => {
+      chai
+        .request(app)
+        .get('/api/v1/articles/18978769707867879/comments')
+        .end((err, res) => {
+          res.status.should.eq(500);
+          res.body.status.should.equal('fail');
+          res.body.data.message.should.equal('Something went wrong, unable to process request');
+          done();
+        });
+    });
+  });
+
   describe('Create comment tests', () => {
     before((done) => {
       chai
@@ -93,7 +117,7 @@ describe('Tests for Comments and Replies', () => {
           content: 'Your post was not inspiring.'
         })
         .end((err, res) => {
-          res.body.data.should.have.property('user');
+          res.body.data.comment.should.have.property('user');
           res.body.data.comment.content.should.equal('Your post was not inspiring.');
           done(err);
         });

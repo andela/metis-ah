@@ -13,6 +13,7 @@ const comments = (sequelize, DataTypes) => {
   Comments.associate = (models) => {
     Comments.belongsTo(models.Users, {
       foreignKey: 'userId',
+      as: 'user',
       onDelete: 'CASCADE'
     });
 
