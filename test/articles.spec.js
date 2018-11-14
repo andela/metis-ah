@@ -398,24 +398,59 @@ describe('Articles likes test', () => {
         done();
       });
   });
-
-  it('should return you unliked the article', (done) => {
+  it('should return true for liked article', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/1/like/unlike')
+      .get('/api/v1/articles/1/like')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {
         expect(res.body.status).to.equal('success');
-        expect(res.body.data.message).to.equal('you unliked the article');
+        expect(res.body.data.userReaction.liked).to.equal(true);
         done();
       });
   });
 
+  it('should return you unliked the article', (done) => {
+    chai
+      .request(app)
+      .post('/api/v1/articles/1/like/dislike')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.message).to.equal('you disliked the article');
+        done();
+      });
+  });
+  it('should return true for disliked articles', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/1/like')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('success');
+        expect(res.body.data.userReaction.disliked).to.equal(true);
+        done();
+      });
+  });
+  it('should return an empty object when no like was found', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/100000/like')
+      .set('authorization', hashedToken)
+      .send()
+      .end((err, res) => {
+        expect(res.body.status).to.equal('fail');
+        expect(res.body.data).to.be.an('Object');
+        done();
+      });
+  });
   it('should return you article not found', (done) => {
     chai
       .request(app)
-      .post('/api/v1/articles/100/like/unlike')
+      .post('/api/v1/articles/100/like/dislike')
       .set('authorization', hashedToken)
       .send()
       .end((err, res) => {

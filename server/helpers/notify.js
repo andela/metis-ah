@@ -56,7 +56,8 @@ const notify = {
           notify.push(
             `notify-${followed.dataValues.id}`,
             `channel-${followed.dataValues.id}`,
-            { message: `${user.dataValues.username} created an article titled: ${notifiable.title}` });
+            { message: `${user.dataValues.username} created an article titled: ${notifiable.title}` }
+          );
         });
         if (bulkData.length !== 0) {
           notify.createNotifications(res, bulkData);
@@ -143,7 +144,8 @@ const notify = {
           notifiable: 'user',
           notifiableId: user.id
         }]);
-        notify.push(`notify-${userId}`,
+        notify.push(
+          `notify-${userId}`,
           `channel-${userId}`,
           { message: `${user.username} is now following you` }
         );
