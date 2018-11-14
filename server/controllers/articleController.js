@@ -127,8 +127,8 @@ const articlesController = {
       })
       .spread((data, created) => {
         if (!created) {
-          data.like = liked;
-          data.dislike = disliked;
+          data.liked = liked;
+          data.disliked = disliked;
           data.save().catch(err => res.status(500).jsend.error({
             message: 'Request could not be processed',
             error: err.message
@@ -143,6 +143,30 @@ const articlesController = {
         return res.status(200).jsend.success({ data, message });
       }).catch(() => res.status(401).jsend.fail({
         message: 'Article not found'
+      }));
+  },
+  /**
+   * @description allows users to check if they've already like an article before
+   * @param  {Object} req the request object
+   * @param  {Object} res the response object
+   * @returns {Object} json response
+   */
+  getUserReaction: (req, res) => {
+    ArticleLikes
+      .find({
+        where: {
+          userId: req.currentUser.id,
+          articleId: Number(req.params.articleId)
+        }
+      }).then((userReaction) => {
+        if (!userReaction) {
+          return res.status(404).jsend.fail({});
+        }
+        return res.status(200).jsend.success({
+          userReaction
+        });
+      }).catch(err => res.status(500).jsend.error({
+        message: err
       }));
   },
 

@@ -18,6 +18,7 @@ const articleRoutes = express.Router();
 
 const {
   like,
+  getUserReaction,
   getArticles,
   getFeaturedArticles,
   getPopularArticlesForTheWeek,
@@ -133,6 +134,15 @@ articleRoutes.post(
   checkParams.likeType,
   isUser,
   like
+);
+
+// check if current user has like or dislike an article
+articleRoutes.get(
+  '/:articleId/like',
+  auth,
+  checkParams.id,
+  isUser,
+  getUserReaction
 );
 
 // REPORT ARTICLE ENDPOINT
