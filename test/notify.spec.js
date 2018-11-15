@@ -25,6 +25,7 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .get('/api/v1/notifications')
       .set('authorization', userToken)
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
         expect(res.body.data.notifications);
         expect(res.body.data.notifications[0].isRead).to.equal(false);
@@ -37,6 +38,7 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .get('/api/v1/notifications/history')
       .set('authorization', userToken)
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
         expect(res.body.data.notifications);
         done(err);
@@ -48,17 +50,25 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .get('/api/v1/notifications/2')
       .set('authorization', userToken)
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
-        expect(res.body).to.have.property('notify');
-        expect(res.body.notify).to.have.property('receiverId');
-        expect(res.body.notify).to.have.property('actorId');
-        expect(res.body.notify).to.have.property('action');
-        expect(res.body.notify).to.have.property('notifiable');
-        expect(res.body.notify).to.have.property('notifiableId');
-        expect(res.body.notify).to.have.property('isRead');
-        expect(res.body.notify).to.have.property('createdAt');
-        expect(res.body.notify).to.have.property('updatedAt');
+        expect(res.body.data.receiverId).to.equal(1);
+        expect(res.body.data.actorId).to.equal(3);
+        expect(res.body.data.notifiable).to.equal('articles');
+        expect(res.body.data.notifiableId).to.equal(4);
+        expect(res.body.data.isRead).to.equal(true);
         done(err);
+      });
+  });
+  it('returns an error if a notification does not exist', () => {
+    chai
+      .request(app)
+      .get('/api/v1/notifications/100')
+      .set('authorization', userToken)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body.status).to.equal('error');
+        expect(res.body.message).to.equal('Notification does not exist');
       });
   });
   it('should mark a notifications as read', (done) => {
@@ -67,10 +77,10 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .put('/api/v1/notifications/4')
       .set('authorization', userToken)
       .set('Accept', 'application/json')
-      .send({ readStatus: 'setAsRead' })
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
-        expect(res.body.message).to.equal('Notification successfully marked as read');
+        expect(res.body.data).to.equal('Notification successfully marked as read');
         done(err);
       });
   });
@@ -80,23 +90,10 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .put('/api/v1/notifications/4')
       .set('authorization', userToken)
       .set('Accept', 'application/json')
-      .send({ readStatus: 'setAsRead' })
       .end((err, res) => {
+        expect(res).to.have.status(409);
         expect(res.body.status).to.equal('error');
-        expect(res.body.error).to.equal('Notification has all ready been marked as read');
-        done(err);
-      });
-  });
-  it('returns an error if no body is provided', (done) => {
-    chai
-      .request(app)
-      .put('/api/v1/notifications/4')
-      .set('authorization', userToken)
-      .set('Accept', 'application/json')
-      .send({ readStatus: '' })
-      .end((err, res) => {
-        expect(res.body.status).to.equal('error');
-        expect(res.body.error).to.equal('You need to set this notification as read');
+        expect(res.body.message).to.equal('Notification has all ready been marked as read');
         done(err);
       });
   });
@@ -106,9 +103,21 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .delete('/api/v1/notifications/3')
       .set('authorization', userToken)
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
-        expect(res.body.message).to.equal('Notification deleted successfully');
+        expect(res.body.data).to.equal('Notification deleted successfully');
         done(err);
+      });
+  });
+  it('returns an error if user tries to cldar a notification that does not exist', () => {
+    chai
+      .request(app)
+      .delete('/api/v1/notifications/120')
+      .set('authorization', userToken)
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body.status).to.equal('error');
+        expect(res.body.message).to.equal('Notificaiton not found');
       });
   });
   it('should clear all read notifications', (done) => {
@@ -117,8 +126,9 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .delete('/api/v1/notifications/read')
       .set('authorization', userToken)
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
-        expect(res.body.message).to.equal('All read notifications have been deleted');
+        expect(res.body.data).to.equal('All read notifications have been deleted');
         done(err);
       });
   });
@@ -128,8 +138,9 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .put('/api/v1/notifications')
       .set('authorization', userToken)
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
-        expect(res.body.message).to.equal('All notifications have been marked as read');
+        expect(res.body.data).to.equal('All notifications have been marked as read');
         done(err);
       });
   });
@@ -140,9 +151,22 @@ describe('TEST ALL NOTIFICATION ENDPOINTS', () => {
       .set('authorization', userToken)
       .set('Accept', 'application/json')
       .end((err, res) => {
+        expect(res).to.have.status(200);
         expect(res.body.status).to.equal('success');
-        expect(res.body.message).to.equal('All Notifications have been deleted');
+        expect(res.body.data).to.equal('All Notifications have been deleted');
         done(err);
+      });
+  });
+  it('returns an error if no notification exists for a user', () => {
+    chai
+      .request(app)
+      .delete('/api/v1/notifications')
+      .set('authorization', userToken)
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        expect(res).to.have.status(404);
+        expect(res.body.status).to.equal('error');
+        expect(res.body.message).to.equal('No notifications found');
       });
   });
 });

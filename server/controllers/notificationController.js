@@ -51,58 +51,32 @@ const notificationController = {
       })
       .then((notify) => {
         if (!notify) {
-          return res.status(404).json({
-            status: 'error',
-            error: 'Notification does not exist'
-          });
+          return res.status(404).jsend.error('Notification does not exist');
         }
         notify.isRead = true;
         notify.save()
           .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
-        return res.status(200).json({
-          status: 'success',
-          notify
-        });
+        return res.status(200).jsend.success(notify);
       })
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   markAsRead: (req, res) => {
-    const { readStatus } = req.body;
-
     Notifications
       .scope(null)
       .findByPk(req.params.notifyId)
       .then((notify) => {
         if (!notify) {
-          return res.status(404).json({
-            status: 'error',
-            error: 'Notification does not exist'
-          });
-        }
-
-        if (!readStatus || readStatus !== 'setAsRead') {
-          return res.status(400).json({
-            status: 'error',
-            error: 'You need to set this notification as read'
-          });
+          return res.status(404).jsend.error('Notification does not exist');
         }
 
         if (notify.isRead) {
-          return res.status(406).json({
-            status: 'error',
-            error: 'Notification has all ready been marked as read',
-            notify
-          });
+          return res.status(409).jsend.error('Notification has all ready been marked as read');
         }
 
         notify.isRead = true;
         notify.save()
           .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
-        return res.status(200).json({
-          status: 'success',
-          message: 'Notification successfully marked as read',
-          notify
-        });
+        return res.status(200).jsend.success('Notification successfully marked as read');
       })
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
@@ -118,10 +92,7 @@ const notificationController = {
           },
         }
       )
-      .then(() => res.status(200).json({
-        status: 'success',
-        message: 'All notifications have been marked as read'
-      }))
+      .then(() => res.status(200).jsend.success('All notifications have been marked as read'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
   clearHistory: (req, res) => {
@@ -133,15 +104,9 @@ const notificationController = {
       })
       .then((notifications) => {
         if (!notifications) {
-          return res.status(404).json({
-            status: 'error',
-            error: 'No notifications found'
-          });
+          return res.status(404).jsend.error('No notifications found');
         }
-        res.status(200).json({
-          status: 'success',
-          message: 'All Notifications have been deleted'
-        });
+        res.status(200).jsend.success('All Notifications have been deleted');
       })
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
@@ -157,15 +122,9 @@ const notificationController = {
       })
       .then((notifications) => {
         if (!notifications) {
-          return res.status(404).json({
-            status: 'error',
-            error: 'No notifications found'
-          });
+          return res.status(404).jsend.error('Notificaiton not found');
         }
-        return res.status(200).json({
-          status: 'success',
-          message: 'Notification deleted successfully'
-        });
+        return res.status(200).jsend.success('Notification deleted successfully');
       })
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   },
@@ -176,10 +135,7 @@ const notificationController = {
           receiverId: req.currentUser.id
         }
       })
-      .then(() => res.status(200).json({
-        status: 'success',
-        message: 'All read notifications have been deleted'
-      }))
+      .then(() => res.status(200).jsend.success('All read notifications have been deleted'))
       .catch(() => res.status(500).jsend.error('Oops, something has gone wrong on the server'));
   }
 };
