@@ -374,11 +374,11 @@
 				}
 			}
 		},
-		"/api/v1/articles/{articleId}/{likeType}": {
+		"/api/v1/articles/{articleId}/{reactionType}": {
 			"post": {
 				"tags": [ "Like" ],
-				"summary": "Allows user to like, dislike and unlike article",
-				"description": "Article like, dislike and unlike endpoint",
+				"summary": "Allows user to like, dislike and remove reaction from on an article",
+				"description": "Article like, dislike and remove reaction from on an endpoint",
 				"consumes": [
 					"application/json"
 				],
@@ -395,8 +395,8 @@
 					},
 					{
 						"in": "path",
-						"name": "likeType",
-						"description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
+						"name": "reactionType",
+						"description": "The reactionType the user inputs.. The acceptable reactionTypes are like, dislike and resetReaction",
 						"required": true,
 						"type": "string"
 					}
@@ -519,13 +519,13 @@
         }
       }
     },
-    "/api/v1/articles/{articleId}/like/{likeType}": {
+    "/api/v1/articles/{articleId}/like/{reactionType}": {
       "post": {
         "tags": [
           "Like"
         ],
-        "summary": "Allows user to like, dislike and unlike article",
-        "description": "Article like, dislike and unlike endpoint",
+        "summary": "Allows user to like, dislike and remove reaction from an article",
+        "description": "Article like, dislike and remove reaction from an endpoint",
         "consumes": [
           "application/json"
         ],
@@ -542,8 +542,8 @@
           },
           {
             "in": "path",
-            "name": "likeType",
-            "description": "The likeType the user inputs.. The acceptable liketypes are like, dislike and unlike",
+            "name": "reactionType",
+            "description": "The reactionType the user inputs.. The acceptable reactionTypes are like, dislike and restReaction",
             "required": true,
             "type": "string"
           }
@@ -678,8 +678,8 @@
         "tags": [
           "Like"
         ],
-        "summary": "Route for authenticated users to like or unlike a comments on an article",
-        "description": "Returns a confirmation is like or unlike is successful",
+        "summary": "Route for authenticated users to like or remove reaction of comments on an article",
+        "description": "Returns a confirmation is like or remove reaction is successful",
         "parameters": [
           {
             "in": "params",
@@ -693,7 +693,7 @@
             "description": "Returns a 201 status code on the first like"
           },
           "200": {
-            "description": "Returns a 200 when like is toggled based on yours like/unlike action"
+            "description": "Returns a 200 when like is toggled based on yours like/reset the action"
           },
           "400": {
             "description": "Returns a 400 if params is not valid"

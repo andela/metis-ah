@@ -102,18 +102,18 @@ const articlesController = {
     }));
   },
   /**
-   * @description this function likes, dislikes and unlike an article
+   * @description this function likes, dislikes and resetReaction an article
    * @param  {Object} req the request object
    * @param  {Object} res the response object
    * @returns {Object} json response
    */
   like: (req, res) => {
     // Check the params passed by user to determine what function to be performed
-    const liked = req.params.likeType === 'like';
-    const disliked = req.params.likeType === 'dislike';
+    const liked = req.params.reactionType === 'like';
+    const disliked = req.params.reactionType === 'dislike';
     // message to be sent to user depending on function performed
-    const message = liked || disliked ? `you ${req.params.likeType}d the article`
-      : 'you unliked the article';
+    const message = liked || disliked ? `you ${req.params.reactionType}d the article`
+      : 'you have removed the article';
     ArticleLikes
       .findOrCreate({
         where: {
@@ -138,7 +138,7 @@ const articlesController = {
           res,
           req,
           Number(req.params.articleId),
-          `${req.params.likeType}d the article: `
+          `${req.params.reactionType}d the article: `
         );
         return res.status(200).jsend.success({ data, message });
       }).catch(() => res.status(401).jsend.fail({

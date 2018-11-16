@@ -21,7 +21,7 @@ const commentHelpers = {
         return model
           .update({ liked: !liked }, { where: likeData })
           .then(() => response.status(200).jsend.success({
-            message: `${type} ${liked ? 'unliked' : 'liked'}`
+            message: `${type} ${liked ? 'reaction removed' : 'liked'}`
           }));
       })
       .catch(error => response.status(500).jsend.error(error));

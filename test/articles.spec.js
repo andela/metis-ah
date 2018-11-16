@@ -360,7 +360,7 @@ describe('ARTICLE ENDPOINT TESTS', () => {
 });
 
 describe('Articles likes test', () => {
-  it('should return Invalid likeType', (done) => {
+  it('should return Invalid reactionType', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/like/adam')
@@ -368,7 +368,7 @@ describe('Articles likes test', () => {
       .send()
       .end((err, res) => {
         expect(res.body.status).to.equal('fail');
-        expect(res.body.data.message).to.equal('Invalid likeType... likeType has to be - like, dislike or unlike');
+        expect(res.body.data.message).to.equal('Invalid reactionType... reactionType has to be - like, dislike or resetReaction');
         done();
       });
   });
@@ -411,7 +411,7 @@ describe('Articles likes test', () => {
       });
   });
 
-  it('should return you unliked the article', (done) => {
+  it('should return you have removed the article', (done) => {
     chai
       .request(app)
       .post('/api/v1/articles/1/like/dislike')
