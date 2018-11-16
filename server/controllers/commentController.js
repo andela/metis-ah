@@ -19,6 +19,9 @@ const commentsController = {
         where: {
           articleId
         },
+        order: [
+          ['createdAt', 'DESC']
+        ],
         include: [
           {
             model: Users,
