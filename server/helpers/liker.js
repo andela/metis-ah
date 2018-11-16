@@ -12,12 +12,12 @@ const liker = (model, response, likeData, type) => {
       }
 
       // The two if blocks below toggle the like functionality
-      // this runs when a user unlikes
+      // this runs when a user resetReactions
       if (liked) {
         return model
           .update({ liked: false }, { where: likeData })
           .then(() => response.status(200).jsend.success({
-            message: `${type} unliked`
+            message: `${type} remove reaction`
           }));
       }
 

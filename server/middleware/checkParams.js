@@ -1,16 +1,16 @@
 const checkParams = {
   /**
- * @description This method validates the params passed in by user for likeType
+ * @description This method validates the params passed in by user for reactionType
  * @param  {object} req The request object
  * @param  {object} res The response object
  * @param {function} next Calls the next middleware
  * @returns  {object} undefined
  */
-  likeType: (req, res, next) => {
-    const validParams = ['like', 'unlike', 'dislike'];
-    if (!validParams.includes(req.params.likeType.toLowerCase())) {
+  reactionType: (req, res, next) => {
+    const validParams = ['like', 'remove reaction', 'dislike'];
+    if (!validParams.includes(req.params.reactionType.toLowerCase())) {
       return res.status(401).jsend.fail({
-        message: 'Invalid likeType... likeType has to be - like, dislike or unlike'
+        message: 'Invalid reactionType... reactionType has to be - like, dislike or resetReaction'
       });
     }
     return next();

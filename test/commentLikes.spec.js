@@ -37,7 +37,7 @@ describe('User can like a comment test', () => {
           done();
         });
     });
-    it('should unlike a comment', (done) => {
+    it('should remove a comment', (done) => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
@@ -45,7 +45,7 @@ describe('User can like a comment test', () => {
         .send({ id: 1, type: 'comment' })
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.data.message.should.equal('Comment unliked');
+          res.body.data.message.should.equal('Comment reaction removed');
           done();
         });
     });
@@ -61,7 +61,7 @@ describe('User can like a comment test', () => {
           done();
         });
     });
-    it('should unlike a reply', (done) => {
+    it('should remove a reply', (done) => {
       chai
         .request(app)
         .post('/api/v1/articles/1/comments/like')
@@ -69,7 +69,7 @@ describe('User can like a comment test', () => {
         .send({ id: 1, type: 'reply' })
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.data.message.should.equal('Reply unliked');
+          res.body.data.message.should.equal('Reply reaction removed');
           done();
         });
     });

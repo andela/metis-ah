@@ -128,10 +128,10 @@ articleRoutes.post('/:articleId/share', auth, checkParams.id, shareArticle);
 
 // LIKE ARTICLE ENDPOINT
 articleRoutes.post(
-  '/:articleId/like/:likeType',
+  '/:articleId/like/:reactionType',
   auth,
   checkParams.id,
-  checkParams.likeType,
+  checkParams.reactionType,
   isUser,
   like
 );
