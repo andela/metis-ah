@@ -13,7 +13,7 @@ module.exports = {
     actorId: 3,
     notifiable: 'articles',
     notifiableId: 4,
-    isRead: true,
+    isRead: false,
     createdAt: '2018-09-08',
     updatedAt: '2018-09-08'
   },
@@ -31,6 +31,15 @@ module.exports = {
     actorId: 2,
     notifiable: 'articles',
     notifiableId: 1,
+    isRead: false,
+    createdAt: '2018-09-08',
+    updatedAt: '2018-09-08'
+  },
+  {
+    receiverId: 1,
+    actorId: 8,
+    notifiable: 'articles',
+    notifiableId: 5,
     isRead: false,
     createdAt: '2018-09-08',
     updatedAt: '2018-09-08'
