@@ -4,7 +4,7 @@ import commentHelpers from '../helpers/commentHelpers';
 
 const { escape } = validator;
 const {
-  Comments, Replies, CommentHistory, ReplyHistory, Users
+  Comments, Replies, CommentHistory, ReplyHistory, Users, CommentLikes
 } = models;
 const { commenter, updater } = commentHelpers;
 
@@ -27,6 +27,11 @@ const commentsController = {
             model: Users,
             as: 'user',
             attributes: ['id', 'username', 'firstname', 'lastname', 'image'],
+          },
+          {
+            model: CommentLikes,
+            as: 'likes',
+            attributes: ['id', 'userId', 'liked']
           }
         ],
         offset,
