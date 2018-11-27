@@ -142,6 +142,19 @@ describe('ARTICLES RATING TESTS', () => {
         expect(res.body.data).to.be.a('object');
         expect(res.body.data).to.have.property('averageRating');
         expect(res.body.data.averageRating).to.equal(3);
+        expect(res.body.data.userRating.rating).to.equal(5);
+        done();
+      });
+  });
+
+  it('gets a user\'s rating on an articles', (done) => {
+    chai
+      .request(app)
+      .get('/api/v1/articles/1/user-rating')
+      .set('authorization', token2)
+      .end((err, res) => {
+        expect(res.body.status).to.be.equal('success');
+        expect(res.body.data.userRating).to.equal(5);
         done();
       });
   });
