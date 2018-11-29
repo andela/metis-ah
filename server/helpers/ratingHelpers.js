@@ -42,9 +42,21 @@ const ratingHelper = {
 
     // Edit the articles rating column
     ratingHelper.editArticleRating(req, sum, count, res);
-    return res.status(201).jsend.success({
-      averageRating: Math.floor(sum / count)
-    });
+
+    Ratings.findOne({
+      where: {
+        articleId: req.params.articleId,
+        userId: req.currentUser.id
+      }
+    })
+      .then((rating) => {
+        if (rating) {
+          return res.status(201).jsend.success({
+            averageRating: Math.floor(sum / count),
+            userRating: rating
+          });
+        }
+      });
   },
 
   /**

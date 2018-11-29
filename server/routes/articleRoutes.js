@@ -28,6 +28,7 @@ const {
   getSingleArticle,
   create,
   rateArticle,
+  getUserRating,
   reportArticle
 } = articleController;
 
@@ -118,6 +119,15 @@ articleRoutes.post(
   validateUser,
   isUser,
   rateArticle
+);
+
+// GET USER'S RATING ON AN ARTICLE
+articleRoutes.get(
+  '/:articleId/user-rating',
+  auth,
+  validArticleId,
+  isUser,
+  getUserRating
 );
 
 // CREATE ARTICLE ENDPOINT

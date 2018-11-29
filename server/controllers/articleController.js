@@ -237,6 +237,32 @@ const articlesController = {
       }
     });
   },
+
+  /**
+   * @description Get a user's ratint an an article
+   * @param  {object} req The HTTP request object
+   * @param  {object} res The HTTP response object
+   * @returns {object} Undefined
+   */
+  getUserRating: (req, res) => {
+    Ratings.findOne({
+      where: {
+        articleId: req.params.articleId,
+        userId: req.currentUser.id
+      }
+    })
+      .then((rating) => {
+        if (!rating) {
+          return res.status(200).jsend.success({
+            userRating: 0
+          });
+        }
+        return res.status(200).jsend.success({
+          userRating: rating.rating
+        });
+      });
+  },
+
   /**
   * @desc validates article input fields
   * @param  {object} req Http Request object
